@@ -1,15 +1,28 @@
-# Binaries for programs and plugins
+logs/
+.idea
+.vscode
+.mvn/
+
+# app
+dubbo-go-pixiu
+dubbo-go-pixiu.exe
+dubbgo_server.out
+.scannerwork
+/logs
+/.idea
+/.vscode
+log
+cache
+
+.DS_Store
+vendor/
+
+coverage.txt
+
+*.iml
+
 *.exe
-*.exe~
-*.dll
-*.so
-*.dylib
+test
 
-# Test binary, built with `go test -c`
-*.test
 
-# Output of the go coverage tool, specifically when used with LiteIDE
-*.out
-
-# Dependency directories (remove the comment below to include it)
-# vendor/
+target/
