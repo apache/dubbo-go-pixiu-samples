@@ -108,11 +108,13 @@ func makeClusters() *pixiupb.PixiuExtensionClusters {
 			{
 				Name:    "http_bin",
 				TypeStr: "http",
-				Endpoints: &pixiupb.Endpoint{
-					Id: "backend",
-					Address: &pixiupb.SocketAddress{
-						Address: "httpbin.org",
-						Port:    80,
+				Endpoints: []*pixiupb.Endpoint{
+					{
+						Id: "backend",
+						Address: &pixiupb.SocketAddress{
+							Address: "httpbin.org",
+							Port:    80,
+						},
 					},
 				},
 				HealthChecks: []*pixiupb.HealthCheck{},

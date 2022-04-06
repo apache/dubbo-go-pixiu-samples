@@ -1,0 +1,51 @@
+{
+  "listeners": [
+    {
+      "name": "net/http",
+      "address": {
+        "socketAddress": {
+          "address": "0.0.0.0",
+          "port": "8080"
+        },
+        "name": "8080"
+      },
+      "filterChain": {
+        "filters": [
+          {
+            "name": "dgp.filter.httpconnectionmanager",
+            "struct": {
+              "http_filters": [
+                {
+                  "config": null,
+                  "name": "dgp.filter.http.httpproxy"
+                },
+                {
+                  "config": {
+                    "uri_regex": [
+                      "^/([^/]*)/(.*)$",
+                      "/$1"
+                    ]
+                  },
+                  "name": "dgp.filter.http.proxyrewrite"
+                }
+              ],
+              "route_config": {
+                "routes": [
+                  {
+                    "match": {
+                      "prefix": "/"
+                    },
+                    "route": {
+                      "cluster": "http_bin",
+                      "cluster_not_found_response_code": 503
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
