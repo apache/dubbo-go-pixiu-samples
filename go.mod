@@ -1,6 +1,6 @@
 module github.com/dubbo-go-pixiu/samples
 
-go 1.15
+go 1.17
 
 require (
 	dubbo.apache.org/dubbo-go/v3 v3.0.1-0.20220107110037-4496cef73dba
@@ -18,4 +18,8 @@ require (
 	google.golang.org/grpc v1.43.0
 	google.golang.org/protobuf v1.27.1
 
+)
+
+replace (
+  k8s.io/apimachinery => k8s.io/apimachinery v0.23.5
 )
