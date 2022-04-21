@@ -14,12 +14,9 @@ require (
 	github.com/spf13/cobra v1.1.1
 	github.com/stretchr/objx v0.2.0 // indirect
 	github.com/stretchr/testify v1.7.0
-	go.etcd.io/etcd/client/pkg/v3 v3.5.0 // indirect
 	google.golang.org/grpc v1.43.0
 	google.golang.org/protobuf v1.27.1
 
 )
 
-replace (
-  k8s.io/apimachinery => k8s.io/apimachinery v0.23.5
-)
+replace k8s.io/apimachinery => k8s.io/apimachinery v0.23.5
