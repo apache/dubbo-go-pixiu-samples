@@ -18,15 +18,6 @@
                 {
                   "config": null,
                   "name": "dgp.filter.http.httpproxy"
-                },
-                {
-                  "config": {
-                    "uri_regex": [
-                      "^/([^/]*)/(.*)$",
-                      "/$1"
-                    ]
-                  },
-                  "name": "dgp.filter.http.proxyrewrite"
                 }
               ],
               "route_config": {
