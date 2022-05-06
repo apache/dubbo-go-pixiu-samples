@@ -1,0 +1,23 @@
+name: 'DingDing Notify Action'
+description: 'Send dingding simple notify message'
+author: 'zcong1993'
+branding:
+  icon: 'message-square'
+  color: 'blue'
+inputs:
+  dingToken:
+    description: 'DingDing bot token'
+    required: true
+  body:
+    description: 'Post Body to send'
+    required: true
+  secret:
+    description: 'If use sign secret'
+    required: false
+  ignoreError:
+    description: 'If set true, will not fail action when API call failed'
+    required: false
+
+runs:
+  using: 'node12'
+  main: 'dist/index.js'
