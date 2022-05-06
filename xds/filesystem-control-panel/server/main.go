@@ -85,8 +85,8 @@ func main() {
 						if !ok {
 							return
 						}
-						log.Println("event:", event)
-						if event.Op&fsnotify.Write == fsnotify.Write {
+						if event.Op == fsnotify.Write {
+							log.Println("event:", event)
 							log.Println("modified file:", event.Name)
 							conf := GenerateSnapshotPixiuFromFile()
 							// Add the config to the snaphost
