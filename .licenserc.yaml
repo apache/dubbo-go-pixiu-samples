@@ -1,0 +1,3 @@
+header:
+  paths-ignore:
+    - '.github'
