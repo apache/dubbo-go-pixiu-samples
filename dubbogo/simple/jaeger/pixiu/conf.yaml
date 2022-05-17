@@ -31,8 +31,6 @@ static_resources:
               http_filters:
                 - name: dgp.filters.tracing
                   config:
-                    url: http://127.0.0.1:14268/api/traces
-                    type: jaeger
                 - name: dgp.filter.http.apiconfig
                   config:
                     path: $PROJECT_DIR/pixiu/api_config.yaml
@@ -49,7 +47,13 @@ static_resources:
                       timeout_config:
                         connect_timeout: 5s
                         request_timeout: 5s
-                - name: dgp.filter.http.response
-                  config:
               server_name: "test_http_dubbo"
               generate_request_id: false
+tracing:
+  name: "jaeger"
+  servicename: "dubbo-go-pixiu"
+  sampler:
+    type: "ratio"
+    param: 0.5
+  config:
+    url: "http://127.0.0.1:14268/api/traces"
