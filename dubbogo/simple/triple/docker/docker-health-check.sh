@@ -15,6 +15,11 @@
 #  limitations under the License.
 #
 
-sleep 5
 curl http://127.0.0.1:8848/nacos/v1/console/health/liveness
-sleep 10
+res=$?
+passCode=0
+while [ "$res" != "$passCode" ];do
+  sleep 5
+  curl http://127.0.0.1:8848/nacos/v1/console/health/liveness
+  res=$?
+done
