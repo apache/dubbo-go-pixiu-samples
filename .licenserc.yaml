@@ -20,4 +20,10 @@ header:
     copyright-owner: Apache Software Foundation
   paths-ignore:
     - '.github'
+    - '.gitignore'
+    - '.gitmodules'
+    - 'LICENSE'
+    - '**/*.md'
+    - '**/*.mod'
+    - '**/*.sum'
   comment: on-failure
