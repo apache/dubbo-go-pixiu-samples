@@ -26,4 +26,5 @@ header:
     - '**/*.md'
     - '**/*.mod'
     - '**/*.sum'
+    -  '**/*.json'
   comment: on-failure
