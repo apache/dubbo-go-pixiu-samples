@@ -20,21 +20,28 @@ package main
 import (
 	"context"
 	"flag"
+	"io/ioutil"
+	"log"
+	"os"
+	"strconv"
+)
+
+import (
 	"github.com/dubbo-go-pixiu/pixiu-api/pkg/xds"
 	pixiupb "github.com/dubbo-go-pixiu/pixiu-api/pkg/xds/model"
+
 	core "github.com/envoyproxy/go-control-plane/envoy/config/core/v3"
 	"github.com/envoyproxy/go-control-plane/pkg/cache/types"
 	"github.com/envoyproxy/go-control-plane/pkg/cache/v3"
 	"github.com/envoyproxy/go-control-plane/pkg/resource/v3"
 	"github.com/envoyproxy/go-control-plane/pkg/server/v3"
 	"github.com/envoyproxy/go-control-plane/pkg/test/v3"
+
 	"github.com/fsnotify/fsnotify"
+
 	"google.golang.org/protobuf/encoding/protojson"
+
 	"google.golang.org/protobuf/types/known/anypb"
-	"io/ioutil"
-	"log"
-	"os"
-	"strconv"
 )
 
 var (
