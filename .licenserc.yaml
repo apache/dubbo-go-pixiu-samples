@@ -13,13 +13,17 @@
 #  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
-#
 
-curl http://127.0.0.1:8848/nacos/v1/console/health/liveness
-res=$?
-passCode=0
-while [ "$res" != "$passCode" ];do
-  sleep 5
-  curl http://127.0.0.1:8848/nacos/v1/console/health/liveness
-  res=$?
-done
+header:
+  license:
+    spdx-id: Apache-2.0
+    copyright-owner: Apache Software Foundation
+  paths-ignore:
+    - '.github'
+    - '.gitignore'
+    - '.gitmodules'
+    - 'LICENSE'
+    - '**/*.md'
+    - '**/*.mod'
+    - '**/*.sum'
+  comment: on-failure
