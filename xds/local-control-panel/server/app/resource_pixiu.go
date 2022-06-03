@@ -18,16 +18,21 @@
 package main
 
 import (
-	"github.com/apache/dubbo-go-pixiu/pkg/common/constant"
-	"github.com/dubbogo/dubbo-go-pixiu-filter/pkg/xds"
-	pixiupb "github.com/dubbogo/dubbo-go-pixiu-filter/pkg/xds/model"
+	"github.com/dubbo-go-pixiu/pixiu-api/pkg/xds"
+	pixiupb "github.com/dubbo-go-pixiu/pixiu-api/pkg/xds/model"
+
 	core "github.com/envoyproxy/go-control-plane/envoy/config/core/v3"
 	"github.com/envoyproxy/go-control-plane/pkg/cache/types"
 	"github.com/envoyproxy/go-control-plane/pkg/cache/v3"
 	"github.com/envoyproxy/go-control-plane/pkg/resource/v3"
+
 	"google.golang.org/protobuf/types/known/anypb"
 	"google.golang.org/protobuf/types/known/structpb"
 	structpb2 "google.golang.org/protobuf/types/known/structpb"
+)
+
+import (
+	"github.com/apache/dubbo-go-pixiu/pkg/common/constant"
 )
 
 var httpManagerConfigYaml = `
@@ -108,11 +113,13 @@ func makeClusters() *pixiupb.PixiuExtensionClusters {
 			{
 				Name:    "http_bin",
 				TypeStr: "http",
-				Endpoints: &pixiupb.Endpoint{
-					Id: "backend",
-					Address: &pixiupb.SocketAddress{
-						Address: "httpbin.org",
-						Port:    80,
+				Endpoints: []*pixiupb.Endpoint{
+					{
+						Id: "backend",
+						Address: &pixiupb.SocketAddress{
+							Address: "httpbin.org",
+							Port:    80,
+						},
 					},
 				},
 				HealthChecks: []*pixiupb.HealthCheck{},

@@ -1,0 +1,25 @@
+{
+  "clusters": [
+    {
+      "name": "http_bin",
+      "typeStr": "http",
+      "lbStr": "Rand",
+      "endpoints": [
+        {
+          "id": "backend3",
+          "address": {
+            "address": "127.0.0.1",
+            "port": "8081"
+          }
+        },
+        {
+          "id": "backend4",
+          "address": {
+            "address": "127.0.0.1",
+            "port": "8082"
+          }
+        }
+      ]
+    }
+  ]
+}
