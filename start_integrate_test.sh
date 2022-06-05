@@ -15,6 +15,7 @@
 #  limitations under the License.
 
 array=("dubbogo/simple/body")
+array+=("dubbogo/simple/jaeger")
 array+=("dubbogo/simple/mix")
 array+=("dubbogo/simple/proxy")
 array+=("dubbogo/simple/query")
