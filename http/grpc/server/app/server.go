@@ -23,11 +23,13 @@ import (
 )
 
 import (
-	"github.com/apache/dubbo-go-pixiu/pkg/logger"
-	"github.com/apache/dubbo-go-pixiu/samples/http/grpc/proto"
-
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
+)
+
+import (
+	"github.com/apache/dubbo-go-pixiu/pkg/logger"
+	"github.com/apache/dubbo-go-pixiu/samples/http/grpc/proto"
 )
 
 const (

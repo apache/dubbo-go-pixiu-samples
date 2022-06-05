@@ -22,11 +22,13 @@ import (
 )
 
 import (
+	"github.com/spf13/cobra"
+)
+
+import (
 	"github.com/apache/dubbo-go-pixiu/pkg/common/constant"
 	"github.com/apache/dubbo-go-pixiu/pkg/logger"
 	"github.com/apache/dubbo-go-pixiu/pkg/server"
-
-	"github.com/spf13/cobra"
 )
 
 var (
