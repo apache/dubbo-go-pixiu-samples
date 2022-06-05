@@ -1,0 +1,42 @@
+{
+  "listeners": [
+    {
+      "name": "net/http",
+      "protocol": "HTTP2",
+      "address": {
+        "socketAddress": {
+          "address": "0.0.0.0",
+          "port": "8881"
+        }
+      },
+      "filterChain": {
+        "filters": [
+          {
+            "name": "dgp.filter.httpconnectionmanager",
+            "struct": {
+              "http_filters": [
+                {
+                  "config": null,
+                  "name": "dgp.filter.http.httpproxy"
+                }
+              ],
+              "route_config": {
+                "routes": [
+                  {
+                    "match": {
+                      "prefix": "/"
+                    },
+                    "route": {
+                      "cluster": "http_bin",
+                      "cluster_not_found_response_code": 503
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
