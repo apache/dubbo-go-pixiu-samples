@@ -5,12 +5,12 @@ xds implement demo how to use xds server.
 ### to run sample:
 
 1. start xds server
-```
-dubbo-go-pixiu/samples/xds/local-control-panel/server/app> go run .
+```shell
+./server/app> go run .
 ```
 
 2. run pixiu 
-```
+```shell
 dubbo-go-pixiu > pixiu gateway start -c ./samples/xds/local-control-panel/pixiu/conf.yaml -g test/configs/log.yml
 ```
 
