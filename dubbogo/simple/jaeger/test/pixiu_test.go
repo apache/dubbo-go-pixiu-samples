@@ -88,7 +88,7 @@ func TestPost(t *testing.T) {
 func TestFindTraces(t *testing.T) {
 	time.Sleep(5 * time.Second)
 
-	operations := []string{"DUBBOGO CLIENT", "HTTP POST"}
+	operations := []string{"DUBBOGO CLIENT", "HTTP-POST"}
 	spans := GetTracesFromJaeger(t)
 	assert.Len(t, spans, len(operations))
 	for i := 0; i < len(spans); i++ {
