@@ -1,0 +1,64 @@
+replicaCount: 1
+
+image:
+  repository: ccr.ccs.tencentyun.com/pixiu/demo-app
+  pullPolicy: IfNotPresent
+  tag: "dubbo-go-pixiu-gateway-0.5.1-rc"
+
+container:
+  env:
+    - name: MODE
+      value: "standalone"
+  ports:
+    - name: http
+      containerPort: 8883
+      protocol: TCP
+  volumeMounts:
+    - mountPath: /var/run/secrets/token
+      name: istio-token
+
+volumes:
+  - name: istio-token
+    projected:
+      sources:
+        - serviceAccountToken:
+            audience: istio-ca
+            path: istio-token
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  type: ClusterIP
+  port: 8883
+  portName: http
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+

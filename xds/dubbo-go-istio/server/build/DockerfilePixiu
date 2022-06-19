@@ -1,0 +1,4 @@
+#todo replace to hub.docker
+FROM dubbogopixiu/dubbo-go-pixiu:v0.5.1-istio
+
+COPY ./conf.yaml /etc/pixiu/conf.yaml
