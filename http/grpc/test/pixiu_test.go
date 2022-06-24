@@ -32,7 +32,7 @@ import (
 )
 
 import (
-	"github.com/apache/dubbo-go-pixiu/samples/http/grpc/proto"
+	"github.com/dubbo-go-pixiu/samples/http/grpc/proto"
 )
 
 const (

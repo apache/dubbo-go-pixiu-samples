@@ -33,7 +33,7 @@ import (
 )
 
 import (
-	pb "github.com/apache/dubbo-go-pixiu/samples/http/grpc/proto"
+	pb "github.com/dubbo-go-pixiu/samples/http/grpc/proto"
 )
 
 var (
