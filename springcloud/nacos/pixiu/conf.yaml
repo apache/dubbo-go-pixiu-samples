@@ -30,44 +30,41 @@ static_resources:
             - name: dgp.filter.httpconnectionmanager
               config:
                 route_config:
+                  dynamic: true
+                  dynamic_apdter: "springcloud"
                   routes:
-                    - match:
-                        prefix: "/user"
-                      route:
-                        cluster: "user"
-                        cluster_not_found_response_code: 505
                 http_filters:
+                  - name: dgp.filter.http.metric
+                    config:
+                  - name: dgp.filter.http.proxyrewrite
+                    config:
+                      uri_regex:
+                        - "^/([^/]*)/(.*)$"
+                        - "/$2"
                   - name: dgp.filter.http.httpproxy
                     config:
-                  - name: dgp.filter.http.cors
-                    config:
-                      allow_origin:
-                        - api.dubbo.com
-                      allow_methods: ""
-                      allow_headers: ""
-                      expose_headers: ""
-                      max_age: ""
-                      allow_credentials: false
-
       config:
         idle_timeout: 5s
         read_timeout: 5s
         write_timeout: 5s
   clusters:
-    - name: "user"
-      lb_policy: "lb"
-      endpoints:
-        - id: 1
-          socket_address:
-            address: 127.0.0.1
-            port: 1314
-      health_checks:
-        - protocol: "tcp"
-          timeout: 1s
-          interval: 2s
-          healthy_threshold: 4
-          unhealthy_threshold: 4
   shutdown_config:
     timeout: "60s"
     step_timeout: "10s"
     reject_policy: "immediacy"
+  adapters:
+    - id: "springcloud"
+      name: "dgp.adapter.springcloud"
+#      enabled: false
+      config:
+        freshInterval: 15s # 刷新配置时间
+        subscribe-policy: adapting # adapting-订阅根据系统自适应策略，definitely-服务订阅根据用户配置的services
+        services:
+          - user-service
+          - auth-service
+        registry:
+          name: naocs
+          protocol: nacos
+          group: DEFAULT_GROUP
+          timeout: 3s
+          address: 127.0.0.1:8848
