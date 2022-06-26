@@ -19,6 +19,8 @@ package main
 
 import (
 	"fmt"
+	"net/http"
+	"net/url"
 	"os"
 	"os/signal"
 	"syscall"
@@ -33,13 +35,24 @@ import (
 
 var survivalTimeout = int(3e9)
 
-// they are necessary:
-// 		export CONF_PROVIDER_FILE_PATH="xxx"
-// 		export APP_LOG_CONF_FILE="xxx"
+// DUBBO_GO_CONFIG_PATH = "path to server.yml"
 func main() {
+	createNacosNamespace()
+
 	config.Load()
 
 	initSignal()
+}
+
+func createNacosNamespace() {
+	params := url.Values{}
+	params.Set("customNamespaceId", "test-namespace")
+	params.Set("namespaceName", "test-namespace")
+	params.Set("namespaceDesc", "test-namespace")
+	_, err := http.PostForm("http://localhost:8848/nacos/v1/console/namespaces", params)
+	if err != nil {
+		panic(err)
+	}
 }
 
 func initSignal() {
