@@ -24,6 +24,7 @@ array+=("dubbogo/simple/resolve")
 array+=("dubbogo/simple/zookeeper")
 array+=("dubbogo/simple/nacos")
 array+=("dubbogo/simple/triple")
+array+=("dubbogo/simple/direct")
 
 #
 ##http

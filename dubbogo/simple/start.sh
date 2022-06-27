@@ -39,29 +39,29 @@ fi
 
 P_DIR=$(pwd)/$2
 
-PIXIU_DIR=$(dirname $(dirname $(dirname "$PWD")))
+PIXIU_DIR=$(dirname $(dirname "$PWD"))
 
 if [ $ACTION = 'prepare' ]; then
     # prepare config file
     echo "prepare config file and docker, please remember clean finally"
-    make PROJECT_DIR=$P_DIR PIXIU_DIR=$PIXIU_DIR PROJECT_NAME=$(basename $P_DIR) BASE_DIR=$P_DIR/dist -f ../../../igt/Makefile config
-    make PROJECT_DIR=$P_DIR PIXIU_DIR=$PIXIU_DIR PROJECT_NAME=$(basename $P_DIR) BASE_DIR=$P_DIR/dist -f ../../../igt/Makefile docker-up
+    make PROJECT_DIR=$P_DIR PIXIU_DIR=$PIXIU_DIR PROJECT_NAME=$(basename $P_DIR) BASE_DIR=$P_DIR/dist -f ../../igt/Makefile config
+    make PROJECT_DIR=$P_DIR PIXIU_DIR=$PIXIU_DIR PROJECT_NAME=$(basename $P_DIR) BASE_DIR=$P_DIR/dist -f ../../igt/Makefile docker-up
     sleep 0.5
 elif [ $ACTION = 'startServer' ]; then
     echo "start server"
-    make PROJECT_DIR=$P_DIR PIXIU_DIR=$PIXIU_DIR PROJECT_NAME=$(basename $P_DIR) BASE_DIR=$P_DIR/dist -f ../../../igt/Makefile startServer
+    make PROJECT_DIR=$P_DIR PIXIU_DIR=$PIXIU_DIR PROJECT_NAME=$(basename $P_DIR) BASE_DIR=$P_DIR/dist -f ../../igt/Makefile startServer
     sleep 0.5
 elif [ $ACTION = 'startPixiu' ]; then
     echo "start pixiu"
-    make PROJECT_DIR=$P_DIR PIXIU_DIR=$PIXIU_DIR PROJECT_NAME=$(basename $P_DIR) BASE_DIR=$P_DIR/dist -f ../../../igt/Makefile startPixiu
+    make PROJECT_DIR=$P_DIR PIXIU_DIR=$PIXIU_DIR PROJECT_NAME=$(basename $P_DIR) BASE_DIR=$P_DIR/dist -f ../../igt/Makefile startPixiu
 elif [ $ACTION = 'startTest' ]; then
     echo "start unit test"
-    make PROJECT_DIR=$P_DIR PIXIU_DIR=$PIXIU_DIR PROJECT_NAME=$(basename $P_DIR) BASE_DIR=$P_DIR/dist -f ../../../igt/Makefile integration
+    make PROJECT_DIR=$P_DIR PIXIU_DIR=$PIXIU_DIR PROJECT_NAME=$(basename $P_DIR) BASE_DIR=$P_DIR/dist -f ../../igt/Makefile integration
     result=$?
 elif [ $ACTION = 'clean' ]; then
     echo "cleanup for config file and docker"
-    make PROJECT_DIR=$P_DIR PIXIU_DIR=$PIXIU_DIR PROJECT_NAME=$(basename $P_DIR) BASE_DIR=$P_DIR/dist -f ../../../igt/Makefile clean
-    make PROJECT_DIR=$P_DIR PIXIU_DIR=$PIXIU_DIR PROJECT_NAME=$(basename $P_DIR) BASE_DIR=$P_DIR/dist -f ../../../igt/Makefile docker-down
+    make PROJECT_DIR=$P_DIR PIXIU_DIR=$PIXIU_DIR PROJECT_NAME=$(basename $P_DIR) BASE_DIR=$P_DIR/dist -f ../../igt/Makefile clean
+    make PROJECT_DIR=$P_DIR PIXIU_DIR=$PIXIU_DIR PROJECT_NAME=$(basename $P_DIR) BASE_DIR=$P_DIR/dist -f ../../igt/Makefile docker-down
 else
   echo "wrong action"
 fi
