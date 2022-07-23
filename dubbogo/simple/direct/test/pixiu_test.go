@@ -31,7 +31,7 @@ import (
 
 func TestPost1(t *testing.T) {
 	url := "http://localhost:8883/UserService/com.dubbogo.pixiu.UserService/GetUserByName"
-	data := "{\"types\":\"string\",\"values\":\"tc\"}"
+	data := "[\"tc\"]"
 	client := &http.Client{Timeout: 5 * time.Second}
 	req, err := http.NewRequest("POST", url, strings.NewReader(data))
 	req.Header.Set("x-dubbo-http1.1-dubbo-version", "1.0.0")
@@ -51,7 +51,7 @@ func TestPost1(t *testing.T) {
 
 func TestPost2(t *testing.T) {
 	url := "http://localhost:8883/UserService/com.dubbogo.pixiu.UserService/UpdateUserByName"
-	data := "{\"types\":\"string,object\",\"values\":[\"tc\",{\"id\":\"0001\",\"code\":1,\"name\":\"tc\",\"age\":15}]}"
+	data := "[\"tc\",{\"id\":\"0001\",\"code\":1,\"name\":\"tc\",\"age\":15}]"
 	client := &http.Client{Timeout: 5 * time.Second}
 	req, err := http.NewRequest("POST", url, strings.NewReader(data))
 	req.Header.Set("x-dubbo-http1.1-dubbo-version", "1.0.0")
@@ -70,7 +70,7 @@ func TestPost2(t *testing.T) {
 
 func TestPost3(t *testing.T) {
 	url := "http://localhost:8883/UserService/com.dubbogo.pixiu.UserService/GetUserByCode"
-	data := "{\"types\":\"int\",\"values\":1}"
+	data := "[1]"
 	client := &http.Client{Timeout: 5 * time.Second}
 	req, err := http.NewRequest("POST", url, strings.NewReader(data))
 	req.Header.Set("x-dubbo-http1.1-dubbo-version", "1.0.0")
