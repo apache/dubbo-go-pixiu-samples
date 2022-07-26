@@ -24,5 +24,4 @@ coverage.txt
 *.exe
 test
 
-
 target/
