@@ -25,11 +25,9 @@ import (
 import (
 	"dubbo.apache.org/dubbo-go/v3/common/logger"
 
-	tripleConstant "github.com/dubbogo/triple/pkg/common/constant"
-)
-
-import (
 	triplepb "github.com/apache/dubbo-go-pixiu/samples/dubbogo/simple/triple/server/protobuf/api"
+
+	tripleConstant "github.com/dubbogo/triple/pkg/common/constant"
 )
 
 type GreeterProvider struct {
