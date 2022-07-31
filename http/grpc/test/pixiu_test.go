@@ -28,9 +28,11 @@ import (
 )
 
 import (
-	"github.com/apache/dubbo-go-pixiu/samples/http/grpc/proto"
-
 	"github.com/stretchr/testify/assert"
+)
+
+import (
+	"github.com/dubbo-go-pixiu/samples/http/grpc/proto"
 )
 
 const (

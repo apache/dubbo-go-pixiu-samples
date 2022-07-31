@@ -21,8 +21,10 @@ array+=("dubbogo/simple/proxy")
 array+=("dubbogo/simple/query")
 array+=("dubbogo/simple/uri")
 array+=("dubbogo/simple/resolve")
-array+=("dubbogo/simple/registry")
+array+=("dubbogo/simple/zookeeper")
+array+=("dubbogo/simple/nacos")
 array+=("dubbogo/simple/triple")
+array+=("dubbogo/simple/direct")
 
 #
 ##http
