@@ -62,5 +62,5 @@ func GenerateSnapshotPixiu2() cache.Snapshot {
 			},
 		},
 	)
-	return snap
+	return *snap
 }

@@ -32,9 +32,9 @@ import (
 
 	hessian "github.com/apache/dubbo-go-hessian2"
 
-	"github.com/apache/dubbo-go-pixiu/pkg/config"
-	_ "github.com/apache/dubbo-go-pixiu/pkg/pluginregistry"
-	"github.com/apache/dubbo-go-pixiu/pkg/server"
+	"github.com/apache/dubbo-go-pixiu/pixiu/pkg/config"
+	_ "github.com/apache/dubbo-go-pixiu/pixiu/pkg/pluginregistry"
+	"github.com/apache/dubbo-go-pixiu/pixiu/pkg/server"
 
 	"github.com/stretchr/testify/assert"
 )

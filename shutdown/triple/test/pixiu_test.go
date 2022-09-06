@@ -23,19 +23,21 @@ import (
 	"sync/atomic"
 	"testing"
 	"time"
+)
 
+import (
 	"dubbo.apache.org/dubbo-go/v3/common/constant"
-
 	dconfig "dubbo.apache.org/dubbo-go/v3/config"
 	"dubbo.apache.org/dubbo-go/v3/config/generic"
 
 	hessian "github.com/apache/dubbo-go-hessian2"
-	"github.com/apache/dubbo-go-pixiu/pkg/config"
 
-	_ "github.com/apache/dubbo-go-pixiu/pkg/pluginregistry"
-	"github.com/apache/dubbo-go-pixiu/pkg/server"
+	"github.com/apache/dubbo-go-pixiu/pixiu/pkg/config"
+	_ "github.com/apache/dubbo-go-pixiu/pixiu/pkg/pluginregistry"
+	"github.com/apache/dubbo-go-pixiu/pixiu/pkg/server"
 
 	tpconst "github.com/dubbogo/triple/pkg/common/constant"
+
 	"github.com/stretchr/testify/assert"
 )
 
