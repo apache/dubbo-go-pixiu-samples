@@ -18,8 +18,7 @@
 package main
 
 import (
-	"github.com/dubbo-go-pixiu/pixiu-api/pkg/xds"
-	pixiupb "github.com/dubbo-go-pixiu/pixiu-api/pkg/xds/model"
+	"github.com/apache/dubbo-go-pixiu/pkg/common/constant"
 
 	core "github.com/envoyproxy/go-control-plane/envoy/config/core/v3"
 	"github.com/envoyproxy/go-control-plane/pkg/cache/types"
@@ -32,7 +31,8 @@ import (
 )
 
 import (
-	"github.com/apache/dubbo-go-pixiu/pkg/common/constant"
+	"github.com/dubbo-go-pixiu/pixiu-api/pkg/xds"
+	pixiupb "github.com/dubbo-go-pixiu/pixiu-api/pkg/xds/model"
 )
 
 var httpManagerConfigYaml = `
