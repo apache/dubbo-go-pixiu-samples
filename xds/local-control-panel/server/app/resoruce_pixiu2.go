@@ -45,7 +45,7 @@ func makeListeners2() *pixiupb.PixiuExtensionListeners {
 	}}
 }
 
-func GenerateSnapshotPixiu2() cache.Snapshot {
+func GenerateSnapshotPixiu2() *cache.Snapshot {
 	ldsResource2, _ := anypb.New(makeListeners2())
 	cdsResource, _ := anypb.New(makeClusters())
 	snap, _ := cache.NewSnapshot("2",

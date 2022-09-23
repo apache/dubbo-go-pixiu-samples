@@ -26,11 +26,9 @@ import (
 )
 
 import (
-	"github.com/stretchr/testify/assert"
-)
+	"github.com/apache/dubbo-go-pixiu/pixiu/pkg/common/constant"
 
-import (
-	"github.com/apache/dubbo-go-pixiu/pkg/common/constant"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestPost(t *testing.T) {
