@@ -43,11 +43,14 @@ static_resources:
                         - name: "user-v1"
                           router: "/user"
                           canary-by-header: v1
-                          canary-weight: 10
+                          canary-weight: 0
                         - name: "user-v2"
                           router: "/user"
                           canary-by-header: v2
-                          canary-weight: 10
+                          canary-weight: 100
+                        - name: "user-v3"
+                          router: "/user"
+                          canary-by-header: v3
                   - name: dgp.filter.http.httpproxy
                     config:
       config:
@@ -76,6 +79,13 @@ static_resources:
           socket_address:
             address: 127.0.0.1
             port: 1316
+    - name: "user-v3"
+        lb_policy: "lb"
+        endpoints:
+          - id: 1
+            socket_address:
+              address: 127.0.0.1
+              port: 1317
   shutdown_config:
     timeout: "60s"
     step_timeout: "10s"
