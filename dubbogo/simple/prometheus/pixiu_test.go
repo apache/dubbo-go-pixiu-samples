@@ -18,23 +18,23 @@
 package prometheus
 
 import (
-	 "net/http"
-	 "testing"
-	 "time"
+	"net/http"
+	"testing"
+	"time"
 )
- 
+
 import (
-	 "github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestLocalRemote(t *testing.T) {
-	 client := &http.Client{Timeout: 5 * time.Second}
-	 req, err := http.NewRequest(http.MethodGet, "http://localhost:1314/user", nil)
-	 assert.NoError(t, err)
-	 resp, err := client.Do(req)
-	 assert.NoError(t, err)
-	 assert.Equal(t, http.StatusOK, resp.StatusCode)
-	 assert.NotNil(t, resp)
+	client := &http.Client{Timeout: 5 * time.Second}
+	req, err := http.NewRequest(http.MethodGet, "http://localhost:1314/user", nil)
+	assert.NoError(t, err)
+	resp, err := client.Do(req)
+	assert.NoError(t, err)
+	assert.Equal(t, http.StatusOK, resp.StatusCode)
+	assert.NotNil(t, resp)
 }
  
 
