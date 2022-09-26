@@ -23,14 +23,15 @@ import (
 	"net/http"
 )
 
+var (
+	router = "/user"
+	data = GetRequests()
+)
+
 func main() {
-	router := "/user"
-	data := GetRequests()
-	
 	http.HandleFunc(router, func(w http.ResponseWriter, r *http.Request) {
 			_, _ = w.Write([]byte(fmt.Sprintf(`{"method":"%s","data":%d}`, data.Request.Method, data.Request.Data)))
 	})
-	
 	log.Println("Starting sample server ...")
 	log.Fatal(http.ListenAndServe(":1314", nil))
 }

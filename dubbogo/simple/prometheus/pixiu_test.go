@@ -15,19 +15,19 @@
  * limitations under the License.
  */
 
- package prometheus
+package prometheus
 
- import (
+import (
 	 "net/http"
 	 "testing"
 	 "time"
- )
+)
  
- import (
+import (
 	 "github.com/stretchr/testify/assert"
- )
- 
- func TestLocalRemote(t *testing.T) {
+)
+
+func TestLocalRemote(t *testing.T) {
 	 client := &http.Client{Timeout: 5 * time.Second}
 	 req, err := http.NewRequest(http.MethodGet, "http://localhost:1314/user", nil)
 	 assert.NoError(t, err)
@@ -35,7 +35,7 @@
 	 assert.NoError(t, err)
 	 assert.Equal(t, http.StatusOK, resp.StatusCode)
 	 assert.NotNil(t, resp)
- }
+}
  
 
  
