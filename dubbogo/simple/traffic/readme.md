@@ -1,0 +1,31 @@
+# Traffic Filter quick start
+
+### Start Http Server
+
+```shell
+cd server
+go run server.go
+```
+
+```shell
+cd server/v1
+go run server.go
+```
+
+```shell
+cd server/v2
+go run server.go
+```
+
+### Start Pixiu
+
+```shell
+go run cmd/pixiu/*.go gateway start -c samples/dubbogo/simple/traffic/pixiu/conf.yaml
+```
+
+### Start test
+
+```shell
+curl http://localhost:8888/user
+curl -H "canary-by-header: v1" http://localhost:8888/user
+```
