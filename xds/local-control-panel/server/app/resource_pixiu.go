@@ -18,6 +18,8 @@
 package main
 
 import (
+	"github.com/apache/dubbo-go-pixiu/pixiu/pkg/common/constant"
+
 	"github.com/dubbo-go-pixiu/pixiu-api/pkg/xds"
 	pixiupb "github.com/dubbo-go-pixiu/pixiu-api/pkg/xds/model"
 
@@ -29,10 +31,6 @@ import (
 	"google.golang.org/protobuf/types/known/anypb"
 	"google.golang.org/protobuf/types/known/structpb"
 	structpb2 "google.golang.org/protobuf/types/known/structpb"
-)
-
-import (
-	"github.com/apache/dubbo-go-pixiu/pkg/common/constant"
 )
 
 var httpManagerConfigYaml = `
@@ -128,7 +126,7 @@ func makeClusters() *pixiupb.PixiuExtensionClusters {
 	}
 }
 
-func GenerateSnapshotPixiu() cache.Snapshot {
+func GenerateSnapshotPixiu() *cache.Snapshot {
 	ldsResource, _ := anypb.New(makeListeners())
 	cdsResource, _ := anypb.New(makeClusters())
 	snap, _ := cache.NewSnapshot("2",
