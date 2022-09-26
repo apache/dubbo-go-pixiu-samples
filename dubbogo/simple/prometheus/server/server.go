@@ -24,45 +24,31 @@ import (
 )
 
 func main() {
-	router := []string{"/user1", "/user2", "/user3", "/user4"}
+	router := "/user"
 	data := GetRequests()
-	for k, v := range data.Requests {
-		http.HandleFunc(router[k], func(w http.ResponseWriter, r *http.Request) {
-			_, _ = w.Write([]byte(fmt.Sprintf(`{"method":"%s","url":%s}`, v.Method, v.URL)))
-		})
-	}
+	
+	http.HandleFunc(router, func(w http.ResponseWriter, r *http.Request) {
+			_, _ = w.Write([]byte(fmt.Sprintf(`{"method":"%s","data":%d}`, data.Request.Method, data.Request.Data)))
+	})
+	
 	log.Println("Starting sample server ...")
 	log.Fatal(http.ListenAndServe(":1314", nil))
 }
 
 func GetRequests() APIRequests {
 	return APIRequests{
-		Requests: []Request{
-			{
+		Request: Request{
 				Method: "POST",
-				URL:    "/mock/test",
+				Data:100,
 			},
-			{
-				Method: "GET",
-				URL:    "/mock/test",
-			},
-			{
-				Method: "PUT",
-				URL:    "/mock/test",
-			},
-			{
-				Method: "DELETE",
-				URL:    "/mock/test",
-			},
-		},
 	}
 }
 
 type APIRequests struct {
-	Requests []Request `json:"requests"`
+	Request Request `json:"requests"`
 }
 
 type Request struct {
 	Method string `json:"method"`
-	URL    string `json:"url"`
+	Data   int     `json:"data"`
 }
