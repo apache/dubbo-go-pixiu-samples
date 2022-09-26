@@ -36,6 +36,3 @@ func TestLocalRemote(t *testing.T) {
 	assert.Equal(t, http.StatusOK, resp.StatusCode)
 	assert.NotNil(t, resp)
 }
- 
-
- 
