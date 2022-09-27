@@ -126,7 +126,7 @@ func main() {
 	RunServer(ctx, srv, port)
 }
 
-func GenerateSnapshotPixiuFromFile() cache.Snapshot {
+func GenerateSnapshotPixiuFromFile() *cache.Snapshot {
 	cdsStr, err := ioutil.ReadFile("../pixiu/cds.json")
 	if err != nil {
 		l.Errorf("%s", err)
