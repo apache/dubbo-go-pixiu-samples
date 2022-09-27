@@ -80,12 +80,12 @@ static_resources:
             address: 127.0.0.1
             port: 1316
     - name: "user-v3"
-        lb_policy: "lb"
-        endpoints:
-          - id: 1
-            socket_address:
-              address: 127.0.0.1
-              port: 1317
+      lb_policy: "lb"
+      endpoints:
+        - id: 1
+          socket_address:
+            address: 127.0.0.1
+            port: 1317
   shutdown_config:
     timeout: "60s"
     step_timeout: "10s"
