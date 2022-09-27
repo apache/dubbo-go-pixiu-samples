@@ -25,31 +25,12 @@ import (
 
 var (
 	router = "/user"
-	data = GetRequests()
 )
 
 func main() {
 	http.HandleFunc(router, func(w http.ResponseWriter, r *http.Request) {
-			_, _ = w.Write([]byte(fmt.Sprintf(`{"method":"%s","data":%d}`, data.Request.Method, data.Request.Data)))
+			_, _ = w.Write([]byte(fmt.Sprintf(`{"method":"%s","data":%d}`, "POST", 100)))
 	})
 	log.Println("Starting sample server ...")
 	log.Fatal(http.ListenAndServe(":1314", nil))
-}
-
-func GetRequests() APIRequests {
-	return APIRequests{
-		Request: Request{
-				Method: "POST",
-				Data:100,
-			},
-	}
-}
-
-type APIRequests struct {
-	Request Request `json:"requests"`
-}
-
-type Request struct {
-	Method string `json:"method"`
-	Data   int     `json:"data"`
 }
