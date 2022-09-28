@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 package main
 
 import (
@@ -29,7 +29,7 @@ var (
 
 func main() {
 	http.HandleFunc(router, func(w http.ResponseWriter, r *http.Request) {
-			_, _ = w.Write([]byte(fmt.Sprintf(`{"method":"%s","data":%d}`, "POST", 100)))
+		_, _ = w.Write([]byte(fmt.Sprintf(`{"method":"%s","data":%d}`, "POST", 100)))
 	})
 	log.Println("Starting sample server ...")
 	log.Fatal(http.ListenAndServe(":1314", nil))
