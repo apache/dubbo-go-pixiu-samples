@@ -33,14 +33,6 @@ import (
 	structpb2 "google.golang.org/protobuf/types/known/structpb"
 )
 
-<<<<<<< HEAD
-import (
-	"github.com/dubbo-go-pixiu/pixiu-api/pkg/xds"
-	pixiupb "github.com/dubbo-go-pixiu/pixiu-api/pkg/xds/model"
-)
-
-=======
->>>>>>> 4c9d97dd3d8615b3d066027676e22754b1ed576d
 var httpManagerConfigYaml = `
 route_config:
   routes:
