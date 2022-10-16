@@ -18,7 +18,10 @@
 package main
 
 import (
-	"github.com/apache/dubbo-go-pixiu/pkg/common/constant"
+	"github.com/apache/dubbo-go-pixiu/pixiu/pkg/common/constant"
+
+	"github.com/dubbo-go-pixiu/pixiu-api/pkg/xds"
+	pixiupb "github.com/dubbo-go-pixiu/pixiu-api/pkg/xds/model"
 
 	core "github.com/envoyproxy/go-control-plane/envoy/config/core/v3"
 	"github.com/envoyproxy/go-control-plane/pkg/cache/types"
@@ -30,11 +33,14 @@ import (
 	structpb2 "google.golang.org/protobuf/types/known/structpb"
 )
 
+<<<<<<< HEAD
 import (
 	"github.com/dubbo-go-pixiu/pixiu-api/pkg/xds"
 	pixiupb "github.com/dubbo-go-pixiu/pixiu-api/pkg/xds/model"
 )
 
+=======
+>>>>>>> 4c9d97dd3d8615b3d066027676e22754b1ed576d
 var httpManagerConfigYaml = `
 route_config:
   routes:
@@ -128,7 +134,7 @@ func makeClusters() *pixiupb.PixiuExtensionClusters {
 	}
 }
 
-func GenerateSnapshotPixiu() cache.Snapshot {
+func GenerateSnapshotPixiu() *cache.Snapshot {
 	ldsResource, _ := anypb.New(makeListeners())
 	cdsResource, _ := anypb.New(makeClusters())
 	snap, _ := cache.NewSnapshot("2",

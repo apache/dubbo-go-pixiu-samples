@@ -23,7 +23,7 @@ import (
 )
 
 import (
-	"github.com/apache/dubbo-go-pixiu/pkg/logger"
+	"github.com/apache/dubbo-go-pixiu/pixiu/pkg/logger"
 
 	"google.golang.org/grpc"
 )
