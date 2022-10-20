@@ -28,7 +28,7 @@ import (
 import (
 	"dubbo.apache.org/dubbo-go/v3/common/constant"
 	dconfig "dubbo.apache.org/dubbo-go/v3/config"
-	"dubbo.apache.org/dubbo-go/v3/config/generic"
+	"dubbo.apache.org/dubbo-go/v3/config/generic" //nolint
 
 	hessian "github.com/apache/dubbo-go-hessian2"
 
