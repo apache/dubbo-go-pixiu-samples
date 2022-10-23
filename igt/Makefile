@@ -147,6 +147,7 @@ run: buildPixiu
 ## buildPixiu: start pixiu
 .PHONY: buildPixiu
 buildPixiu:
+	@echo "buildPixiu CGO=$(CGO)"
 	@CGO_ENABLED=$(CGO) GOOS=$(GOOS) GOARCH=$(GOARCH) go build $(GCFLAGS) -ldflags=$(LDFLAGS) -o $(OUT_DIR)/dubbo-go-pixiu$(EXT_NAME) $(pixiuSources)
 	@-$(OUT_DIR)/dubbo-go-pixiu$(EXT_NAME) gateway start -a $(API_CONFIG_PATH) -c $(CONFIG_PATH) & echo $$! > $(PIXIU_PID)
 	@cat $(PIXIU_PID) | sed "/^/s/^/  \> PIXIU_PID: /"
