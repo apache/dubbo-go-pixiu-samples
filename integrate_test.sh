@@ -22,6 +22,9 @@ fi
 P_DIR=$(pwd)/$1
 PIXIU_DIR=$(pwd)
 
+# prepare
+make PROJECT_DIR=$P_DIR PIXIU_DIR=$PIXIU_DIR PROJECT_NAME=$(basename $P_DIR) BASE_DIR=$P_DIR/dist -f igt/Makefile prepare
+
 make PROJECT_DIR=$P_DIR PIXIU_DIR=$PIXIU_DIR PROJECT_NAME=$(basename $P_DIR) BASE_DIR=$P_DIR/dist -f igt/Makefile docker-up
 sleep 2
 # test
@@ -31,7 +34,7 @@ make PROJECT_DIR=$P_DIR PIXIU_DIR=$PIXIU_DIR PROJECT_NAME=$(basename $P_DIR) BAS
 make PROJECT_DIR=$P_DIR PIXIU_DIR=$PIXIU_DIR PROJECT_NAME=$(basename $P_DIR) BASE_DIR=$P_DIR/dist -f igt/Makefile start
 sleep 2
 # start pixiu
-make PROJECT_DIR=$P_DIR PIXIU_DIR=$PIXIU_DIR PROJECT_NAME=$(basename $P_DIR) BASE_DIR=$P_DIR/dist -f igt/Makefile buildPixiu
+make CGO=on PROJECT_DIR=$P_DIR PIXIU_DIR=$PIXIU_DIR PROJECT_NAME=$(basename $P_DIR) BASE_DIR=$P_DIR/dist -f igt/Makefile buildPixiu
 sleep 2
 # start integration
 make PROJECT_DIR=$P_DIR PIXIU_DIR=$PIXIU_DIR PROJECT_NAME=$(basename $P_DIR) BASE_DIR=$P_DIR/dist -f igt/Makefile integration
