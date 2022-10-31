@@ -21,16 +21,18 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-)
-
-var (
-	router = "/user"
+	"strings"
 )
 
 func main() {
-	http.HandleFunc(router, func(w http.ResponseWriter, r *http.Request) {
-		_, _ = w.Write([]byte(fmt.Sprintf(`{"method":"%s","data":%d}`, "POST", 100)))
-	})
+	routers := []string{"/user", "/user/pixiu", "/prefix", "/health"}
+
+	for _, router := range routers {
+		msg := router[strings.LastIndex(router, "/")+1:]
+		http.HandleFunc(router, func(w http.ResponseWriter, r *http.Request) {
+			_, _ = w.Write([]byte(fmt.Sprintf(`{"message":"%s","status":200}`, msg)))
+		})
+	}
 	log.Println("Starting sample server ...")
-	log.Fatal(http.ListenAndServe(":1314", nil))
+	log.Fatal(http.ListenAndServe(":8888", nil))
 }
