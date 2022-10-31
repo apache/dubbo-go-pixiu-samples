@@ -18,7 +18,9 @@
 package prometheus
 
 import (
+	"io/ioutil"
 	"net/http"
+	"strings"
 	"testing"
 	"time"
 )
@@ -27,12 +29,29 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestLocalRemote(t *testing.T) {
+func TestLocal(t *testing.T) {
+
+	verify(t, "http://localhost:8888/health", http.StatusUnauthorized)
+
+	s := verify(t, "http://localhost:8888/user", http.StatusOK)
+	assert.True(t, strings.Contains(s, "user"))
+
+	s = verify(t, "http://localhost:8888/user/pixiu", http.StatusOK)
+	assert.True(t, strings.Contains(s, "pixiu"))
+
+	s = verify(t, "http://localhost:8888/prefix", http.StatusOK)
+	assert.True(t, strings.Contains(s, "prefix"))
+}
+
+func verify(t *testing.T, url string, status int) string {
 	client := &http.Client{Timeout: 5 * time.Second}
-	req, err := http.NewRequest(http.MethodGet, "http://localhost:1314/user", nil)
+	req, err := http.NewRequest(http.MethodGet, url, nil)
 	assert.NoError(t, err)
 	resp, err := client.Do(req)
 	assert.NoError(t, err)
-	assert.Equal(t, http.StatusOK, resp.StatusCode)
+	assert.Equal(t, status, resp.StatusCode)
 	assert.NotNil(t, resp)
+	s, _ := ioutil.ReadAll(resp.Body)
+	t.Log(string(s))
+	return string(s)
 }
