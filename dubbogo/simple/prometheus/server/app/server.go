@@ -34,5 +34,5 @@ func main() {
 		})
 	}
 	log.Println("Starting sample server ...")
-	log.Fatal(http.ListenAndServe(":8888", nil))
+	log.Fatal(http.ListenAndServe(":1314", nil))
 }

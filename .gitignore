@@ -23,5 +23,6 @@ coverage.txt
 
 *.exe
 test
+!dubbogo/simple/prometheus/test
 
 target/
