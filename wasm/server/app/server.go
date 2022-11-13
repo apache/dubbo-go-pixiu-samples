@@ -18,6 +18,7 @@
 package main
 
 import (
+	"dubbo.apache.org/dubbo-go/v3/common/constant"
 	"fmt"
 	"os"
 	"os/signal"
@@ -36,10 +37,13 @@ const Version = "2.7.5"
 
 var survivalTimeout = int(3e9)
 
-// they are necessary:
-// export DUBBO_GO_CONFIG_PATH="../profiles/dev/server.yml"
-// export APP_LOG_CONF_FILE="../profiles/dev/log.yml"
 func main() {
+
+	getwd, _ := os.Getwd()
+	err := os.Setenv(constant.ConfigFileEnvKey, getwd+"/wasm/server/profiles/dev/server.yml")
+	if err != nil {
+		return
+	}
 	config.Load()
 	logger.Infof("dubbo version is: %s", Version)
 	initSignal()

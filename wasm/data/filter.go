@@ -23,6 +23,7 @@ import (
 )
 
 func main() {
+
 	proxywasm.SetNewHttpContext(newHttpContext)
 }
 
@@ -41,7 +42,9 @@ func (ctx *myHttpContext) OnHttpRequestHeaders(numHeaders int, endOfStream bool)
 
 	// add single header
 	proxywasm.LogInfo("proxywasm add singe header...")
-	err := proxywasm.AddHttpRequestHeader("go-wasm-header", "hello wasm")
+
+	// fixme this value will return with the Response Body, it is not good
+	err := proxywasm.AddHttpRequestHeader("go-wasm-header", "pixiu-wasm")
 	if err != nil {
 		proxywasm.LogCriticalf("failed to add request headers: %v", err)
 	}
@@ -55,7 +58,6 @@ func (ctx *myHttpContext) OnHttpRequestHeaders(numHeaders int, endOfStream bool)
 	for _, h := range hs {
 		proxywasm.LogInfof("request header from go wasm --> %s: %s", h[0], h[1])
 	}
-
 	return types.ActionContinue
 }
 
