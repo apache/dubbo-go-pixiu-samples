@@ -22,6 +22,5 @@ coverage.txt
 *.iml
 
 *.exe
-test
 
 target/
