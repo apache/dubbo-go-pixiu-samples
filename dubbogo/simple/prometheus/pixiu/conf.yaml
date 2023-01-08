@@ -54,6 +54,7 @@ static_resources:
                     counter_push: true
                     push_interval_threshold: 100
                     push_job_name: "prometheus"
+                - name: dgp.filter.http.httpproxy                    
       config:
         idle_timeout: 5s
         read_timeout: 5s
