@@ -52,7 +52,7 @@ static_resources:
                     metric_path: "/metrics"
                     push_gateway_url: "http://127.0.0.1:9091"
                     counter_push: true
-                    push_interval_threshold: 100
+                    push_interval_threshold: 3
                     push_job_name: "prometheus"
                 - name: dgp.filter.http.httpproxy                    
       config:
