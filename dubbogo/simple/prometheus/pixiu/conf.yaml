@@ -32,11 +32,21 @@ static_resources:
               route_config:
                 routes:
                   - match:
+                      prefix: /health
+                    route:
+                      cluster: user
+                      cluster_not_found_response_code: 505
+                  - match:
                       prefix: /user
                     route:
                       cluster: user
                       cluster_not_found_response_code: 505
-                http_filters:
+                  - match:
+                      prefix: /prefix
+                    route:
+                      cluster: user
+                      cluster_not_found_response_code: 505
+              http_filters:
                 - name: dgp.filter.http.prometheusmetric
                   metric_collect_rules:
                     metric_path: "/metrics"
@@ -44,7 +54,6 @@ static_resources:
                     counter_push: true
                     push_interval_threshold: 100
                     push_job_name: "prometheus"
-                    
       config:
         idle_timeout: 5s
         read_timeout: 5s
