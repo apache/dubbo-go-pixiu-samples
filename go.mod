@@ -13,7 +13,8 @@ require (
 	github.com/gogo/protobuf v1.3.2
 	github.com/golang/protobuf v1.5.2
 	github.com/spf13/cobra v1.4.0
-	github.com/stretchr/testify v1.7.2
+	github.com/stretchr/testify v1.8.0
+	github.com/tetratelabs/proxy-wasm-go-sdk v0.0.13
 	google.golang.org/genproto v0.0.0-20220502173005-c8bf987b8c21
 	google.golang.org/grpc v1.49.0
 	google.golang.org/protobuf v1.28.1
