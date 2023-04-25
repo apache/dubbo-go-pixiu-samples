@@ -36,7 +36,7 @@ import (
 	_ "github.com/apache/dubbo-go-pixiu/pixiu/pkg/pluginregistry"
 	"github.com/apache/dubbo-go-pixiu/pixiu/pkg/server"
 
-	tpconst "github.com/dubbogo/triple/pkg/common/constant"
+	tpconst "github.com/dubbogo/triple/pkg/common/constant" //nolint
 
 	"github.com/stretchr/testify/assert"
 )

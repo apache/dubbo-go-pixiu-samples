@@ -39,7 +39,7 @@ import (
 	status "github.com/dubbogo/grpc-go/status"
 
 	common "github.com/dubbogo/triple/pkg/common"
-	constant "github.com/dubbogo/triple/pkg/common/constant"
+	constant "github.com/dubbogo/triple/pkg/common/constant" //nolint
 	triple "github.com/dubbogo/triple/pkg/triple"
 )
 

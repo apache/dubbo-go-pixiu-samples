@@ -31,7 +31,7 @@ import (
 
 	hessian "github.com/apache/dubbo-go-hessian2"
 
-	tpconst "github.com/dubbogo/triple/pkg/common/constant"
+	tpconst "github.com/dubbogo/triple/pkg/common/constant" //nolint
 )
 
 func TestTriple2Dubbo(t *testing.T) {
