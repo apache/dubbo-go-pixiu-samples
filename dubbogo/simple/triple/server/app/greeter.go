@@ -24,8 +24,10 @@ import (
 
 import (
 	"dubbo.apache.org/dubbo-go/v3/common/logger"
+
 	"github.com/dubbogo/grpc-go/metadata"
-	tripleConstant "github.com/dubbogo/triple/pkg/common/constant"
+
+	tripleConstant "github.com/dubbogo/triple/pkg/common/constant" //nolint
 )
 
 import (
