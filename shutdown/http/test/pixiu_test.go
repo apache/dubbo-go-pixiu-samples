@@ -39,7 +39,7 @@ func TestHttpListenShutdown(t *testing.T) {
 	// start pixiu listener
 	bootstrap := config.Load("../pixiu/conf.yaml")
 	go server.Start(bootstrap)
-	time.Sleep(3 * time.Second) // wait start allready
+	time.Sleep(3 * time.Second) // wait start already
 
 	// start client
 	url := "http://localhost:8888/user/"
