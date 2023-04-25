@@ -36,7 +36,7 @@ import (
 	_ "github.com/apache/dubbo-go-pixiu/pixiu/pkg/pluginregistry"
 	"github.com/apache/dubbo-go-pixiu/pixiu/pkg/server"
 
-	tpconst "github.com/dubbogo/triple/pkg/common/constant"
+	tpconst "github.com/dubbogo/triple/pkg/common/constant" //nolint
 
 	"github.com/stretchr/testify/assert"
 )
@@ -74,7 +74,7 @@ func TestTripleListenShutdown(t *testing.T) {
 	// start pixiu listener
 	bootstrap := config.Load("../pixiu/conf.yaml")
 	go server.Start(bootstrap)
-	time.Sleep(3 * time.Second) // wait start allready
+	time.Sleep(3 * time.Second) // wait start already
 
 	// start client
 	tripleRefConf := newTripleRefConf("com.dubbogo.pixiu.TripleUserService", tpconst.TRIPLE)

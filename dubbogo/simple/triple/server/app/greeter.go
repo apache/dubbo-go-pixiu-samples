@@ -25,7 +25,9 @@ import (
 import (
 	"dubbo.apache.org/dubbo-go/v3/common/logger"
 
-	tripleConstant "github.com/dubbogo/triple/pkg/common/constant"
+	"github.com/dubbogo/grpc-go/metadata"
+
+	tripleConstant "github.com/dubbogo/triple/pkg/common/constant" //nolint
 )
 
 import (
@@ -75,7 +77,11 @@ func (s *GreeterProvider) SayHelloStream(svr triplepb.Greeter_SayHelloStreamServ
 
 func (s *GreeterProvider) SayHello(ctx context.Context, in *triplepb.HelloRequest) (*triplepb.User, error) {
 	logger.Infof("Dubbo3 GreeterProvider get user name = %s\n" + in.Name)
-	fmt.Println("get triple header tri-req-id = ", ctx.Value(tripleConstant.TripleCtxKey(tripleConstant.TripleRequestID)))
-	fmt.Println("get triple header tri-service-version = ", ctx.Value(tripleConstant.TripleCtxKey(tripleConstant.TripleServiceVersion)))
+	md, ok := metadata.FromIncomingContext(ctx)
+	if !ok {
+		logger.Errorf("Parsing incoming context error")
+	}
+	fmt.Println("get triple header tri-req-id = ", md.Get(tripleConstant.TripleRequestID))
+	fmt.Println("get triple header tri-service-version = ", md.Get(tripleConstant.TripleServiceVersion))
 	return &triplepb.User{Name: "Hello " + in.Name, Id: "12345", Age: 21}, nil
 }
