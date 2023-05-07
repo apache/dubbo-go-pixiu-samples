@@ -31,10 +31,16 @@ dubbo:
       port: 20000
   provider:
     registry-ids: zk
+    filter: generic_service,execute,pshutdown,tracing #metrics,echo,token,tps,accesslog,
     services:
       UserProvider:
+#        filter: echo,metrics,token,accesslog,tps,generic_service,execute,pshutdown,tracing
         group: test
         version: 1.0.0
         cluster: test_dubbo
         serialization: hessian2
         interface: com.dubbogo.pixiu.UserService
+#  tracing:
+#    UserService:
+#      ServiceName: "dubbo-user-service"
+#      Address: "http://127.0.0.1:14268/api/traces"
