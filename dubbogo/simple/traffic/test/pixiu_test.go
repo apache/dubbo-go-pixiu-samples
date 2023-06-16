@@ -29,7 +29,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestGET(t *testing.T) {
+func TestCanaryGET(t *testing.T) {
 	url := "http://localhost:8888/user"
 	client := &http.Client{Timeout: 5 * time.Second}
 	req, err := http.NewRequest("GET", url, nil)
@@ -43,7 +43,7 @@ func TestGET(t *testing.T) {
 	assert.True(t, strings.Contains(string(s), `"server": "v1"`))
 }
 
-func TestGET1(t *testing.T) {
+func TestCanaryGET1(t *testing.T) {
 	url := "http://localhost:8888/user"
 	client := &http.Client{Timeout: 5 * time.Second}
 	req, err := http.NewRequest("GET", url, nil)
@@ -56,12 +56,54 @@ func TestGET1(t *testing.T) {
 	assert.True(t, strings.Contains(string(s), `"server": "v2"`))
 }
 
-func TestGET2(t *testing.T) {
+func TestCanaryGET2(t *testing.T) {
 	url := "http://localhost:8888/user"
 	client := &http.Client{Timeout: 5 * time.Second}
 	req, err := http.NewRequest("GET", url, nil)
 	assert.NoError(t, err)
 	req.Header.Add("canary-by-header", "v3")
+	resp, err := client.Do(req)
+	assert.NoError(t, err)
+	assert.NotNil(t, resp)
+	assert.Equal(t, 200, resp.StatusCode)
+	s, _ := ioutil.ReadAll(resp.Body)
+	assert.True(t, strings.Contains(string(s), `"server": "v3"`))
+}
+
+func TestHeaderGET1(t *testing.T) {
+	url := "http://localhost:8888/user"
+	client := &http.Client{Timeout: 5 * time.Second}
+	req, err := http.NewRequest("GET", url, nil)
+	assert.NoError(t, err)
+	req.Header.Add("X-A", "t1")
+	resp, err := client.Do(req)
+	assert.NoError(t, err)
+	assert.NotNil(t, resp)
+	assert.Equal(t, 200, resp.StatusCode)
+	s, _ := ioutil.ReadAll(resp.Body)
+	assert.True(t, strings.Contains(string(s), `"server": "v1"`))
+}
+
+func TestHeaderGET2(t *testing.T) {
+	url := "http://localhost:8888"
+	client := &http.Client{Timeout: 5 * time.Second}
+	req, err := http.NewRequest("GET", url, nil)
+	assert.NoError(t, err)
+	req.Header.Add("X-C", "t1")
+	resp, err := client.Do(req)
+	assert.NoError(t, err)
+	assert.NotNil(t, resp)
+	assert.Equal(t, 200, resp.StatusCode)
+	s, _ := ioutil.ReadAll(resp.Body)
+	assert.True(t, strings.Contains(string(s), `"server": "v2"`))
+}
+
+func TestHeaderGET3(t *testing.T) {
+	url := "http://localhost:8888"
+	client := &http.Client{Timeout: 5 * time.Second}
+	req, err := http.NewRequest("GET", url, nil)
+	assert.NoError(t, err)
+	req.Header.Add("REG", "tt")
 	resp, err := client.Do(req)
 	assert.NoError(t, err)
 	assert.NotNil(t, resp)
