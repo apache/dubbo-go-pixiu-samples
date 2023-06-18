@@ -19,9 +19,6 @@ package main
 
 import (
 	"fmt"
-	"github.com/uber/jaeger-client-go"
-	jaegerConfig "github.com/uber/jaeger-client-go/config"
-	"github.com/uber/jaeger-client-go/transport"
 	"os"
 	"os/signal"
 	"syscall"
@@ -32,6 +29,10 @@ import (
 	"dubbo.apache.org/dubbo-go/v3/common/logger"
 	"dubbo.apache.org/dubbo-go/v3/config"
 	_ "dubbo.apache.org/dubbo-go/v3/imports"
+
+	"github.com/uber/jaeger-client-go"
+	jaegerConfig "github.com/uber/jaeger-client-go/config"
+	"github.com/uber/jaeger-client-go/transport"
 )
 
 var survivalTimeout = int(3e9)
