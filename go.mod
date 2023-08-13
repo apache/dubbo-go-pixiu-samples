@@ -14,6 +14,7 @@ require (
 	github.com/golang/protobuf v1.5.2
 	github.com/spf13/cobra v1.5.0
 	github.com/stretchr/testify v1.8.3
+	github.com/uber/jaeger-client-go v2.29.1+incompatible
 	google.golang.org/genproto v0.0.0-20230110181048-76db0878b65f
 	google.golang.org/grpc v1.53.0
 	google.golang.org/protobuf v1.30.0

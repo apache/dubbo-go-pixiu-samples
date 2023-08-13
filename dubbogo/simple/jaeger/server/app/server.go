@@ -29,6 +29,10 @@ import (
 	"dubbo.apache.org/dubbo-go/v3/common/logger"
 	"dubbo.apache.org/dubbo-go/v3/config"
 	_ "dubbo.apache.org/dubbo-go/v3/imports"
+
+	"github.com/uber/jaeger-client-go"
+	jaegerConfig "github.com/uber/jaeger-client-go/config"
+	"github.com/uber/jaeger-client-go/transport"
 )
 
 var survivalTimeout = int(3e9)
@@ -39,6 +43,7 @@ var survivalTimeout = int(3e9)
 func main() {
 	config.Load()
 	logger.Infof("dubbo version is: %s", Version)
+	initZipkin()
 	initSignal()
 }
 
@@ -63,4 +68,34 @@ func initSignal() {
 			return
 		}
 	}
+}
+
+func initZipkin() {
+
+	cfg := jaegerConfig.Configuration{
+		ServiceName: "UserService",
+		Sampler: &jaegerConfig.SamplerConfig{
+			Type:  jaeger.SamplerTypeConst,
+			Param: 1,
+		},
+		Reporter: &jaegerConfig.ReporterConfig{
+			QueueSize:                  0,
+			BufferFlushInterval:        0,
+			LogSpans:                   true,
+			LocalAgentHostPort:         "",
+			DisableAttemptReconnecting: false,
+			AttemptReconnectInterval:   0,
+			CollectorEndpoint:          "",
+			User:                       "",
+			Password:                   "",
+			HTTPHeaders:                nil,
+		},
+		Headers:             nil,
+		BaggageRestrictions: nil,
+		Throttler:           nil,
+	}
+
+	_, _ = cfg.InitGlobalTracer("UserService",
+		jaegerConfig.Reporter(jaeger.NewRemoteReporter(transport.NewHTTPTransport("http://127.0.0.1:14268/api/traces"))),
+	)
 }
