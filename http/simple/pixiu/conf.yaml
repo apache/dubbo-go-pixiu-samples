@@ -24,7 +24,7 @@ static_resources:
       address:
         socket_address:
           address: "0.0.0.0"
-          port: 8888
+          port: 10000
       filter_chains:
           filters:
             - name: dgp.filter.httpconnectionmanager
@@ -32,13 +32,16 @@ static_resources:
                 route_config:
                   routes:
                     - match:
-                        prefix: "/user"
+                        prefix: "/"
                       route:
-                        cluster: "user"
+                        cluster: "local"
                         cluster_not_found_response_code: 505
                 http_filters:
                   - name: dgp.filter.http.httpproxy
                     config:
+                      maxIdleConns: 100
+                      maxIdleConnsPerHost: 100
+                      MaxConnsPerHost: 100
                   - name: dgp.filter.http.cors
                     config:
                       allow_origin:
@@ -54,13 +57,13 @@ static_resources:
         read_timeout: 5s
         write_timeout: 5s
   clusters:
-    - name: "user"
+    - name: "local"
       lb_policy: "lb"
       endpoints:
         - id: 1
           socket_address:
             address: 127.0.0.1
-            port: 1314
+            port: 8080
       health_checks:
         - protocol: "tcp"
           timeout: 1s
