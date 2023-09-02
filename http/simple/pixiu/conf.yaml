@@ -39,6 +39,9 @@ static_resources:
                 http_filters:
                   - name: dgp.filter.http.httpproxy
                     config:
+                      maxIdleConns: 100
+                      maxIdleConnsPerHost: 100
+                      MaxConnsPerHost: 100
                   - name: dgp.filter.http.cors
                     config:
                       allow_origin:
