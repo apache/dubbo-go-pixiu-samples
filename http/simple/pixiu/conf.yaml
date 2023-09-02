@@ -24,7 +24,7 @@ static_resources:
       address:
         socket_address:
           address: "0.0.0.0"
-          port: 10000
+          port: 8888
       filter_chains:
           filters:
             - name: dgp.filter.httpconnectionmanager
@@ -32,9 +32,9 @@ static_resources:
                 route_config:
                   routes:
                     - match:
-                        prefix: "/"
+                        prefix: "/user"
                       route:
-                        cluster: "local"
+                        cluster: "user"
                         cluster_not_found_response_code: 505
                 http_filters:
                   - name: dgp.filter.http.httpproxy
@@ -57,13 +57,13 @@ static_resources:
         read_timeout: 5s
         write_timeout: 5s
   clusters:
-    - name: "local"
+    - name: "user"
       lb_policy: "lb"
       endpoints:
         - id: 1
           socket_address:
             address: 127.0.0.1
-            port: 8080
+            port: 1314
       health_checks:
         - protocol: "tcp"
           timeout: 1s
