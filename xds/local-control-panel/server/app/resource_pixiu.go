@@ -18,7 +18,7 @@
 package main
 
 import (
-	"github.com/apache/dubbo-go-pixiu/pixiu/pkg/common/constant"
+	"github.com/apache/dubbo-go-pixiu/pkg/common/constant"
 
 	"github.com/dubbo-go-pixiu/pixiu-api/pkg/xds"
 	pixiupb "github.com/dubbo-go-pixiu/pixiu-api/pkg/xds/model"

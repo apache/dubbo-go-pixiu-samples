@@ -22,13 +22,18 @@
 dubbo:
   registries:
     zk:
-      protocol: zookeeper
+      protocol: nacos
       timeout: 3s
-      address: 127.0.0.1:2181
+      address: 127.0.0.1:8848
+      username: nacos
+      password: nacos
   protocols:
     dubbo:
       name: dubbo
       port: 20000
+    tri:
+      name: tri
+      port: 20001
   provider:
     registry-ids: zk
     services:
