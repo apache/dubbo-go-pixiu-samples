@@ -26,7 +26,6 @@ import (
 )
 
 import (
-	"dubbo.apache.org/dubbo-go/v3/common/logger"
 	"dubbo.apache.org/dubbo-go/v3/config"
 	_ "dubbo.apache.org/dubbo-go/v3/imports"
 )
@@ -34,11 +33,11 @@ import (
 var survivalTimeout = int(3e9)
 
 // they are necessary:
-// 		export CONF_PROVIDER_FILE_PATH="xxx"
-// 		export APP_LOG_CONF_FILE="xxx"
+//
+//	export CONF_PROVIDER_FILE_PATH="xxx"
+//	export APP_LOG_CONF_FILE="xxx"
 func main() {
 	config.Load()
-	logger.Infof("dubbo version is: %s", Version)
 	initSignal()
 }
 
@@ -48,13 +47,11 @@ func initSignal() {
 	signal.Notify(signals, os.Interrupt, syscall.SIGHUP, syscall.SIGQUIT, syscall.SIGTERM, syscall.SIGINT)
 	for {
 		sig := <-signals
-		logger.Infof("get signal %s", sig.String())
 		switch sig {
 		case syscall.SIGHUP:
 			// reload()
 		default:
 			time.AfterFunc(time.Duration(survivalTimeout), func() {
-				logger.Warnf("app exit now by force...")
 				os.Exit(1)
 			})
 

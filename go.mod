@@ -18,5 +18,4 @@ require (
 	google.golang.org/grpc v1.56.3
 	google.golang.org/protobuf v1.30.0
 	vimagination.zapto.org/memio v1.0.0 // indirect
-
 )
