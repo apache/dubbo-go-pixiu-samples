@@ -26,9 +26,9 @@ import (
 )
 
 import (
-	"dubbo.apache.org/dubbo-go/v3/common/logger"
 	"dubbo.apache.org/dubbo-go/v3/config"
 	_ "dubbo.apache.org/dubbo-go/v3/imports"
+	"github.com/dubbogo/gost/log/logger"
 
 	"github.com/uber/jaeger-client-go"
 	jaegerConfig "github.com/uber/jaeger-client-go/config"
@@ -38,8 +38,9 @@ import (
 var survivalTimeout = int(3e9)
 
 // they are necessary:
-// 		export CONF_PROVIDER_FILE_PATH="xxx"
-// 		export APP_LOG_CONF_FILE="xxx"
+//
+//	export CONF_PROVIDER_FILE_PATH="xxx"
+//	export APP_LOG_CONF_FILE="xxx"
 func main() {
 	config.Load()
 	logger.Infof("dubbo version is: %s", Version)
