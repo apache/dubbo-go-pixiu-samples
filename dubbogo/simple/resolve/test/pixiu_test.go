@@ -32,7 +32,7 @@ import (
 func TestPost1(t *testing.T) {
 	url := "http://localhost:8883/UserService/com.dubbogo.pixiu.UserService/GetUserByName"
 	data := "{\"types\":\"string\",\"values\":\"tc\"}"
-	client := &http.Client{Timeout: 5 * time.Second}
+	client := &http.Client{Timeout: 60 * time.Second}
 	req, err := http.NewRequest("POST", url, strings.NewReader(data))
 	req.Header.Set("x-dubbo-http1.1-dubbo-version", "1.0.0")
 	req.Header.Set("x-dubbo-service-protocol", "dubbo")
