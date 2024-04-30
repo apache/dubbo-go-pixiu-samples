@@ -188,14 +188,13 @@ func (u *UserProvider) CreateUser(ctx context.Context, user *User) (*User, error
 
 // GetUserByName query by name, single param, PX config GET.
 func (u *UserProvider) GetUserByName(ctx context.Context, name string) (*User, error) {
-	fmt.Println("------------------------")
 	outLn("Req GetUserByName name:%#v", name)
 	r, ok := cache.GetByName(name)
 	if ok {
 		outLn("Req GetUserByName result:%#v", r)
-		return r, errors.New("fail")
+		return r, nil
 	}
-	return nil, errors.New("fail")
+	return nil, nil
 }
 
 // GetUserByCode query by code, single param, PX config GET.
