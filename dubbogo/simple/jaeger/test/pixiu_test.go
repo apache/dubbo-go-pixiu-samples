@@ -23,7 +23,6 @@ import (
 	"io"
 	"io/ioutil"
 	"net/http"
-	"sort"
 	"strings"
 	"testing"
 	"time"
@@ -93,9 +92,6 @@ func TestFindTraces(t *testing.T) {
 	operations := []string{"DUBBOGO CLIENT", "HTTP-POST"}
 	spans := GetTracesFromJaeger(t)
 	spans = spans[len(spans)-2:] // lsat 2 spans
-	sort.Slice(spans, func(i, j int) bool {
-		return spans[i].OperationName < spans[j].OperationName
-	})
 	assert.Len(t, spans, len(operations))
 	for i := 0; i < len(operations); i++ {
 		fmt.Println(operations[i], spans[i].OperationName)
