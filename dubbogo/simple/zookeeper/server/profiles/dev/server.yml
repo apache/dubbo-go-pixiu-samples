@@ -27,10 +27,6 @@ dubbo:
       timeout: 3s
       address: 127.0.0.1:2181
       registry-type: all
-#    nacos:
-#      protocol: nacos
-#      timeout: 3s
-#      address: 127.0.0.1:8848
   protocols:
     dubbo:
       name: dubbo

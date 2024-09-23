@@ -40,7 +40,7 @@ static_resources:
       config:
         registries:
           "zookeeper":
-            registry_type: application # or interface
+            registry_type: interface # or interface
             protocol: zookeeper
             address: "127.0.0.1:2181"
             timeout: "5s"
