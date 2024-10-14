@@ -30,6 +30,7 @@ dubbo:
       password: nacos
       group: test-group
       namespace: test-namespace
+      registry-type: all
   protocols:
     dubbo:
       name: dubbo

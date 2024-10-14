@@ -16,27 +16,30 @@
 # specific language governing permissions and limitations
 # under the License.
 #
-# dubbo server yaml configure file
-# application config
-dubbo:
-  application:
-    name: BDTService
-  registries:
-    nacos:
-      protocol: nacos
-      timeout: 3s
-      address: 127.0.0.1:8848
-      registry-type: all
-  protocols:
-    triple:
-      name: tri
-      port: 20001
-  provider:
-    registry-ids: nacos
-    services:
-      # you may refer to `Reference()` method defined in `protobuf/triple/helloworld.pb.go`
-      GreeterProvider:
-        protocol-ids: triple # 使用上面定义的协议id
-        serialization: protobuf
-        # interface read from pb file
-        interface: "org.apache.dubbogo.samples.api.Greeter"
+level: "debug"
+development: true
+disableCaller: false
+disableStacktrace: false
+sampling:
+encoding: "console"
+
+# encoder
+encoderConfig:
+  messageKey: "message"
+  levelKey: "level"
+  timeKey: "time"
+  nameKey: "logger"
+  callerKey: "caller"
+  stacktraceKey: "stacktrace"
+  lineEnding: ""
+  levelEncoder: "capitalColor"
+  timeEncoder: "iso8601"
+  durationEncoder: "seconds"
+  callerEncoder: "short"
+  nameEncoder: ""
+
+outputPaths:
+  - "stderr"
+errorOutputPaths:
+  - "stderr"
+initialFields:
