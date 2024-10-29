@@ -28,3 +28,4 @@ services:
       - MODE=standalone
     ports:
       - "8848:8848"
+      - "9848:9848"
