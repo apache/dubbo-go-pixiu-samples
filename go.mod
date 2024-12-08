@@ -3,9 +3,9 @@ module github.com/dubbo-go-pixiu/samples
 go 1.18
 
 require (
-	dubbo.apache.org/dubbo-go/v3 v3.1.1-rc1
+	dubbo.apache.org/dubbo-go/v3 v3.1.1
 	github.com/apache/dubbo-go-hessian2 v1.12.3
-	github.com/apache/dubbo-go-pixiu v1.0.0-rc2
+	github.com/apache/dubbo-go-pixiu v1.0.1-rc1
 	github.com/dubbogo/gost v1.14.0
 	github.com/dubbogo/grpc-go v1.42.10
 	github.com/dubbogo/triple v1.2.2-rc3
@@ -65,7 +65,7 @@ require (
 	github.com/go-resty/resty/v2 v2.7.0 // indirect
 	github.com/goccy/go-json v0.10.2 // indirect
 	github.com/goinggo/mapstructure v0.0.0-20140717182941-194205d9b4a9 // indirect
-	github.com/golang-jwt/jwt/v4 v4.4.2 // indirect
+	github.com/golang-jwt/jwt/v4 v4.5.1 // indirect
 	github.com/golang/mock v1.6.0 // indirect
 	github.com/golang/snappy v0.0.4 // indirect
 	github.com/google/uuid v1.3.0 // indirect
