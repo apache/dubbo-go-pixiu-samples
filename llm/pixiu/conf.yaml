@@ -41,7 +41,8 @@ static_resources:
                     config:
                       maxIdleConns: 100
                       maxIdleConnsPerHost: 100
-                      MaxConnsPerHost: 100
+                      maxConnsPerHost: 100
+                      scheme: "https"
                   # - name: dgp.filter.llm.tokenizer
       config:
         idle_timeout: 5s
@@ -58,7 +59,7 @@ static_resources:
       health_checks:
         - protocol: "https"
           timeout: 1s
-          interval: 2s
+          interval: 5s
           healthy_threshold: 4
           unhealthy_threshold: 4
   shutdown_config:

@@ -37,7 +37,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestPostFixed(t *testing.T) {
+func TestLLMCall(t *testing.T) {
 	err := godotenv.Load(".env")
 	assert.NoError(t, err)
 	url := "http://localhost:8888/chat/completions"
