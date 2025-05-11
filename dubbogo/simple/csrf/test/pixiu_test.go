@@ -18,7 +18,7 @@
 package csrf
 
 import (
-	"io/ioutil"
+	"io"
 	"net/http"
 	"strings"
 	"testing"
@@ -41,7 +41,7 @@ func GetToken(t *testing.T) bool {
 		assert.NoError(t, err)
 		assert.Equal(t, http.StatusOK, resp.StatusCode)
 		assert.NotNil(t, resp)
-		s, _ := ioutil.ReadAll(resp.Body)
+		s, _ := io.ReadAll(resp.Body)
 		token = string(s)
 	})
 }
@@ -58,7 +58,7 @@ func TestCsrfHeader(t *testing.T) {
 		assert.NoError(t, err)
 		assert.Equal(t, http.StatusOK, resp.StatusCode)
 		assert.NotNil(t, resp)
-		s, _ := ioutil.ReadAll(resp.Body)
+		s, _ := io.ReadAll(resp.Body)
 		t.Log(string(s))
 		assert.True(t, strings.Contains(string(s), "success"))
 	}
@@ -75,7 +75,7 @@ func TestCsrfQuery(t *testing.T) {
 		assert.NoError(t, err)
 		assert.Equal(t, http.StatusOK, resp.StatusCode)
 		assert.NotNil(t, resp)
-		s, _ := ioutil.ReadAll(resp.Body)
+		s, _ := io.ReadAll(resp.Body)
 		t.Log(string(s))
 		assert.True(t, strings.Contains(string(s), "success"))
 	}

@@ -21,7 +21,6 @@ import (
 	"context"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"net/http"
 	"sort"
 	"strings"
@@ -83,7 +82,7 @@ func TestPost(t *testing.T) {
 	assert.NoError(t, err)
 	assert.NotNil(t, resp)
 	assert.Equal(t, 200, resp.StatusCode)
-	s, _ := ioutil.ReadAll(resp.Body)
+	s, _ := io.ReadAll(resp.Body)
 	assert.Equal(t, "{\"age\":99,\"code\":4,\"iD\":\"0003\",\"name\":\"dubbogo2\"}", string(s))
 }
 
