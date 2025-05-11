@@ -13,6 +13,7 @@ require (
 	github.com/dubbogo/triple v1.2.2-rc3
 	github.com/gin-gonic/gin v1.9.1
 	github.com/gogo/protobuf v1.3.2
+	github.com/joho/godotenv v1.3.0
 	github.com/spf13/cobra v1.6.0
 	github.com/stretchr/testify v1.8.4
 	github.com/uber/jaeger-client-go v2.29.1+incompatible
