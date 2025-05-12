@@ -18,33 +18,26 @@
 package main
 
 import (
-	"fmt"
+	"log"
 	"net/http"
-	"time"
+)
+
+import (
+	"github.com/apache/dubbo-go-pixiu/pkg/common/constant"
 )
 
 func main() {
-	client := &http.Client{Timeout: time.Second * 2}
-	url := "http://localhost:8888/api/v1/test-dubbo/user?name=tc"
-
-	ch := make(chan interface{})
-	for i := 0; i < 5; i++ {
-		go func() {
-			for {
-				access(client, url)
-			}
-		}()
-	}
-	<-ch
+	http.HandleFunc("/v1/", handle)
+	log.Println("Starting sample server ...")
+	log.Fatal(http.ListenAndServe(":1314", nil))
 }
 
-func access(c *http.Client, url string) {
-	res, err := c.Get(url)
-	time.Sleep(time.Millisecond * 100)
-	if err != nil {
-		fmt.Println(time.Now(), "blocked", err.Error())
-		return
+func handle(w http.ResponseWriter, r *http.Request) {
+	switch r.Method {
+	case constant.Get:
+		// w.WriteHeader(200)
+		w.Header().Set(constant.HeaderKeyContextType, constant.HeaderValueJsonUtf8)
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte("resp"))
 	}
-	fmt.Println(time.Now(), "passed")
-	_ = res.Body.Close()
 }

@@ -41,6 +41,26 @@ resources:
 
 ### 测试:
 
-- 为了更简单的测试，我们把qps设置为1
+- 为了更简单的测试，我们把qps设置为1，运行测试并查看输出
 
-- 运行[并发测试](test.go)并查看输出
+```bash
+go run /path_to/dubbo-go-pixiu/cmd/pixiu/*.go gateway start -c /path_to/dubbo-go-pixiu-samples/plugins/ratelimit/pixiu/conf.yaml
+```
+
+```bash
+go run /path_to/dubbo-go-pixiu-samples/plugins/ratelimit/server/app/*
+```
+
+```bash
+go test -v /path_to/dubbo-go-pixiu-samples/plugins/ratelimit/test
+```
+
+输出结果应如下所示：
+```
+=== RUN   TestRatelimit
+2025-05-12T12:04:22.509+0800	INFO	test/pixiu_test.go:52	status: 200
+2025-05-12T12:04:22.510+0800	INFO	test/pixiu_test.go:58	status: 429
+2025-05-12T12:04:22.510+0800	INFO	test/pixiu_test.go:58	status: 429
+2025-05-12T12:04:22.511+0800	INFO	test/pixiu_test.go:58	status: 429
+2025-05-12T12:04:22.511+0800	INFO	test/pixiu_test.go:58	status: 429
+```
