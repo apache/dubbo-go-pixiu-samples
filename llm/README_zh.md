@@ -17,11 +17,13 @@ $ cp pathto/dubbo-go-pixiu-samples/llm/test/.env.example pathto/dubbo-go-pixiu-s
 通过执行以下命令运行Pixiu服务器：
 
 ```shell
-$ go run pathto/dubbo-go-pixiu/cmd/pixiu/*.go gateway start -c pathto/dubbo-go-pixiu-samples/llm/pixiu/conf.yaml
+$ cd pathto/dubbo-go-pixiu
+$ go run ./cmd/pixiu/*.go gateway start -c pathto/dubbo-go-pixiu-samples/llm/pixiu/conf.yaml
 ```
 
-### **运行测试代码**
+### **运行客户端代码**
 
 ```shell
-$ go test -v pathto/dubbo-go-pixiu-samples/llm/test/ -count=1
+$ cd pathto/dubbo-go-pixiu-samples/llm
+$ go run ./go-client/client.go
 ```

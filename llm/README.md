@@ -17,11 +17,13 @@ Add your DeepSeek API to `.env` file, see [deepseek](https://platform.deepseek.c
 Run the Pixiu server by executing:
 
 ```shell
-$ go run pathto/dubbo-go-pixiu/cmd/pixiu/*.go gateway start -c pathto/dubbo-go-pixiu-samples/llm/pixiu/conf.yaml
+$ cd pathto/dubbo-go-pixiu
+$ go run ./cmd/pixiu/*.go gateway start -c pathto/dubbo-go-pixiu-samples/llm/pixiu/conf.yaml
 ```
 
-### **Run the test code**
+### **Run the client code**
 
 ```shell
-$ go test -v pathto/dubbo-go-pixiu-samples/llm/test/ -count=1
+$ cd pathto/dubbo-go-pixiu-samples/llm
+$ go run ./go-client/client.go
 ```
