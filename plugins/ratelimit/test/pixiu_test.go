@@ -31,17 +31,18 @@ import (
 )
 
 func TestRatelimit(t *testing.T) {
-	url := "http://localhost:8888/v1/"
-	client := &http.Client{Timeout: 5 * time.Second}
-	req, err := http.NewRequest("GET", url, nil)
-	assert.NoError(t, err)
-	req.Header.Add("Content-Type", "application/json")
-	var resp *http.Response
-
 	var (
 		cnt200 int
 		cnt429 int
+		url    = "http://localhost:8888/v1/"
+		client = &http.Client{Timeout: 5 * time.Second}
+		resp   *http.Response
 	)
+
+	req, err := http.NewRequest("GET", url, nil)
+	assert.NoError(t, err)
+	req.Header.Add("Content-Type", "application/json")
+
 	for i := 0; i < 5; i++ {
 		resp, err = client.Do(req)
 		if resp.StatusCode == 200 {
