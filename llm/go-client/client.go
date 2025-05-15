@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package test
+package main
 
 import (
 	"bufio"
@@ -25,39 +25,39 @@ import (
 	"net/http"
 	"os"
 	"strings"
-	"testing"
 	"time"
 )
 
 import (
-	"github.com/apache/dubbo-go-pixiu/pkg/common/constant"
-
 	"github.com/joho/godotenv"
-
-	"github.com/stretchr/testify/assert"
 )
 
-func TestLLMCall(t *testing.T) {
-	err := godotenv.Load(".env")
-	assert.NoError(t, err)
+func main() {
+	err := godotenv.Load("go-client/.env")
+	if err != nil {
+		fmt.Println("Error loading .env file")
+		return
+	}
 	url := "http://localhost:8888/chat/completions"
 	data := `{"model":"deepseek-chat","messages":[{"role": "user", "content": "3+5=?"}],"temperature":0.8,"stream":true}`
 	client := &http.Client{Timeout: 10 * time.Second}
 
 	req, err := http.NewRequest("POST", url, strings.NewReader(data))
-	assert.NoError(t, err)
+	if err != nil {
+		fmt.Println("Error creating request:", err)
+		return
+	}
 
 	key := os.Getenv("API_KEY")
 	req.Header.Add("Content-Type", "application/json")
 	req.Header.Add("Authorization", "Bearer "+key)
 
 	resp, err := client.Do(req)
-	assert.NoError(t, err)
+	if err != nil {
+		fmt.Println("Error making request:", err)
+		return
+	}
 	defer resp.Body.Close()
-
-	assert.NotNil(t, resp)
-	assert.Equal(t, http.StatusOK, resp.StatusCode)
-	assert.Contains(t, resp.Header.Get(constant.HeaderKeyContextType), "text/event-stream")
 
 	reader := bufio.NewReader(resp.Body)
 	var eventData strings.Builder
@@ -65,10 +65,10 @@ func TestLLMCall(t *testing.T) {
 	for {
 		line, err := reader.ReadString('\n')
 		if err != nil {
-			if err == io.EOF {
-				break
+			if err != io.EOF {
+				fmt.Println("Error reading response:", err)
+				return
 			}
-			assert.NoError(t, err)
 			return
 		}
 		line = strings.TrimSpace(line)
@@ -97,5 +97,4 @@ func TestLLMCall(t *testing.T) {
 			}
 		}
 	}
-	fmt.Println()
 }
