@@ -38,8 +38,10 @@ func TestRatelimit(t *testing.T) {
 	req.Header.Add("Content-Type", "application/json")
 	var resp *http.Response
 
-	var cnt200 int
-	var cnt429 int
+	var (
+		cnt200 int
+		cnt429 int
+	)
 	for i := 0; i < 5; i++ {
 		resp, err = client.Do(req)
 		if resp.StatusCode == 200 {
