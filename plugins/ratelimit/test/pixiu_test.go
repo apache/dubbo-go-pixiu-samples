@@ -45,24 +45,25 @@ func TestRatelimit(t *testing.T) {
 
 	for i := 0; i < 5; i++ {
 		resp, err = client.Do(req)
+		assert.NoError(t, err)
+		assert.NotNil(t, resp)
+
 		if resp.StatusCode == 200 {
-			assert.NoError(t, err)
-			assert.NotNil(t, resp)
 			assert.Equal(t, 200, resp.StatusCode)
 			s, _ := io.ReadAll(resp.Body)
 			assert.True(t, strings.Contains(string(s), "resp"))
 			cnt200++
 			logger.Info("status: ", 200)
 		} else {
-			assert.NoError(t, err)
-			assert.NotNil(t, resp)
 			assert.Equal(t, 429, resp.StatusCode)
 			cnt429++
 			logger.Info("status: ", 429)
 		}
+
+		resp.Body.Close()
 	}
 
-	assert.Equal(t, cnt200, 1)
-	assert.Equal(t, cnt429, 4)
+	assert.Equal(t, 1, cnt200)
+	assert.Equal(t, 4, cnt429)
 
 }
