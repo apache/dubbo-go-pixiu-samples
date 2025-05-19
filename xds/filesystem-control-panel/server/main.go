@@ -20,7 +20,6 @@ package main
 import (
 	"context"
 	"flag"
-	"io/ioutil"
 	"log"
 	"os"
 	"strconv"
@@ -129,7 +128,7 @@ func main() {
 }
 
 func GenerateSnapshotPixiuFromFile() *cache.Snapshot {
-	cdsStr, err := ioutil.ReadFile("../pixiu/cds.json")
+	cdsStr, err := os.ReadFile("../pixiu/cds.json")
 	if err != nil {
 		l.Errorf("%s", err)
 	}
@@ -139,7 +138,7 @@ func GenerateSnapshotPixiuFromFile() *cache.Snapshot {
 		l.Errorf("%s", err)
 	}
 
-	ldsStr, err := ioutil.ReadFile("../pixiu/lds.json")
+	ldsStr, err := os.ReadFile("../pixiu/lds.json")
 	if err != nil {
 		l.Errorf("%s", err)
 	}
