@@ -18,7 +18,7 @@
 package test
 
 import (
-	"io/ioutil"
+	"io"
 	"net/http"
 	"strings"
 	"testing"
@@ -40,7 +40,7 @@ func TestPost(t *testing.T) {
 	assert.NoError(t, err)
 	assert.NotNil(t, resp)
 	assert.Equal(t, 200, resp.StatusCode)
-	s, _ := ioutil.ReadAll(resp.Body)
+	s, _ := io.ReadAll(resp.Body)
 	assert.Equal(t, "{\"age\":99,\"code\":3,\"iD\":\"0003\",\"name\":\"dubbogo\"}", string(s))
 }
 
@@ -55,7 +55,7 @@ func TestPut1(t *testing.T) {
 	assert.NoError(t, err)
 	assert.NotNil(t, resp)
 	assert.Equal(t, 200, resp.StatusCode)
-	s, _ := ioutil.ReadAll(resp.Body)
+	s, _ := io.ReadAll(resp.Body)
 	assert.Equal(t, "true", string(s))
 }
 
@@ -70,6 +70,6 @@ func TestPut2(t *testing.T) {
 	assert.NoError(t, err)
 	assert.NotNil(t, resp)
 	assert.Equal(t, 200, resp.StatusCode)
-	s, _ := ioutil.ReadAll(resp.Body)
+	s, _ := io.ReadAll(resp.Body)
 	assert.Equal(t, "true", string(s))
 }

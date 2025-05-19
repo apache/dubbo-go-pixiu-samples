@@ -18,7 +18,7 @@
 package jwt
 
 import (
-	"io/ioutil"
+	"io"
 	"net/http"
 	"strings"
 	"testing"
@@ -75,7 +75,7 @@ func verify(t *testing.T, url string, status int) string {
 	assert.NoError(t, err)
 	assert.Equal(t, status, resp.StatusCode)
 	assert.NotNil(t, resp)
-	s, _ := ioutil.ReadAll(resp.Body)
+	s, _ := io.ReadAll(resp.Body)
 	t.Log(string(s))
 	return string(s)
 }
