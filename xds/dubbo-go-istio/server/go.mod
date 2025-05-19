@@ -1,6 +1,8 @@
 module dubbo-go-app
 
-go 1.18
+go 1.23.0
+
+toolchain go1.23.8
 
 require (
 	dubbo.apache.org/dubbo-go/v3 v3.1.1-rc1

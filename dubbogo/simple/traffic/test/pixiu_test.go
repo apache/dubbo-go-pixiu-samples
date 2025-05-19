@@ -18,7 +18,7 @@
 package test
 
 import (
-	"io/ioutil"
+	"io"
 	"net/http"
 	"strings"
 	"testing"
@@ -39,7 +39,7 @@ func TestCanaryGET(t *testing.T) {
 	assert.NoError(t, err)
 	assert.NotNil(t, resp)
 	assert.Equal(t, 200, resp.StatusCode)
-	s, _ := ioutil.ReadAll(resp.Body)
+	s, _ := io.ReadAll(resp.Body)
 	assert.True(t, strings.Contains(string(s), `"server": "v1"`))
 }
 
@@ -52,7 +52,7 @@ func TestCanaryGET1(t *testing.T) {
 	assert.NoError(t, err)
 	assert.NotNil(t, resp)
 	assert.Equal(t, 200, resp.StatusCode)
-	s, _ := ioutil.ReadAll(resp.Body)
+	s, _ := io.ReadAll(resp.Body)
 	assert.True(t, strings.Contains(string(s), `"server": "v2"`))
 }
 
@@ -66,7 +66,7 @@ func TestCanaryGET2(t *testing.T) {
 	assert.NoError(t, err)
 	assert.NotNil(t, resp)
 	assert.Equal(t, 200, resp.StatusCode)
-	s, _ := ioutil.ReadAll(resp.Body)
+	s, _ := io.ReadAll(resp.Body)
 	assert.True(t, strings.Contains(string(s), `"server": "v3"`))
 }
 
@@ -80,7 +80,7 @@ func TestHeaderGET1(t *testing.T) {
 	assert.NoError(t, err)
 	assert.NotNil(t, resp)
 	assert.Equal(t, 200, resp.StatusCode)
-	s, _ := ioutil.ReadAll(resp.Body)
+	s, _ := io.ReadAll(resp.Body)
 	assert.True(t, strings.Contains(string(s), `"server": "v1"`))
 }
 
@@ -94,7 +94,7 @@ func TestHeaderGET2(t *testing.T) {
 	assert.NoError(t, err)
 	assert.NotNil(t, resp)
 	assert.Equal(t, 200, resp.StatusCode)
-	s, _ := ioutil.ReadAll(resp.Body)
+	s, _ := io.ReadAll(resp.Body)
 	assert.True(t, strings.Contains(string(s), `"server": "v2"`))
 }
 
@@ -108,6 +108,6 @@ func TestHeaderGET3(t *testing.T) {
 	assert.NoError(t, err)
 	assert.NotNil(t, resp)
 	assert.Equal(t, 200, resp.StatusCode)
-	s, _ := ioutil.ReadAll(resp.Body)
+	s, _ := io.ReadAll(resp.Body)
 	assert.True(t, strings.Contains(string(s), `"server": "v3"`))
 }

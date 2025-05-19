@@ -19,7 +19,7 @@ package main
 
 import (
 	"encoding/json"
-	"io/ioutil"
+	"io"
 	"log"
 	"math/rand"
 	"net/http"
@@ -39,7 +39,7 @@ func main() {
 func user(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case constant.Post:
-		byts, err := ioutil.ReadAll(r.Body)
+		byts, err := io.ReadAll(r.Body)
 		if err != nil {
 			w.Write([]byte(err.Error()))
 		}

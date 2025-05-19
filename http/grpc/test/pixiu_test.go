@@ -20,7 +20,7 @@ package test
 import (
 	"bytes"
 	"encoding/json"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"strings"
 	"testing"
@@ -46,7 +46,7 @@ func TestGet(t *testing.T) {
 	assert.NoError(t, err)
 	resp, err := c.Do(req)
 	assert.NoError(t, err)
-	body, err := ioutil.ReadAll(resp.Body)
+	body, err := io.ReadAll(resp.Body)
 	assert.NoError(t, err)
 	assert.NotNil(t, body)
 	var r proto.GetUserResponse
@@ -66,7 +66,7 @@ func TestPost(t *testing.T) {
 	assert.NoError(t, err)
 	resp, err := c.Do(req)
 	assert.NoError(t, err)
-	body, err := ioutil.ReadAll(resp.Body)
+	body, err := io.ReadAll(resp.Body)
 	assert.NoError(t, err)
 	assert.NotNil(t, body)
 	var r proto.GetUserResponse
