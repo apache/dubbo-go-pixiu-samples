@@ -1,12 +1,14 @@
 module github.com/dubbo-go-pixiu/samples
 
-go 1.18
+go 1.23
+
+toolchain go1.23.4
 
 require (
 	dubbo.apache.org/dubbo-go/v3 v3.1.1
 	github.com/apache/dubbo-go-hessian2 v1.12.3
 	github.com/apache/dubbo-go-pixiu v1.0.1-rc1
-	github.com/dubbogo/gost v1.14.0
+	github.com/dubbogo/gost v1.14.1
 	github.com/dubbogo/grpc-go v1.42.10
 	github.com/dubbogo/triple v1.2.2-rc3
 	github.com/gin-gonic/gin v1.9.1
@@ -118,6 +120,7 @@ require (
 	github.com/prometheus/procfs v0.8.0 // indirect
 	github.com/robfig/cron/v3 v3.0.1 // indirect
 	github.com/shirou/gopsutil/v3 v3.22.2 // indirect
+	github.com/sirupsen/logrus v1.8.1 // indirect
 	github.com/spaolacci/murmur3 v1.1.0 // indirect
 	github.com/spf13/cast v1.5.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect

@@ -1,87 +1,60 @@
-# samples
+# Dubbo-go-pixiu Samples
+
+![CI](https://github.com/apache/dubbo-go-samples/workflows/CI/badge.svg)
+
 samples for [dubbo-go-pixiu](https://github.com/apache/dubbo-go-pixiu)
 
+[中文 🇨🇳](./README_CN.md)
 
 ## What It Contains
 
-- dubbogo/simple/nacos: http to dubbo with nacos registry
-- dubbogo/simple/triple: http to triple
-- dubbogo/simple/jaeger: pixiu with jaeger
-- dubbogo/simple/direct: http to dubbo with direct generic call  
-- dubbogo/simple/body: http to dubbo with api_config.yaml
-- dubbogo/simple/resolve: http to dubbo with auto resolve protocol
+- dubbogo/simple: this directory contains some simple samples for dubbogo and pixiu
+  - dubbogo/simple/bestdo: include jaeger and http to dubbo
+  - dubbogo/simple/body: http to dubbo with api_config.yaml
+  - dubbogo/simple/csrf: csrf protection
+  - dubbogo/simple/direct: http to dubbo with direct generic call
+  - dubbogo/simple/farconfnacos: pixiu with nacos remote Configuration Center
+  - dubbogo/simple/jaeger: pixiu with jaeger
+  - dubbogo/simple/jwt: jwt authentication
+  - dubbogo/simple/nacos: http to dubbo with nacos registry
+  - dubbogo/simple/prometheus: pixiu with prometheus
+  - dubbogo/simple/dubboproxy: dubbo to http transform and http to dubbo transform
+  - dubbogo/simple/resolve: http to dubbo with auto resolve protocol
+  - dubbogo/simple/traffic: traffic splitting and canary release
+  - dubbogo/simple/triple: http to triple
+  - dubbogo/simple/zookeeper: pixiu with dubbo using zookeeper as registry center
+
+- dubbohttpproxy: dubbo to http transform and http to dubbo transform
+- dubbotripleproxy: dubbo to triple transform and triple to dubbo transform
 
 - grpc: grpc proxy
+
 - http/grpc: http to grpc transform
-- http/simple: http proxy
+- http/simple: simple http proxy
+
+- llm: simple sample for pixiu to call llm
+
+- plugins: this directory contains some plugins for pixiu
+  - plugins/ratelimit: rate limit plugin for pixiu
+
+- seata: This demonstrates how to configure the Seata filter to interact with the Seata TC for distributed transaction coordination.
+
+- shutdown: this directory demonstrates how to gracefully shut down
+  - shutdown/dubbo: This demonstrates how to gracefully shut down the Pixiu server with dubbo listener.
+  - shutdown/http: This demonstrates how to gracefully shut down the Pixiu server with http listener.
+  - shutdown/http2: This demonstrates how to gracefully shut down the Pixiu server with http2 listener.
+  - shutdown/triple: This demonstrates how to gracefully shut down the Pixiu server with triple listener.
 
 - springcloud: http proxy with spring cloud registry
 - xds: pixiu with xds
 
-## How to run
+## How To Run
 
-#### cd samples dir
+Pls refer [How To Run](HOWTO.md) for the instructions.
 
-```
-cd dubbogo/simple
-```
+## How to contribute
 
-we can use start.sh to run samples quickly. for more info, execute command as below for more help
-
-```
-./start.sh [action] [project]
-./start.sh help
-```
-
-we run body samples below step
-
-#### prepare config file and docker
-
-prepare command will prepare dubbo-server and pixiu config file and start docker container needed
-
-```
-./start.sh prepare body
-```
-
-if prepare config file manually, notice:
-- modify $PROJECT_DIR in conf.yaml to absolute path in your compute
-
-#### start dubbo or http server
-
-```
-./start.sh startServer body
-```
-
-#### start pixiu
-
-```
-./start.sh startPixiu body
-```
-
-if run pixiu manually in pixiu project, use command as below.
-
-```
- go run pixiu/*.go gateway start -c /[absolute-path]/dubbo-go-pixiu/samples/dubbogo/simple/body/pixiu/conf.yaml
-```
-
-
-#### Try a request
-
-use curl to send request
-
-```bash
-curl -X POST 'localhost:8881/api/v1/test-dubbo/user' -d '{"id":"0003","code":3,"name":"dubbogo","age":99}' --header 'Content-Type: application/json' 
-```
-
-or just run unit test
-
-```bash
-./start.sh startTest body
-
-```
-
-#### Clean
-
-```
-./start.sh clean body
-```
+If you want to add more samples, pls. read on:
+1. Create new sub directory and give it an appropriate name for your new sample. Pls follow the layout of the existing sample if you are not sure how to organize your code.
+2. Make sure your sample work as expected before submit PR, and make sure GitHub CI passes after PR is submitted. Pls refer to the existing sample on how to test the sample.
+3. Pls provide README.md to explain your samples.
