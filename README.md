@@ -50,7 +50,7 @@ samples for [dubbo-go-pixiu](https://github.com/apache/dubbo-go-pixiu)
 
 ## How To Run
 
-Pls refer [How To Run](HOWTO.md) for the instructions.
+Please refer [How To Run](HOWTO.md) for the instructions.
 
 ## How to contribute
 
