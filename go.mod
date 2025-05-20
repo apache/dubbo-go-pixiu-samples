@@ -1,8 +1,8 @@
 module github.com/dubbo-go-pixiu/samples
 
-go 1.23
+go 1.23.0
 
-toolchain go1.23.4
+toolchain go1.23.8
 
 require (
 	dubbo.apache.org/dubbo-go/v3 v3.1.1
