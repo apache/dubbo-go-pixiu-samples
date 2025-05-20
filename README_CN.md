@@ -37,7 +37,7 @@
 - plugins：此目录包含 pixiu 的一些插件
   - plugins/ratelimit：pixiu 的 ratelimit 插件
 
-- seata：示了如何配置 Seata filter 与 Seata TC 交互对分布式事务进行协调
+- seata：演示了如何配置 Seata filter 与 Seata TC 交互对分布式事务进行协调
 
 - shutdown：此目录演示优雅关闭
   - shutdown/dubbo：演示如何优雅关闭带有 dubbo listener 的 Pixiu 服务。
