@@ -553,8 +553,9 @@ github.com/dubbogo/gost v1.9.0/go.mod h1:pPTjVyoJan3aPxBPNUX0ADkXjPibLo+/Ib0/fAD
 github.com/dubbogo/gost v1.11.18/go.mod h1:vIcP9rqz2KsXHPjsAwIUtfJIJjppQLQDcYaZTy/61jI=
 github.com/dubbogo/gost v1.12.6-0.20220824084206-300e27e9e524/go.mod h1:0YHTGJtjHiYlWtVEkZnyrvhr7rR+23GczNaJrgc2v38=
 github.com/dubbogo/gost v1.13.1/go.mod h1:9HMXBv+WBMRWhF3SklpqDjkS/01AKWm2SrVdz/A0xJI=
-github.com/dubbogo/gost v1.14.0 h1:yc5YfozvUBAChAox8H7CkmHb6/TvF6cKdqZNJNv2jdE=
 github.com/dubbogo/gost v1.14.0/go.mod h1:YP28JweR+hhJdikP3bZ3bVKUWWI313xX1rgLaEE0FvQ=
+github.com/dubbogo/gost v1.14.1 h1:veA+5FqwUHvqaB5OPvsWz4iDkGGpyL4lig2rSOZANEs=
+github.com/dubbogo/gost v1.14.1/go.mod h1:m3VJVqCjQ87SwYRrxN2s4T33cOCDrMVbRh4+MAUitnQ=
 github.com/dubbogo/grpc-go v1.42.9/go.mod h1:F1T9hnUvYGW4JLK1QNriavpOkhusU677ovPzLkk6zHM=
 github.com/dubbogo/grpc-go v1.42.10 h1:CoyCdtqKJEar/3rPa6peZbDqYZ/mVsCqAxB6TfTSkhQ=
 github.com/dubbogo/grpc-go v1.42.10/go.mod h1:JMkPt1mIHL96GAFeYsMoMjew6f1ROKycikGzZQH1s5U=
