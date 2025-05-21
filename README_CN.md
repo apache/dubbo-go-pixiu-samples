@@ -19,18 +19,18 @@
   - dubbogo/simple/nacos：http 到 dubbo，使用 nacos 作为注册中心
   - dubbogo/simple/prometheus：pixiu 集成 prometheus
   - dubbogo/simple/dubboproxy：dubbo 到 http 转换和 http 到 dubbo 转换
-  - dubbogo/simple/resolve：http 到 dubbo 的协议自动解析
+  - dubbogo/simple/resolve：将 http 请求转换为 dubbo 请求，按照默认http to dubbo转换规则
   - dubbogo/simple/traffic：流量切分和金丝雀发布
   - dubbogo/simple/triple：http 到 triple
   - dubbogo/simple/zookeeper：pixiu 集成 dubbo，使用 zookeeper 作为注册中心
 
 - dubbohttpproxy：dubbo 到 http 转换和 http 到 dubbo 转换
-- dubbotripleproxy：dubbo 到 triple 转换和 triple 到 dubbo 转换
+- dubbotripleproxy：dubbo2 协议和 triple 协议请求相互转换的案例
 
 - grpc：gRPC 代理
 
-- http/grpc：http 到 gRPC 转换
-- http/simple：简单的 HTTP 代理
+- http/grpc：将http请求转换为 grpc 请求，支持配置 proto 文件或动态从开启反射功能的 grpc server中获取 proto 信息
+- http/simple：此目录包含常见的 Http 请求代理功能，作为常见的 API 网关
 
 - llm：pixiu 调用 LLM 的简单示例
 
@@ -45,7 +45,7 @@
   - shutdown/http2：演示如何优雅关闭带有 http2 listener 的 Pixiu 服务。
   - shutdown/triple：演示如何优雅关闭带有 triple listener 的 Pixiu 服务。
 
-- springcloud：使用 Spring Cloud 注册中心的 HTTP 代理
+- springcloud：http代理功能，从 spring cloud 服务注册中心中获取集群信息，动态管理 cluster 和 route 功能
 - xds：pixiu 集成 xds
 
 ## 如何运行

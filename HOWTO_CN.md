@@ -18,7 +18,7 @@ http/simple/
 └── request.sh             # 请求脚本
 ```
 
-您可以通过 bash 命令快速运行 dubbo-go-samples 的示例以及运行集成测试。
+您可以通过 bash 命令快速运行 dubbo-go-pixiu-samples 的示例以及运行集成测试。
 
 ### 通过 命令行 快速开始
 

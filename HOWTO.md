@@ -22,7 +22,7 @@ http/simple/
 
 ```
 
-You can quickly run the examples and integration tests of dubbo-go-samples using bash commands.
+You can quickly run the examples and integration tests of dubbo-go-pixiu-samples using bash commands.
 
 ### 1. Quick Start via Command Line
 
