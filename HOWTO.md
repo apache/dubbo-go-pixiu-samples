@@ -106,7 +106,7 @@ This project, dubbo-go-pixiu-samples, is not only used to demonstrate how to use
     ./integrate_test.sh http/simple/
     ```
 
-    When the following information is output, it indicates that the integration test has passed:
+    When see the following information, it indicates that the integration test has passed:
 
     ```bash
     --- PASS: TestGET1 (0.00s)

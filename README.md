@@ -52,6 +52,12 @@ samples for [dubbo-go-pixiu](https://github.com/apache/dubbo-go-pixiu)
 
 Please refer [How To Run](HOWTO.md) for the instructions.
 
+## Dubbo-go-pixiu ecosystem other projects
+
+- [pixiu-admin](https://github.com/dubbo-go-pixiu/pixiu-admin) Dubbo-go-pixiu Admin is a comprehensive management platform for the dubbo-go-pixiu Gateway. It provides a centralized control panel for configuring, monitoring, and managing gateway resources through both a web-based user interface and RESTful APIs.
+- [pixiu-api](https://github.com/dubbo-go-pixiu/pixiu-api) Dubbo-go-pixiu API is a gateway framework that serves as the API configuration model for the dubbo-go-pixiu ecosystem. It provides a set of APIs and configuration models to build, configure, and extend API gateway functionality for microservices, with a particular focus on integration with Dubbo services.
+- [benchmark](https://github.com/dubbo-go-pixiu/benchmark) The benchmark system allows users to measure and analyze key performance metrics such as latency, throughput, and Queries Per Second (QPS) under various load conditions to evaluate the efficiency of the protocol conversion process.
+
 ## How to contribute
 
 If you want to add more samples, pls. read on:

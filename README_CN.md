@@ -52,6 +52,12 @@
 
 请参考 [如何运行](HOWTO_CN.md) 获取相关说明。
 
+## Dubbo-go-pixiu 生态系统的其他项目
+
+-   **[pixiu-admin](https://github.com/dubbo-go-pixiu/pixiu-admin)** Dubbo-go-pixiu Admin 是 dubbo-go-pixiu 网关的综合管理平台。它提供了一个集中的控制面板，用于通过基于 Web 的用户界面和 RESTful API 来配置、监控和管理网关资源。
+-   **[pixiu-api](https://github.com/dubbo-go-pixiu/pixiu-api)** Dubbo-go-pixiu API 是 dubbo-go-pixiu 生态系统的 API 配置模型。它提供了一组 API 和配置模型，用于构建、配置和扩展微服务的 API 网关功能，尤其侧重于与 Dubbo 服务的集成。
+-   **[benchmark](https://github.com/dubbo-go-pixiu/benchmark)** 该基准测试系统允许用户在各种负载条件下测量和分析关键性能指标，如延迟、吞吐量和每秒查询数 (QPS)，以评估协议转换过程的效率。
+
 ## 如何贡献
 
 如果您希望增加新的用例，请继续阅读:
