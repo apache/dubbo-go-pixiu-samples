@@ -36,7 +36,7 @@ The architecture, which uses Nacos as the remote configuration center, is shown 
     go run cmd/pixiu/*.go gateway start -c pathto/dubbo-go-pixiu-samples/dubbogo/simple/farconfnacos/pixiu/conf.yaml
     ```
 
-    Check the console output. If you see the following log entry, the remote configuration has been loaded successfully:
+    Check the console output. If you see the following log entry, the remote configuration has been loaded successfully，we can see that`idle_timeout``read_timeout``write_timeout`are the values we set in the configuration file:
 
     ```
     2025-05-26T16:36:02.862+0800    INFO   config/config_load.go:137  http config:map[idle_timeout:123s read_timeout:456s write_timeout:789s] true

@@ -10,7 +10,7 @@
 
 ## 案例运行步骤:
 
-1. 在 docker 中启动 zookeeper 和 nacos
+1. 在 docker 中启动 Nacos
     ```bash
     cd pathto/dubbo-go-pixiu-samples/dubbogo/simple/farconfnacos/docker
     docker-compose up
@@ -32,7 +32,7 @@
     go run cmd/pixiu/*.go gateway start -c pathto/dubbo-go-pixiu-samples/dubbogo/simple/farconfnacos/pixiu/conf.yaml
     ```
    
-    查看控制台输出，若看到如下日志，表示远端配置已成功加载：
+    查看控制台输出，若看到如下日志，表示远端配置已成功加载，可以看出`idle_timeout``read_timeout``write_timeout`分别为我们在配置文件中设定的值：
 
     ```
     2025-05-26T16:36:02.862+0800	INFO	config/config_load.go:137	http config:map[idle_timeout:123s read_timeout:456s write_timeout:789s] true
