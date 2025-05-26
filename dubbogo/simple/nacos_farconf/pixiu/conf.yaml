@@ -16,30 +16,15 @@
 # specific language governing permissions and limitations
 # under the License.
 #
-level: "debug"
-development: true
-disableCaller: false
-disableStacktrace: false
-sampling:
-encoding: "console"
-
-# encoder
-encoderConfig:
-  messageKey: "message"
-  levelKey: "level"
-  timeKey: "time"
-  nameKey: "logger"
-  callerKey: "caller"
-  stacktraceKey: "stacktrace"
-  lineEnding: ""
-  levelEncoder: "capitalColor"
-  timeEncoder: "iso8601"
-  durationEncoder: "seconds"
-  callerEncoder: "short"
-  nameEncoder: ""
-
-outputPaths:
-  - "stderr"
-errorOutputPaths:
-  - "stderr"
-initialFields:
+config-center:
+  type: nacos
+  enable: true
+nacos:
+  server_configs:
+    - ip_addr: "127.0.0.1"
+      port: 8848
+  client-config:
+    username: nacos
+    password: admin
+  data-id: dubbo-go-pixiu
+  group: DEFAULT_GROUP
