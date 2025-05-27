@@ -13,7 +13,7 @@ samples for [dubbo-go-pixiu](https://github.com/apache/dubbo-go-pixiu)
   - dubbogo/simple/body: http to dubbo with api_config.yaml
   - dubbogo/simple/csrf: csrf protection
   - dubbogo/simple/direct: http to dubbo with direct generic call
-  - dubbogo/simple/nacos_farconf: pixiu use nacos as remote config center
+  - dubbogo/simple/nacos_farconf: pixiu uses nacos as a remote config center
   - dubbogo/simple/jaeger: pixiu with jaeger
   - dubbogo/simple/jwt: jwt authentication
   - dubbogo/simple/nacos: http to dubbo with nacos registry
