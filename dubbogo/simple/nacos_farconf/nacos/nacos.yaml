@@ -19,11 +19,11 @@
 ---
 static_resources:
   listeners:
-    - name: "net/http"
-      protocol_type: "HTTP"
+    - name: net/http
+      protocol_type: HTTP
       address:
         socket_address:
-          address: "0.0.0.0"
+          address: 0.0.0.0
           port: 8881
       filter_chains:
         filters:
@@ -40,11 +40,11 @@ static_resources:
                       auto_resolve: true
                       registries:
                         "zookeeper":
-                          protocol: "zookeeper"
-                          timeout: "3s"
-                          address: "127.0.0.1:2181"
-                          username: ""
-                          password: ""
+                          protocol: zookeeper
+                          timeout: 3s
+                          address: 127.0.0.1:2181
+                          username:
+                          password:
                       timeout_config:
                         connect_timeout: 5s
                         request_timeout: 5s
@@ -52,10 +52,10 @@ static_resources:
               server_name: "test_http_dubbo"
               generate_request_id: false
       config:
-        idle_timeout: 123s
-        read_timeout: 456s
-        write_timeout: 789s
+        idle_timeout: 4s
+        read_timeout: 5s
+        write_timeout: 6s
   shutdown_config:
-    timeout: "60s"
-    step_timeout: "10s"
-    reject_policy: "immediacy"
+    timeout: 60s
+    step_timeout: 10s
+    reject_policy: immediacy

@@ -35,5 +35,5 @@
     查看控制台输出，若看到如下日志，表示远端配置已成功加载，可以看出`idle_timeout``read_timeout``write_timeout`分别为我们在配置文件中设定的值：
 
     ```
-    2025-05-26T16:36:02.862+0800	INFO	config/config_load.go:137	http config:map[idle_timeout:123s read_timeout:456s write_timeout:789s] true
+    2025-05-28T11:39:22.982+0800	INFO	config/config_load.go:137	http config:map[idle_timeout:4s read_timeout:5s write_timeout:6s] true
     ```
