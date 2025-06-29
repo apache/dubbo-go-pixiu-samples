@@ -13,7 +13,7 @@
   - dubbogo/simple/body：http 到 dubbo，使用 api_config.yaml
   - dubbogo/simple/csrf：CSRF 保护
   - dubbogo/simple/direct：http 到 dubbo 的直接泛化调用
-  - dubbogo/simple/farconfnacos：pixiu 使用 nacos 远端配置中心
+  - dubbogo/simple/nacos_farconf：pixiu 使用 nacos 作为远端配置中心
   - dubbogo/simple/jaeger：pixiu 集成 jaeger
   - dubbogo/simple/jwt：JWT 认证
   - dubbogo/simple/nacos：http 到 dubbo，使用 nacos 作为注册中心
