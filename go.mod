@@ -4,8 +4,6 @@ go 1.23.0
 
 toolchain go1.23.8
 
-replace github.com/apache/dubbo-go-pixiu => /Users/similarityyoung/Documents/dubbo/dubbo-go-pixiu
-
 require (
 	dubbo.apache.org/dubbo-go/v3 v3.1.1
 	github.com/apache/dubbo-go-hessian2 v1.12.3
