@@ -1,35 +1,62 @@
-# Description
-The route guide server and client demonstrate how to use grpc go libraries to
-perform unary, client streaming, server streaming and full duplex RPCs.
+# gRPC Simple Example
 
-Please refer to [gRPC Basics: Go](https://grpc.io/docs/tutorials/basic/go.html) for more information.
+[中文](./README_CN.md)
 
-See the definition of the route guide service in `routeguide/route_guide.proto`.
+This example demonstrates how to use Apache Dubbo-go-pixiu as a gateway for a standard gRPC service, supporting unary, client-side streaming, server-side streaming, and bidirectional streaming RPCs.
 
-# Run the sample code
-To compile and run the server, assuming you are in the root of the `route_guide`
-folder, i.e., `.../examples/route_guide/`, simply:
+The example includes:
+- A gRPC server implementing the RouteGuide service.
+- A gRPC client for the RouteGuide service.
+- A Pixiu configuration file to proxy requests to the gRPC server.
 
-```sh
-$ go run server/server.go
-```
+## How to Run
 
-Likewise, to run the client:
+You will need three separate terminal windows.
 
-```sh
-$ go run client/client.go
-```
+### 1. Start the gRPC Server
 
-# Optional command line flags
-The server and client both take optional command line flags. For example, the
-client and server run without TLS by default. To enable TLS:
+In the first terminal, navigate to the example directory and start the gRPC server.
 
 ```sh
-$ go run server/server.go -tls=true
+# Terminal 1
+cd dubbo-go-pixiu-samples/grpc/simple
+go run server/server.go
 ```
 
-and
+The server will start and listen on `localhost:50051`.
+
+### 2. Start the Pixiu Gateway
+
+In the second terminal, navigate to the example directory and start the Pixiu gateway.
 
 ```sh
-$ go run client/client.go -tls=true
+# Terminal 2
+cd dubbo-go-pixiu-samples
+go run pixiu/*.go gateway start -c grpc/simple/pixiu/conf.yaml
 ```
+
+Pixiu will start and listen for gRPC requests on `localhost:8881`.
+
+### 3. Run the gRPC Client
+
+In the third terminal, navigate back to the example directory and run the client.
+
+```sh
+# Terminal 3
+cd dubbo-go-pixiu-samples/grpc/simple
+go run client/client.go
+```
+
+The client will send requests to Pixiu at `localhost:8881`, which then proxies them to the gRPC server. You should see the client interacting with the server and printing feature information.
+
+## Running the Tests
+
+Before running the tests, ensure that the gRPC server and the Pixiu gateway are running as described in the "How to Run" section.
+
+Open a new terminal and run the following command from the project root (`dubbo-go-pixiu-samples`) to execute the integration tests:
+
+```sh
+go test -v ./grpc/simple/test/
+```
+
+You will see the successful execution logs for all subtests (unary, server-streaming, client-streaming, and bidirectional-streaming).
