@@ -18,18 +18,15 @@
 package main
 
 import (
-	"bufio"
-	"encoding/json"
+	"context"
 	"fmt"
-	"io"
-	"net/http"
 	"os"
-	"strings"
-	"time"
 )
 
 import (
 	"github.com/joho/godotenv"
+	"github.com/openai/openai-go"
+	"github.com/openai/openai-go/option"
 )
 
 func main() {
@@ -38,63 +35,37 @@ func main() {
 		fmt.Println("Error loading .env file")
 		return
 	}
-	url := "http://localhost:8888/chat/completions"
-	data := `{"model":"deepseek-chat","messages":[{"role": "user", "content": "3+5=?"}],"temperature":0.8,"stream":true}`
-	client := &http.Client{Timeout: 10 * time.Second}
 
-	req, err := http.NewRequest("POST", url, strings.NewReader(data))
-	if err != nil {
-		fmt.Println("Error creating request:", err)
-		return
-	}
+	client := openai.NewClient(
+		option.WithAPIKey(os.Getenv("API_KEY")),
+		option.WithBaseURL("http://localhost:8888/"),
+	)
 
-	key := os.Getenv("API_KEY")
-	req.Header.Add("Content-Type", "application/json")
-	req.Header.Add("Authorization", "Bearer "+key)
+	question := "1+1=?"
 
-	resp, err := client.Do(req)
-	if err != nil {
-		fmt.Println("Error making request:", err)
-		return
-	}
-	defer resp.Body.Close()
+	stream := client.Chat.Completions.NewStreaming(context.Background(), openai.ChatCompletionNewParams{
+		Messages: []openai.ChatCompletionMessageParamUnion{
+			openai.UserMessage(question),
+		},
+		Model: "deepseek-chat",
+	})
 
-	reader := bufio.NewReader(resp.Body)
-	var eventData strings.Builder
+	// optionally, an accumulator helper can be used
+	acc := openai.ChatCompletionAccumulator{}
 
-	for {
-		line, err := reader.ReadString('\n')
-		if err != nil {
-			if err != io.EOF {
-				fmt.Println("Error reading response:", err)
-				return
-			}
-			return
-		}
-		line = strings.TrimSpace(line)
+	for stream.Next() {
+		chunk := stream.Current()
+		acc.AddChunk(chunk)
 
-		if strings.HasPrefix(line, "data:") {
-			dataLine := strings.TrimPrefix(line, "data:")
-			eventData.WriteString(dataLine)
-		} else if line == "" {
-			if eventData.Len() > 0 {
-				dataStr := eventData.String()
-				var currentParsedData struct {
-					Choices []struct {
-						Delta struct {
-							Content string `json:"content"`
-						} `json:"delta"`
-					} `json:"choices"`
-				}
-				err := json.Unmarshal([]byte(dataStr), &currentParsedData)
-				if err != nil {
-					continue
-				} else if len(currentParsedData.Choices) > 0 && len(currentParsedData.Choices[0].Delta.Content) > 0 {
-					fmt.Print(currentParsedData.Choices[0].Delta.Content)
-					// logger.Info()
-				}
-				eventData.Reset()
-			}
+		if len(chunk.Choices) > 0 {
+			fmt.Print(chunk.Choices[0].Delta.Content)
 		}
 	}
+
+	if stream.Err() != nil {
+		panic(stream.Err())
+	}
+
+	// After the stream is finished, acc can be used like a ChatCompletion
+	_ = acc.Choices[0].Message.Content
 }
