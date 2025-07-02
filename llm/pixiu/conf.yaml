@@ -46,8 +46,8 @@ static_resources:
                   # - name: dgp.filter.llm.tokenizer
       config:
         idle_timeout: 5s
-        read_timeout: 5s
-        write_timeout: 5s
+        read_timeout: 50s
+        write_timeout: 50s
   clusters:
     - name: "chat"
       lb_policy: "lb"
@@ -56,12 +56,6 @@ static_resources:
           socket_address:
             domains:
               - "api.deepseek.com"
-      health_checks:
-        - protocol: "https"
-          timeout: 1s
-          interval: 5s
-          healthy_threshold: 4
-          unhealthy_threshold: 4
   shutdown_config:
     timeout: "60s"
     step_timeout: "10s"
