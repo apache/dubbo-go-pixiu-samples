@@ -1,6 +1,8 @@
 
 # Pixiu Dubbo-go 快速入门示例
 
+[English](./README.md)
+
 本文档将引导您如何运行一个基于 Pixiu 网关和 Dubbo-go 的简单服务示例。
 
 ---

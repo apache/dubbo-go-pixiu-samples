@@ -1,5 +1,7 @@
 # Pixiu Dubbo-go Quick Start Sample
 
+[中文 🇨🇳](./README_CN.md)
+
 This document will guide you on how to run a simple service sample based on the Pixiu gateway and a Dubbo-go backend.
 
 -----

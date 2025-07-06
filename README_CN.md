@@ -4,7 +4,7 @@
 
 [dubbo-go-pixiu](https://github.com/apache/dubbo-go-pixiu) 的示例
 
-[中文 🇨🇳](./README_CN.md)
+[English](./README.md)
 
 ## 包含内容
 
