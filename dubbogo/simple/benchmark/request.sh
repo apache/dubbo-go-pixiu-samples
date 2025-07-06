@@ -16,9 +16,10 @@
 # specific language governing permissions and limitations
 # under the License.
 #
-ADDRESS="localhost:8882"
 
-API1=$(curl -s -X GET ${ADDRESS}"/api/v1/test-dubbo/user/tc?age=99")
+ADDRESS="172.22.142.171:8881"
+
+API1=$(curl -s -X GET ${ADDRESS}"/api/v1/test-dubbo/user/tc?age=66")
 API2=$(curl -s -X PUT ${ADDRESS}"/api/v1/test-dubbo/user/tc" -d '{"id":"0001","code":1,"name":"tc","age":66}' --header "Content-Type: application/json")
 API3=$(curl -s -X PUT ${ADDRESS}"/api/v1/test-dubbo/user?name=tc" -d '{"id":"0001","code":1,"name":"tc","age":55}' --header "Content-Type: application/json")
 
