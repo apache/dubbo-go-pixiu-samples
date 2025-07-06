@@ -43,7 +43,7 @@ import (
 )
 
 func GetTracesFromJaeger(t *testing.T) []*api_v2.Span {
-	conn, err := grpc.Dial("localhost:16685", grpc.WithTransportCredentials(insecure.NewCredentials()), grpc.WithBlock())
+	conn, err := grpc.NewClient("localhost:16685", grpc.WithTransportCredentials(insecure.NewCredentials()))
 	require.NoError(t, err)
 	defer conn.Close()
 
