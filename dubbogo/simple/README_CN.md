@@ -55,7 +55,7 @@ cd samples/dubbogo/simple/
 打开一个新的终端，执行以下 cURL 命令：
 
 ```bash
-curl -s -X GET '[http://127.0.0.1:8881/api/v1/test-dubbo/user/tc?age=66](http://127.0.0.1:8881/api/v1/test-dubbo/user/tc?age=66)'
+curl -s -X GET 'http://127.0.0.1:8881/api/v1/test-dubbo/user/tc?age=66'
 ```
 
 **预期响应:**
