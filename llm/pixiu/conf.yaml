@@ -53,9 +53,8 @@ static_resources:
       lb_policy: "lb"
       endpoints:
         - id: 1
-          socket_address:
-            domains:
-              - "api.deepseek.com"
+          llm_meta:
+            provider: "deepseek"
   shutdown_config:
     timeout: "60s"
     step_timeout: "10s"
