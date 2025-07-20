@@ -28,7 +28,7 @@ import (
 )
 
 import (
-	gproto "github.com/dubbo-go-pixiu/samples/grpc/proto"
+	gproto "github.com/dubbo-go-pixiu/samples/grpc/deprecated/proto"
 )
 
 type grpcServer struct {

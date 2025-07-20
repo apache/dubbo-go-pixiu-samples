@@ -26,16 +26,16 @@ static_resources:
           address: "0.0.0.0"
           port: 8881
       filter_chains:
-          filters:
-            - name: dgp.filter.grpcconnectionmanager
-              config:
-                route_config:
-                  routes:
-                    - match:
-                        prefix: "/provider.UserProvider/"
-                      route:
-                        cluster: "test-grpc"
-                        cluster_not_found_response_code: 505
+        filters:
+          - name: dgp.filter.grpcconnectionmanager
+            config:
+              route_config:
+                routes:
+                  - match:
+                      prefix: "/provider.UserProvider/"
+                    route:
+                      cluster: "test-grpc"
+                      cluster_not_found_response_code: 505
       config:
         idle_timeout: 5s
         read_timeout: 5s

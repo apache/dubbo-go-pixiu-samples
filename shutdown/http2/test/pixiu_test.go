@@ -37,7 +37,7 @@ import (
 )
 
 import (
-	gproto "github.com/dubbo-go-pixiu/samples/grpc/proto"
+	gproto "github.com/dubbo-go-pixiu/samples/grpc/deprecated/proto"
 )
 
 func TestHttpListenShutdown(t *testing.T) {
@@ -48,7 +48,7 @@ func TestHttpListenShutdown(t *testing.T) {
 	time.Sleep(3 * time.Second) // wait start already
 
 	// start client
-	conn, err := grpc.Dial("localhost:8881", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.NewClient("localhost:8881", grpc.WithTransportCredentials(insecure.NewCredentials()))
 	assert.NoError(t, err)
 	defer conn.Close()
 	client := gproto.NewUserProviderClient(conn)
