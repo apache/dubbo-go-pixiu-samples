@@ -19,9 +19,12 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 	"strings"
+)
+
+import (
+	"github.com/dubbogo/gost/log/logger"
 )
 
 func main() {
@@ -30,9 +33,10 @@ func main() {
 	for _, router := range routers {
 		msg := router[strings.LastIndex(router, "/")+1:]
 		http.HandleFunc(router, func(w http.ResponseWriter, r *http.Request) {
+			logger.Info("request received for", msg)
 			_, _ = w.Write([]byte(fmt.Sprintf(`{"message":"%s","status":200}`, msg)))
 		})
 	}
-	log.Println("Starting sample server ...")
-	log.Fatal(http.ListenAndServe(":1314", nil))
+	logger.Info("Listening on 1314")
+	logger.Fatal(http.ListenAndServe(":1314", nil))
 }
