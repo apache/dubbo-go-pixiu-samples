@@ -30,39 +30,40 @@ import (
 )
 
 type _testMetric struct {
-	buf []byte
+	buf string
 }
 
 func (tt *_testMetric) ServeHTTP(writer http.ResponseWriter, request *http.Request) {
-
-	tt.buf, _ = io.ReadAll(request.Body)
-	//fmt.Printf("read (%d, content-length: %d) => %s\n", len(tt.buf), request.ContentLength, tt.buf)
+	body, _ := io.ReadAll(request.Body)
+	tt.buf = string(body)
+	//logger.Info("read (%d, content-length: %d) => %s\n", len(tt.buf), request.ContentLength, string(tt.buf))
 	writer.WriteHeader(200)
 }
 
 func TestLocal(t *testing.T) {
 	metricServer := &_testMetric{
-		buf: make([]byte, 204800),
+		buf: "",
 	}
+	http.Handle("/metrics", metricServer)
 	go http.ListenAndServe(":9091", metricServer)
 
 	verify(t, "http://localhost:8888/health", http.StatusOK)
-	assert.True(t, strings.Contains(string(metricServer.buf), "pixiu_requests_total"))
+	assert.Contains(t, metricServer.buf, "pixiu_requests_total")
 	metricServer.buf = metricServer.buf[0:0]
 
 	s := verify(t, "http://localhost:8888/user", http.StatusOK)
 	assert.True(t, strings.Contains(s, "user"))
-	assert.True(t, strings.Contains(string(metricServer.buf), "pixiu_requests_total"))
+	assert.Contains(t, metricServer.buf, "pixiu_requests_total")
 	metricServer.buf = metricServer.buf[0:0]
 
 	s = verify(t, "http://localhost:8888/user/pixiu", http.StatusOK)
 	assert.True(t, strings.Contains(s, "pixiu"))
-	assert.True(t, strings.Contains(string(metricServer.buf), "pixiu_requests_total"))
+	assert.Contains(t, metricServer.buf, "pixiu_requests_total")
 	metricServer.buf = metricServer.buf[0:0]
 
 	s = verify(t, "http://localhost:8888/prefix", http.StatusOK)
 	assert.True(t, strings.Contains(s, "prefix"))
-	assert.True(t, strings.Contains(string(metricServer.buf), "pixiu_requests_total"))
+	assert.Contains(t, metricServer.buf, "pixiu_requests_total")
 	metricServer.buf = metricServer.buf[0:0]
 }
 
