@@ -32,7 +32,7 @@ array+=("dubbogo/simple/prometheus")
 array+=("http/grpc")
 array+=("http/simple")
 ## grpc proxy
-array+=("grpc")
+array+=("grpc/deprecated")
 
 for((i=0;i<${#array[*]};i++))
 do
