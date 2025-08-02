@@ -44,7 +44,6 @@ jobs:
       DING_SIGN: ${{ secrets.PROXY_DING_SIGN }}
 
     steps:
-
       - name: Set up Go 1.x
         uses: actions/setup-go@v5
         with:
@@ -78,10 +77,11 @@ jobs:
           else
               go get -v -t -d ./...
           fi
+          go install github.com/dubbogo/tools/cmd/imports-formatter@latest
 
-      - name: Go Fmt
+      - name: Format Code
         run: |
-          go fmt ./... && git status && [[ -z `git status -s` ]]
+          go fmt ./... && GOROOT=$(go env GOROOT) imports-formatter && git status && [[ -z `git status -s` ]]
           # diff -u <(echo -n) <(gofmt -d -s .)
 
       - name: Install go ci lint
