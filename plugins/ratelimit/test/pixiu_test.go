@@ -27,6 +27,7 @@ import (
 
 import (
 	"github.com/apache/dubbo-go-pixiu/pkg/logger"
+
 	"github.com/stretchr/testify/assert"
 )
 

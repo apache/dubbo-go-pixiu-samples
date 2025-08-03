@@ -24,12 +24,10 @@ import (
 )
 
 import (
-	"github.com/spf13/cobra"
-)
-
-import (
 	"github.com/apache/dubbo-go-pixiu/pkg/cmd"
 	_ "github.com/apache/dubbo-go-pixiu/pkg/pluginregistry"
+
+	"github.com/spf13/cobra"
 )
 
 const (

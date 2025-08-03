@@ -25,6 +25,7 @@ import (
 
 import (
 	"github.com/joho/godotenv"
+
 	"github.com/openai/openai-go"
 	"github.com/openai/openai-go/option"
 )
