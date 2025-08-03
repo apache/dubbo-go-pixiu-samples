@@ -27,12 +27,14 @@ samples for [dubbo-go-pixiu](https://github.com/apache/dubbo-go-pixiu)
 - dubbohttpproxy: dubbo to http transform and http to dubbo transform
 - dubbotripleproxy: example of inter-conversion of dubbo and triple protocol requests
 
-- grpc: grpc proxy
+- grpc/simple: this sample demonstrates how to use pixiu as a gateway for a standard gRPC service, supporting unary, client-side streaming, server-side streaming, and bidirectional streaming RPCs.
 
 - http/grpc: convert http requests to grpc requests, support configuring proto files or dynamically obtaining proto information from a grpc server with reflection enabled.
 - http/simple: this directory contains common Http request proxying features that serve as common API gateways
 
 - llm: simple sample for pixiu to call llm
+
+- mcp: this sample demonstrates how to use the MCP (Model Context Protocol) filter in pixiu to expose backend HTTP API services as MCP tools for Large Language Models (LLM) to call.
 
 - plugins: this directory contains some plugins for pixiu
   - plugins/ratelimit: rate limit plugin for pixiu
