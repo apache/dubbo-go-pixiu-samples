@@ -27,12 +27,14 @@
 - dubbohttpproxy：dubbo 到 http 转换和 http 到 dubbo 转换
 - dubbotripleproxy：dubbo2 协议和 triple 协议请求相互转换的案例
 
-- grpc：gRPC 代理
+- grpc/simple: 演示了如何使用 Pixiu 作为标准 gRPC 服务的网关，支持一元调用、客户端流、服务端流和双向流通信。
 
 - http/grpc：将http请求转换为 grpc 请求，支持配置 proto 文件或动态从开启反射功能的 grpc server中获取 proto 信息
 - http/simple：此目录包含常见的 Http 请求代理功能，作为常见的 API 网关
 
 - llm：pixiu 调用 LLM 的简单示例
+
+- mcp: 演示了如何使用 Dubbo-go-pixiu 的 MCP (Model Context Protocol) 过滤器，将后端 HTTP API 服务暴露为 MCP 工具，供大型语言模型 (LLM) 调用。
 
 - plugins：此目录包含 pixiu 的一些插件
   - plugins/ratelimit：pixiu 的 ratelimit 插件
