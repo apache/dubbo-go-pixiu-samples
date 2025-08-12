@@ -44,6 +44,8 @@ static_resources:
                     maxConnsPerHost: 100
                     scheme: "https"
                 - name: dgp.filter.llm.tokenizer
+                  config:
+                    log_to_console: true
       config:
         idle_timeout: 5s
         read_timeout: 50s
