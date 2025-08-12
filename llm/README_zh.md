@@ -6,12 +6,18 @@
 
 ## 2. **准备工作**
 
-```shell
-$ cp pathto/dubbo-go-pixiu-samples/llm/test/.env.example pathto/dubbo-go-pixiu-samples/llm/test/.env
-```
 
-将你的 DeepSeek API 添加到 `.env` 文件中，更多详情请参阅 [deepseek](https://platform.deepseek.com)。
+1. 将你的 DeepSeek API 添加到 `.env` 文件中，更多详情请参阅 [deepseek](https://platform.deepseek.com)。
 
+    ```shell
+    $ cp pathto/dubbo-go-pixiu-samples/llm/test/.env.example pathto/dubbo-go-pixiu-samples/llm/test/.env
+    ```
+
+2. Docker Compose
+    ```shell
+    docker-compose up -d
+    ```
+    
 ### **运行 Pixiu 服务器**
 
 通过执行以下命令运行Pixiu服务器：

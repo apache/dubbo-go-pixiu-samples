@@ -6,11 +6,16 @@ This sample demonstrates how to make a llm call using Dubbo-go-pixiu.
 
 ## 2. **Preparation**
 
-```shell
-$ cp pathto/dubbo-go-pixiu-samples/llm/test/.env.example pathto/dubbo-go-pixiu-samples/llm/test/.env
-```
+1. Add your DeepSeek API to `.env` file, see [deepseek](https://platform.deepseek.com) for more details.
 
-Add your DeepSeek API to `.env` file, see [deepseek](https://platform.deepseek.com) for more details.
+    ```shell
+    $ cp pathto/dubbo-go-pixiu-samples/llm/test/.env.example pathto/dubbo-go-pixiu-samples/llm/test/.env
+    ```
+
+2. Docker Compose
+    ```shell
+    docker-compose up -d
+    ```
 
 ### **Run the Pixiu Server**
 
