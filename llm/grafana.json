@@ -289,7 +289,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum(rate(pixiu_llm_time_to_first_token_milliseconds_sum_total{cluster_name=~\"$cluster_name\"}[5m])) by (cluster_name) / sum(rate(pixiu_llm_streaming_requests_total{cluster_name=~\"$cluster_name\"}[5m])) by (cluster_name)",
+          "expr": "sum(rate(pixiu_llm_time_to_last_token_milliseconds_sum_total{cluster_name=~\"$cluster_name\"}[5m])) by (cluster_name) / sum(rate(pixiu_llm_streaming_requests_total{cluster_name=~\"$cluster_name\"}[5m])) by (cluster_name)",
           "range": true,
           "refId": "A"
         }
@@ -593,7 +593,7 @@
             "type": "prometheus",
             "uid": "${datasource}"
           },
-          "expr": "sum(rate(pixiu_llm_time_to_first_token_milliseconds_sum_total{cluster_name=~\"$cluster_name\"}[5m])) by (cluster_name) \n/\nsum(rate(pixiu_llm_streaming_requests_total{cluster_name=~\"$cluster_name\"}[5m])) by (cluster_name)",
+          "expr": "sum(rate(pixiu_llm_time_to_last_token_milliseconds_sum_total{cluster_name=~\"$cluster_name\"}[5m])) by (cluster_name) \n/\nsum(rate(pixiu_llm_streaming_requests_total{cluster_name=~\"$cluster_name\"}[5m])) by (cluster_name)",
           "legend": "Avg TTFT - {{cluster_name}}",
           "refId": "A"
         }
