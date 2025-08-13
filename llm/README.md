@@ -11,8 +11,10 @@ This sample demonstrates how to make a llm call using Dubbo-go-pixiu.
     ```shell
     $ cp pathto/dubbo-go-pixiu-samples/llm/test/.env.example pathto/dubbo-go-pixiu-samples/llm/test/.env
     ```
+   
+2. Edit the `prometheus.yml` file to set the correct IP address.
 
-2. Docker Compose
+3. Docker Compose
     ```shell
     docker-compose up -d
     ```

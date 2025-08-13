@@ -57,7 +57,6 @@ static_resources:
         - id: 1
           llm_meta:
             provider: "deepseek"
-            api_key: "${DEEPSEEK_API_KEY}"
             retry_policy:
               name: "CountBased"
               times: 3

@@ -12,8 +12,9 @@
     ```shell
     $ cp pathto/dubbo-go-pixiu-samples/llm/test/.env.example pathto/dubbo-go-pixiu-samples/llm/test/.env
     ```
+2. 根据真实情况修改 prometheus.yml 文件中的 IP 地址。
 
-2. Docker Compose
+3. Docker Compose
     ```shell
     docker-compose up -d
     ```
