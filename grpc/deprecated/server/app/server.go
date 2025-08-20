@@ -25,11 +25,9 @@ import (
 import (
 	"github.com/apache/dubbo-go-pixiu/pkg/logger"
 
-	"google.golang.org/grpc"
-)
-
-import (
 	"github.com/dubbo-go-pixiu/samples/http/grpc/proto"
+
+	"google.golang.org/grpc"
 )
 
 const (

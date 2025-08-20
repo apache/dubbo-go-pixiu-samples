@@ -24,11 +24,9 @@ import (
 )
 
 import (
-	"google.golang.org/grpc"
-)
-
-import (
 	gproto "github.com/dubbo-go-pixiu/samples/grpc/deprecated/proto"
+
+	"google.golang.org/grpc"
 )
 
 type grpcServer struct {

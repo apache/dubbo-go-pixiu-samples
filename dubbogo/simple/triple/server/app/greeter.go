@@ -23,15 +23,13 @@ import (
 )
 
 import (
+	triplepb "github.com/dubbo-go-pixiu/samples/dubbogo/simple/triple/server/protobuf/api"
+
 	"github.com/dubbogo/gost/log/logger"
 
 	"github.com/dubbogo/grpc-go/metadata"
 
 	tripleConstant "github.com/dubbogo/triple/pkg/common/constant" //nolint
-)
-
-import (
-	triplepb "github.com/dubbo-go-pixiu/samples/dubbogo/simple/triple/server/protobuf/api"
 )
 
 type GreeterProvider struct {

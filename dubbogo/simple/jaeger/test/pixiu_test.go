@@ -29,6 +29,8 @@ import (
 )
 
 import (
+	"github.com/dubbo-go-pixiu/samples/dubbogo/simple/jaeger/grpc/api_v2"
+
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
@@ -36,10 +38,6 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 
 	"google.golang.org/protobuf/types/known/timestamppb"
-)
-
-import (
-	"github.com/dubbo-go-pixiu/samples/dubbogo/simple/jaeger/grpc/api_v2"
 )
 
 func GetTracesFromJaeger(t *testing.T) []*api_v2.Span {

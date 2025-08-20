@@ -17,7 +17,9 @@
 
 package main
 
-import "time"
+import (
+	"time"
+)
 
 // ClientInfo holds the static information about a client.
 // For this demo, we are hardcoding the clients.

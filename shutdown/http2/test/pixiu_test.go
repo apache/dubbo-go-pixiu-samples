@@ -30,14 +30,12 @@ import (
 	_ "github.com/apache/dubbo-go-pixiu/pkg/pluginregistry"
 	"github.com/apache/dubbo-go-pixiu/pkg/server"
 
+	gproto "github.com/dubbo-go-pixiu/samples/grpc/deprecated/proto"
+
 	"github.com/stretchr/testify/assert"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
-)
-
-import (
-	gproto "github.com/dubbo-go-pixiu/samples/grpc/deprecated/proto"
 )
 
 func TestHttpListenShutdown(t *testing.T) {
