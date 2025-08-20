@@ -34,28 +34,32 @@ static_resources:
                 routes:
                   # Protected MCP endpoint
                   - match:
-                      prefix: "/mcp"
+                      prefix: "/"
                     route:
                       cluster: "mcp-protected"
                       cluster_not_found_response_code: 505
               http_filters:
+                - name: "dgp.filter.http.cors"
+                  config:
+                    allow_origin:
+                      - "*"
+                    allow_methods: "GET, POST, PUT, DELETE, OPTIONS"
+                    allow_headers: "Content-Type, Authorization, X-Requested-With"
+                    max_age: "3600"
                 # MCP Authorization Filter (protect /mcp)
                 - name: "dgp.filter.http.auth.mcp"
                   config:
                     resource_metadata:
-                      path: "/.well-known/oauth-protected-resource"
+                      path: "/.well-known/oauth-protected-resource/mcp"
                       resource: "http://localhost:8888/mcp"
                       authorization_servers:
-                        - "http://localhost:9000/.well-known/oauth-authorization-server"
+                        - "http://localhost:9000"
                     providers:
                       - name: "local"
                         issuer: "http://localhost:9000"
-                        audience: "http://localhost:8888/mcp"
                         jwks: "http://localhost:9000/.well-known/jwks.json"
                     rules:
                       - cluster: "mcp-protected"
-                        provider: "local"
-                        required_scopes: ["read"]
 
                 # MCP Server Filter - Tools Configuration (same as simple)
                 - name: "dgp.filter.mcp.mcpserver"

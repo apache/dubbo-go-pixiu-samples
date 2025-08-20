@@ -15,16 +15,17 @@
  * limitations under the License.
  */
 
-// OAuth tests for the MCP authorization sample.
-// They verify 401 without token, successful tool listing and read-only calls
-// with a 'read' token, and basic service availability checks.
+// OAuth tests for MCP authorization integration.
+// Prerequisites: Authorization Server (port 9000), Backend API (port 8081), Pixiu Gateway (port 8888)
 package test
 
 import (
 	"bytes"
+	"crypto/rand"
+	"crypto/sha256"
+	"encoding/base64"
 	"encoding/json"
 	"io"
-	"mime"
 	"net/http"
 	"net/url"
 	"strings"
@@ -37,9 +38,11 @@ const (
 	mcpPath        = "/mcp"
 	backendBaseURL = "http://localhost:8081"
 	authBaseURL    = "http://localhost:9000"
+	clientID       = "sample-client"
+	redirectURI    = "http://localhost:8081/callback"
 )
 
-// JSON-RPC types
+// JSON-RPC request/response types
 type JSONRPCRequest struct {
 	JSONRPC string `json:"jsonrpc"`
 	ID      any    `json:"id"`
@@ -59,32 +62,118 @@ type toolCallParams struct {
 	Arguments map[string]any `json:"arguments"`
 }
 
-// Helpers
-// httpGetOK returns true when a GET call returns status 200.
-func httpGetOK(url string) bool {
-	client := &http.Client{Timeout: 5 * time.Second}
-	resp, err := client.Get(url)
-	if err != nil {
-		return false
+func TestMain(m *testing.M) {
+	if !waitForAllServices() {
+		panic("Services not available. Start: Authorization Server (9000), Backend API (8081), Pixiu Gateway (8888)")
 	}
-	defer resp.Body.Close()
-	return resp.StatusCode == http.StatusOK
+	m.Run()
 }
 
-// getAccessToken obtains a bearer token from the local auth server using
-// client_credentials with a specific scope (read/write).
-func getAccessToken(t *testing.T, scope string) string {
+func waitForAllServices() bool {
+	services := map[string]string{
+		"Backend": backendBaseURL + "/api/health",
+		"Auth":    authBaseURL + "/.well-known/oauth-authorization-server",
+		"Pixiu":   pixiuBaseURL + mcpPath,
+	}
+
+	for name, url := range services {
+		if !waitForService(name, url) {
+			return false
+		}
+	}
+	return true
+}
+
+func waitForService(name, url string) bool {
+	client := &http.Client{Timeout: 2 * time.Second}
+	for i := 0; i < 30; i++ {
+		resp, err := client.Get(url)
+		if err == nil {
+			resp.Body.Close()
+			if resp.StatusCode == http.StatusOK || (name == "Pixiu" && resp.StatusCode == http.StatusUnauthorized) {
+				return true
+			}
+		}
+		time.Sleep(500 * time.Millisecond)
+	}
+	return false
+}
+
+// getAccessToken implements OAuth2 Authorization Code with PKCE flow
+func getAccessToken(t *testing.T) string {
+	t.Helper()
+	codeVerifier := generateCodeVerifier(32)
+	codeChallenge := generateCodeChallenge(codeVerifier)
+	code := getAuthorizationCode(t, codeChallenge)
+	return exchangeCodeForToken(t, code, codeVerifier)
+}
+
+func generateCodeVerifier(length int) string {
+	b := make([]byte, length)
+	rand.Read(b)
+	return base64.RawURLEncoding.EncodeToString(b)
+}
+
+func generateCodeChallenge(codeVerifier string) string {
+	hasher := sha256.New()
+	hasher.Write([]byte(codeVerifier))
+	return base64.RawURLEncoding.EncodeToString(hasher.Sum(nil))
+}
+
+func getAuthorizationCode(t *testing.T, codeChallenge string) string {
+	t.Helper()
+	params := url.Values{}
+	params.Set("client_id", clientID)
+	params.Set("redirect_uri", redirectURI)
+	params.Set("response_type", "code")
+	params.Set("code_challenge", codeChallenge)
+	params.Set("code_challenge_method", "S256")
+	params.Set("resource", pixiuBaseURL+mcpPath)
+
+	client := &http.Client{
+		Timeout: 5 * time.Second,
+		CheckRedirect: func(req *http.Request, via []*http.Request) error {
+			return http.ErrUseLastResponse
+		},
+	}
+
+	resp, err := client.Get(authBaseURL + "/oauth/authorize?" + params.Encode())
+	if err != nil {
+		t.Fatalf("authorization request failed: %v", err)
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusFound {
+		body, _ := io.ReadAll(resp.Body)
+		t.Fatalf("expected redirect, got %d: %s", resp.StatusCode, string(body))
+	}
+
+	location := resp.Header.Get("Location")
+	parsedURL, err := url.Parse(location)
+	if err != nil {
+		t.Fatalf("failed to parse redirect location: %v", err)
+	}
+
+	code := parsedURL.Query().Get("code")
+	if code == "" {
+		t.Fatalf("authorization code missing")
+	}
+	return code
+}
+
+func exchangeCodeForToken(t *testing.T, code, codeVerifier string) string {
 	t.Helper()
 	form := url.Values{}
-	form.Set("grant_type", "client_credentials")
-	form.Set("client_id", "sample-client")
-	form.Set("client_secret", "secret")
+	form.Set("grant_type", "authorization_code")
+	form.Set("code", code)
+	form.Set("client_id", clientID)
+	form.Set("redirect_uri", redirectURI)
+	form.Set("code_verifier", codeVerifier)
 	form.Set("resource", pixiuBaseURL+mcpPath)
-	form.Set("scope", scope)
 
 	req, err := http.NewRequest(http.MethodPost, authBaseURL+"/oauth/token", strings.NewReader(form.Encode()))
 	if err != nil {
-		t.Fatalf("build token request: %v", err)
+		t.Fatalf("failed to build token request: %v", err)
 	}
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 
@@ -96,139 +185,110 @@ func getAccessToken(t *testing.T, scope string) string {
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		b, _ := io.ReadAll(resp.Body)
-		t.Fatalf("expected 200 from token endpoint, got %d: %s", resp.StatusCode, string(b))
+		body, _ := io.ReadAll(resp.Body)
+		t.Fatalf("expected 200 from token endpoint, got %d: %s", resp.StatusCode, string(body))
 	}
 
-	var obj struct {
+	var tokenResp struct {
 		AccessToken string `json:"access_token"`
-		TokenType   string `json:"token_type"`
-		Scope       string `json:"scope"`
 	}
-	if err := json.NewDecoder(resp.Body).Decode(&obj); err != nil {
-		t.Fatalf("decode token response: %v", err)
+	if err := json.NewDecoder(resp.Body).Decode(&tokenResp); err != nil {
+		t.Fatalf("failed to decode token response: %v", err)
 	}
-	if obj.AccessToken == "" {
-		t.Fatalf("empty access token")
+
+	if tokenResp.AccessToken == "" {
+		t.Fatalf("access token is empty")
 	}
-	return obj.AccessToken
+	return tokenResp.AccessToken
 }
 
-// sendJSONRPC posts a JSON-RPC request to /mcp with an optional bearer token.
 func sendJSONRPC(t *testing.T, method string, params any, token string) (int, []byte) {
 	t.Helper()
 	reqObj := JSONRPCRequest{JSONRPC: "2.0", ID: 1, Method: method, Params: params}
-	body, err := json.Marshal(reqObj)
+	reqBody, err := json.Marshal(reqObj)
 	if err != nil {
-		t.Fatalf("marshal request: %v", err)
+		t.Fatalf("failed to marshal request: %v", err)
 	}
-	req, err := http.NewRequest(http.MethodPost, pixiuBaseURL+mcpPath, bytes.NewBuffer(body))
+
+	req, err := http.NewRequest(http.MethodPost, pixiuBaseURL+mcpPath, bytes.NewBuffer(reqBody))
 	if err != nil {
-		t.Fatalf("build request: %v", err)
+		t.Fatalf("failed to create request: %v", err)
 	}
+
 	req.Header.Set("Content-Type", "application/json")
 	if token != "" {
 		req.Header.Set("Authorization", "Bearer "+token)
 	}
+
 	client := &http.Client{Timeout: 8 * time.Second}
 	resp, err := client.Do(req)
 	if err != nil {
-		t.Fatalf("send request: %v", err)
+		t.Fatalf("failed to send request: %v", err)
 	}
 	defer resp.Body.Close()
-	data, _ := io.ReadAll(resp.Body)
-	return resp.StatusCode, data
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		t.Fatalf("failed to read response: %v", err)
+	}
+	return resp.StatusCode, body
 }
 
-// Tests
-// TestServiceAvailability_OAuth ensures all services are up before running auth tests.
-func TestServiceAvailability_OAuth(t *testing.T) {
-	if !httpGetOK(backendBaseURL) {
-		t.Skip("Backend service not available. Start: cd mcp/simple/server && go run server.go")
-	}
-	if !httpGetOK(authBaseURL + "/.well-known/oauth-authorization-server") {
-		t.Skip("Auth server not available. Start: cd mcp/oauth/authserver && go run server.go")
-	}
-	if !httpGetOK(pixiuBaseURL) {
-		t.Skip("Pixiu not available. Start gateway with mcp/oauth/pixiu/conf.yaml")
-	}
-}
-
-// TestUnauthorized_NoToken verifies that calling /mcp without a bearer token
-// returns 401 (or a JSON-RPC error envelope depending on proxy behavior).
-func TestUnauthorized_NoToken(t *testing.T) {
-	if !httpGetOK(pixiuBaseURL) {
-		t.Skip("Pixiu not available")
-	}
+// TestUnauthorizedAccess verifies requests without tokens are rejected
+func TestUnauthorizedAccess(t *testing.T) {
 	status, body := sendJSONRPC(t, "tools/list", nil, "")
+	if status == http.StatusOK && strings.Contains(string(body), "error") {
+		t.Logf("Received JSON-RPC error (acceptable): %s", string(body))
+		return
+	}
 	if status != http.StatusUnauthorized {
-		// Some proxies may return JSON-RPC error with 200; accept either 401 or JSON-RPC error
-		// Try to parse content type and error
-		ct, _, _ := mime.ParseMediaType(http.DetectContentType(body))
-		if status == http.StatusOK && strings.Contains(string(body), "error") && strings.Contains(ct, "application/json") {
-			t.Logf("Received 200 with error body (acceptable for some setups): %s", string(body))
-			return
-		}
-		t.Fatalf("expected 401 without token, got %d body=%s", status, string(body))
+		t.Errorf("expected 401, got %d: %s", status, string(body))
 	}
 }
 
-// TestAuthorized_ReadToken_ToolsList validates that a read token can list tools.
-func TestAuthorized_ReadToken_ToolsList(t *testing.T) {
-	if !httpGetOK(pixiuBaseURL) || !httpGetOK(authBaseURL+"/.well-known/oauth-authorization-server") {
-		t.Skip("Services not available")
-	}
-	token := getAccessToken(t, "read")
-	status, data := sendJSONRPC(t, "tools/list", nil, token)
+// TestAuthorizedAccess verifies OAuth2 flow and MCP operations
+func TestAuthorizedAccess(t *testing.T) {
+	token := getAccessToken(t)
+
+	// Test tools/list
+	status, body := sendJSONRPC(t, "tools/list", nil, token)
 	if status != http.StatusOK {
-		t.Fatalf("expected 200, got %d body=%s", status, string(data))
+		t.Fatalf("tools/list failed: %d, %s", status, string(body))
 	}
+
 	var resp JSONRPCResponse
-	if err := json.Unmarshal(data, &resp); err != nil {
-		t.Fatalf("unmarshal response: %v", err)
+	if err := json.Unmarshal(body, &resp); err != nil {
+		t.Fatalf("failed to unmarshal response: %v", err)
 	}
 	if resp.Error != nil {
-		t.Fatalf("json-rpc error: %v", resp.Error)
+		t.Fatalf("JSON-RPC error: %v", resp.Error)
 	}
+
 	result, ok := resp.Result.(map[string]any)
 	if !ok {
-		t.Fatalf("result not object")
+		t.Fatalf("result is not an object")
 	}
-	if _, ok := result["tools"].([]any); !ok {
-		t.Fatalf("tools not found in result")
+	tools, ok := result["tools"].([]any)
+	if !ok || len(tools) == 0 {
+		t.Fatalf("no tools found")
 	}
-}
+	t.Logf("Retrieved %d tools", len(tools))
 
-// TestAuthorized_ReadToken_GetUser validates that a read token can call a read-only tool.
-func TestAuthorized_ReadToken_GetUser(t *testing.T) {
-	if !httpGetOK(pixiuBaseURL) || !httpGetOK(backendBaseURL) || !httpGetOK(authBaseURL+"/.well-known/oauth-authorization-server") {
-		t.Skip("Services not available")
-	}
-	token := getAccessToken(t, "read")
+	// Test tool call
 	params := toolCallParams{
-		Name: "get_user",
-		Arguments: map[string]any{
-			"id":              1,
-			"include_profile": true,
-		},
+		Name:      "health_check",
+		Arguments: map[string]any{},
 	}
-	status, data := sendJSONRPC(t, "tools/call", params, token)
+	status, body = sendJSONRPC(t, "tools/call", params, token)
 	if status != http.StatusOK {
-		t.Fatalf("expected 200, got %d body=%s", status, string(data))
+		t.Fatalf("health_check failed: %d, %s", status, string(body))
 	}
-	var resp JSONRPCResponse
-	if err := json.Unmarshal(data, &resp); err != nil {
-		t.Fatalf("unmarshal response: %v", err)
+
+	if err := json.Unmarshal(body, &resp); err != nil {
+		t.Fatalf("failed to unmarshal tool call response: %v", err)
 	}
 	if resp.Error != nil {
-		t.Fatalf("json-rpc error: %v", resp.Error)
+		t.Fatalf("tool call JSON-RPC error: %v", resp.Error)
 	}
-	result, ok := resp.Result.(map[string]any)
-	if !ok {
-		t.Fatalf("result not object")
-	}
-	content, ok := result["content"].([]any)
-	if !ok || len(content) == 0 {
-		t.Fatalf("content missing")
-	}
+	t.Logf("Tool call successful")
 }

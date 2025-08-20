@@ -1,15 +1,28 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package main
 
 import (
-	"crypto/rand"
 	"crypto/sha256"
 	"encoding/base64"
-	"encoding/hex"
-	"encoding/json"
 	"fmt"
-	"math/big"
+	"log"
 	"net/http"
-	"strings"
 	"time"
 )
 
@@ -21,122 +34,8 @@ type tokenResponse struct {
 	Scope       string `json:"scope,omitempty"`
 }
 
-// jwks represents a JSON Web Key Set.
-type jwks struct {
-	Keys []jwk `json:"keys"`
-}
-
-// jwk represents a single JSON Web Key.
-type jwk struct {
-	Kty string `json:"kty"`
-	Kid string `json:"kid"`
-	Use string `json:"use"`
-	Alg string `json:"alg"`
-	N   string `json:"n"`
-	E   string `json:"e"`
-}
-
-// dynamicClientRegistrationRequest represents the RFC 7591 minimal client metadata accepted by /register.
-type dynamicClientRegistrationRequest struct {
-	RedirectURIs            []string `json:"redirect_uris"`
-	TokenEndpointAuthMethod string   `json:"token_endpoint_auth_method,omitempty"`
-}
-
-// handleDynamicClientRegistration implements a minimal RFC 7591 dynamic client registration endpoint.
-func handleDynamicClientRegistration(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodPost {
-		writeJSON(w, http.StatusMethodNotAllowed, map[string]string{"error": "method_not_allowed"})
-		return
-	}
-
-	var req dynamicClientRegistrationRequest
-	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		writeJSON(w, http.StatusBadRequest, map[string]string{"error": "invalid_request"})
-		return
-	}
-
-	// Basic validation: require at least one redirect URI and simple scheme check.
-	if len(req.RedirectURIs) == 0 {
-		writeJSON(w, http.StatusBadRequest, map[string]string{"error": "invalid_redirect_uris", "error_description": "redirect_uris must be provided"})
-		return
-	}
-	for _, ru := range req.RedirectURIs {
-		if !(strings.HasPrefix(ru, "http://") || strings.HasPrefix(ru, "https://")) {
-			writeJSON(w, http.StatusBadRequest, map[string]string{"error": "invalid_redirect_uri", "error_description": "redirect_uris must be absolute http(s) URLs"})
-			return
-		}
-	}
-
-	// Default token endpoint auth method
-	if req.TokenEndpointAuthMethod == "" {
-		req.TokenEndpointAuthMethod = "none"
-	}
-
-	clientID := generateRandomString(16)
-	var clientSecret string
-	if req.TokenEndpointAuthMethod != "none" {
-		clientSecret = generateRandomString(32)
-	}
-
-	now := time.Now().Unix()
-	client := ClientInfo{
-		ID:                      clientID,
-		Secret:                  clientSecret,
-		RedirectURIs:            req.RedirectURIs,
-		TokenEndpointAuthMethod: req.TokenEndpointAuthMethod,
-		ClientIDIssuedAt:        now,
-	}
-
-	clients[clientID] = client
-
-	issuer := "http://localhost" + listenAddr
-	regURI := issuer + "/register/" + clientID
-
-	resp := map[string]interface{}{
-		"client_id":                  client.ID,
-		"redirect_uris":              client.RedirectURIs,
-		"client_id_issued_at":        client.ClientIDIssuedAt,
-		"token_endpoint_auth_method": client.TokenEndpointAuthMethod,
-		"registration_client_uri":    regURI,
-	}
-	if client.Secret != "" {
-		resp["client_secret"] = client.Secret
-	}
-
-	w.Header().Set("Location", regURI)
-	writeJSON(w, http.StatusCreated, resp)
-}
-
-func handleMetadata(w http.ResponseWriter, r *http.Request) {
-	issuer := "http://localhost" + listenAddr
-	meta := map[string]interface{}{
-		"issuer":                                issuer,
-		"authorization_endpoint":                issuer + "/oauth/authorize",
-		"token_endpoint":                        issuer + "/oauth/token",
-		"jwks_uri":                              issuer + "/.well-known/jwks.json",
-		"registration_endpoint":                 issuer + "/register",
-		"grant_types_supported":                 []string{"authorization_code"},
-		"response_types_supported":              []string{"code"},
-		"token_endpoint_auth_methods_supported": []string{"none"}, // PKCE does not require a client secret
-		"code_challenge_methods_supported":      []string{"S256"},
-	}
-	writeJSON(w, http.StatusOK, meta)
-}
-
-func handleJwks(w http.ResponseWriter, r *http.Request) {
-	pubKey := privKey.PublicKey
-	key := jwk{
-		Kty: "RSA",
-		Kid: keyID,
-		Use: "sig",
-		Alg: "RS256",
-		N:   base64.RawURLEncoding.EncodeToString(pubKey.N.Bytes()),
-		E:   base64.RawURLEncoding.EncodeToString(big.NewInt(int64(pubKey.E)).Bytes()),
-	}
-	writeJSON(w, http.StatusOK, jwks{Keys: []jwk{key}})
-}
-
 func handleAuthorize(w http.ResponseWriter, r *http.Request) {
+	log.Printf("Received %s %s from %s", r.Method, r.URL.Path, r.RemoteAddr)
 	// Parse query parameters
 	query := r.URL.Query()
 	clientID := query.Get("client_id")
@@ -206,6 +105,7 @@ func handleAuthorize(w http.ResponseWriter, r *http.Request) {
 }
 
 func handleToken(w http.ResponseWriter, r *http.Request) {
+	log.Printf("Received %s %s from %s", r.Method, r.URL.Path, r.RemoteAddr)
 	if err := r.ParseForm(); err != nil {
 		writeJSON(w, http.StatusBadRequest, map[string]string{"error": "invalid_request"})
 		return
@@ -281,37 +181,4 @@ func validatePKCE(challenge, verifier string) bool {
 	hasher.Write([]byte(verifier))
 	calculatedChallenge := base64.RawURLEncoding.EncodeToString(hasher.Sum(nil))
 	return calculatedChallenge == challenge
-}
-
-// writeJSON is a helper to write JSON responses.
-func writeJSON(w http.ResponseWriter, status int, v any) {
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(status)
-	_ = json.NewEncoder(w).Encode(v)
-}
-
-// generateRandomString creates a secure random string of a given length.
-func generateRandomString(length int) string {
-	bytes := make([]byte, length)
-	if _, err := rand.Read(bytes); err != nil {
-		// In a real application, this should be handled more gracefully.
-		panic(err)
-	}
-	return hex.EncodeToString(bytes)
-}
-
-// corsMiddleware wraps an http.Handler and sets permissive CORS headers.
-func corsMiddleware(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Access-Control-Allow-Origin", "*")
-		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
-		w.Header().Set("Access-Control-Allow-Headers", "Authorization, Content-Type")
-		w.Header().Set("Access-Control-Max-Age", "600")
-
-		if r.Method == http.MethodOptions {
-			w.WriteHeader(http.StatusNoContent)
-			return
-		}
-		next.ServeHTTP(w, r)
-	})
 }
