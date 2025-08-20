@@ -34,7 +34,9 @@
 
 - llm：pixiu 调用 LLM 的简单示例
 
-- mcp: 演示了如何使用 Dubbo-go-pixiu 的 MCP (Model Context Protocol) 过滤器，将后端 HTTP API 服务暴露为 MCP 工具，供大型语言模型 (LLM) 调用。
+- mcp: 演示 MCP (Model Context Protocol) 过滤器，将 HTTP API 暴露为 LLM 工具
+  - mcp/simple: 基础的 MCP 服务集成示例，展示如何将 HTTP API 转换为 MCP 工具
+  - mcp/oauth: MCP OAuth 授权示例，演示如何使用 OAuth2 保护 MCP 端点，支持 PKCE 授权码流程
 
 - plugins：此目录包含 pixiu 的一些插件
   - plugins/ratelimit：pixiu 的 ratelimit 插件
