@@ -27,12 +27,14 @@ import (
 )
 
 import (
-	pb "github.com/dubbo-go-pixiu/samples/grpc/simple/routeguide"
-
 	"github.com/stretchr/testify/assert"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
+)
+
+import (
+	pb "github.com/dubbo-go-pixiu/samples/grpc/simple/routeguide"
 )
 
 const (

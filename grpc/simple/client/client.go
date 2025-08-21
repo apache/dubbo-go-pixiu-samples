@@ -31,10 +31,12 @@ import (
 )
 
 import (
-	pb "github.com/dubbo-go-pixiu/samples/grpc/simple/routeguide"
-
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
+)
+
+import (
+	pb "github.com/dubbo-go-pixiu/samples/grpc/simple/routeguide"
 )
 
 var (
