@@ -41,7 +41,7 @@ type jwk struct {
 
 func handleMetadata(w http.ResponseWriter, r *http.Request) {
 	log.Printf("Received %s %s from %s", r.Method, r.URL.Path, r.RemoteAddr)
-	issuer := "http://localhost" + listenAddr
+	issuer := issuerBaseURL // Use shared constant
 	meta := map[string]interface{}{
 		"issuer":                                issuer,
 		"authorization_endpoint":                issuer + "/oauth/authorize",

@@ -103,7 +103,7 @@ func TestIssueJWT(t *testing.T) {
 			err = json.Unmarshal(claimsBytes, &claims)
 			require.NoError(t, err)
 
-			assert.Equal(t, "http://localhost:9000", claims["iss"])
+			assert.Equal(t, issuerBaseURL, claims["iss"]) // Use shared constant
 			assert.Equal(t, tc.audience, claims["aud"])
 			assert.Equal(t, tc.scope, claims["scope"])
 

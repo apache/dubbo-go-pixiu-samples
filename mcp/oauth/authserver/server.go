@@ -24,6 +24,8 @@ import (
 
 const (
 	listenAddr = ":9000"
+	// issuerBaseURL is the base URL for the OAuth issuer
+	issuerBaseURL = "http://localhost:9000"
 )
 
 func main() {

@@ -96,7 +96,7 @@ func TestHandleMetadata(t *testing.T) {
 	err := json.NewDecoder(resp.Body).Decode(&meta)
 	require.NoError(t, err)
 
-	issuer := "http://localhost" + listenAddr
+	issuer := issuerBaseURL // Use shared constant
 	assert.Equal(t, issuer, meta["issuer"])
 	assert.Equal(t, issuer+"/oauth/authorize", meta["authorization_endpoint"])
 	assert.Equal(t, issuer+"/oauth/token", meta["token_endpoint"])

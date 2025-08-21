@@ -60,7 +60,7 @@ func issueJWT(audience, scope string) (string, error) {
 	headerEnc := base64.RawURLEncoding.EncodeToString(headerBytes)
 
 	claims := map[string]interface{}{
-		"iss":   "http://localhost:9000", // Hardcoded issuer
+		"iss":   issuerBaseURL, // Use shared constant
 		"aud":   audience,
 		"scope": scope,
 		"iat":   time.Now().Unix(),

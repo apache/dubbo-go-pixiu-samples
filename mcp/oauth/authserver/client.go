@@ -79,7 +79,7 @@ func handleDynamicClientRegistration(w http.ResponseWriter, r *http.Request) {
 
 	clients[clientID] = client
 
-	issuer := "http://localhost" + listenAddr
+	issuer := issuerBaseURL // Use shared constant
 	regURI := issuer + "/register/" + clientID
 
 	resp := map[string]interface{}{
