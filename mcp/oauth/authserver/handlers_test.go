@@ -70,16 +70,24 @@ func TestValidatePKCE(t *testing.T) {
 
 func TestGenerateRandomString(t *testing.T) {
 	// Test length
-	s32 := generateRandomString(32)
+	s32, err := generateRandomString(32)
+	require.NoError(t, err)
 	assert.Len(t, s32, 64) // 32 bytes = 64 hex characters
 
-	s16 := generateRandomString(16)
+	s16, err := generateRandomString(16)
+	require.NoError(t, err)
 	assert.Len(t, s16, 32) // 16 bytes = 32 hex characters
 
 	// Test for randomness (not a perfect test, but checks for non-empty and different results)
-	s32_another := generateRandomString(32)
+	s32_another, err := generateRandomString(32)
+	require.NoError(t, err)
 	assert.NotEmpty(t, s32)
 	assert.NotEqual(t, s32, s32_another, "Two generated strings should not be the same")
+	
+	// Test with zero length (edge case)
+	s0, err := generateRandomString(0)
+	require.NoError(t, err)
+	assert.Empty(t, s0)
 }
 
 func TestHandleMetadata(t *testing.T) {

@@ -85,7 +85,12 @@ func handleAuthorize(w http.ResponseWriter, r *http.Request) {
 	// For this demo, we auto-approve.
 
 	// Generate and store authorization code
-	code := generateRandomString(32)
+	code, err := generateRandomString(32)
+	if err != nil {
+		writeJSON(w, http.StatusInternalServerError, map[string]string{"error": "server_error", "error_description": "failed to generate authorization code"})
+		return
+	}
+	
 	authCodes[code] = AuthCodeInfo{
 		ClientID:            clientID,
 		RedirectURI:         redirectURI,

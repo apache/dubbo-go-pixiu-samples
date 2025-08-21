@@ -32,13 +32,12 @@ func writeJSON(w http.ResponseWriter, status int, v any) {
 }
 
 // generateRandomString creates a secure random string of a given length.
-func generateRandomString(length int) string {
+func generateRandomString(length int) (string, error) {
 	bytes := make([]byte, length)
 	if _, err := rand.Read(bytes); err != nil {
-		// In a real application, this should be handled more gracefully.
-		panic(err)
+		return "", err
 	}
-	return hex.EncodeToString(bytes)
+	return hex.EncodeToString(bytes), nil
 }
 
 // corsMiddleware wraps an http.Handler and sets permissive CORS headers.

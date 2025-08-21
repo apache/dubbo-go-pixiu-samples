@@ -62,10 +62,19 @@ func handleDynamicClientRegistration(w http.ResponseWriter, r *http.Request) {
 		req.TokenEndpointAuthMethod = "none"
 	}
 
-	clientID := generateRandomString(16)
+	clientID, err := generateRandomString(16)
+	if err != nil {
+		writeJSON(w, http.StatusInternalServerError, map[string]string{"error": "server_error", "error_description": "failed to generate client ID"})
+		return
+	}
+	
 	var clientSecret string
 	if req.TokenEndpointAuthMethod != "none" {
-		clientSecret = generateRandomString(32)
+		clientSecret, err = generateRandomString(32)
+		if err != nil {
+			writeJSON(w, http.StatusInternalServerError, map[string]string{"error": "server_error", "error_description": "failed to generate client secret"})
+			return
+		}
 	}
 
 	now := time.Now().Unix()
