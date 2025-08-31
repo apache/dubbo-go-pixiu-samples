@@ -47,7 +47,7 @@ const (
 func createNacosClient() (naming_client.INamingClient, error) {
 	nacosHost := os.Getenv("NACOS_HOST")
 	if nacosHost == "" {
-		nacosHost = "172.22.142.171"
+		nacosHost = NacosServerIP
 	}
 	serverConfigs := []constant.ServerConfig{
 		*constant.NewServerConfig(nacosHost, NacosServerPort),
