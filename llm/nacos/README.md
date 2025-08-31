@@ -12,9 +12,7 @@ This sample demonstrates register service through nacos, and how to make a llm c
     $ cp pathto/dubbo-go-pixiu-samples/llm/nacos/.env.example pathto/dubbo-go-pixiu-samples/llm/nacos/.env
     ```
    
-2. Edit the `prometheus.yml` file to set the correct IP address.
-
-3. Docker Compose
+2. Docker Compose
    Service registration code and nacos service are started through Docker Compose.
     ```shell
     docker-compose up -d
