@@ -20,12 +20,16 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/dubbogo/gost/log/logger"
-	"github.com/joho/godotenv"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
+)
+
+import (
+	"github.com/dubbogo/gost/log/logger"
+
+	"github.com/joho/godotenv"
 
 	"github.com/nacos-group/nacos-sdk-go/clients"
 	"github.com/nacos-group/nacos-sdk-go/clients/naming_client"
