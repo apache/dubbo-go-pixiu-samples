@@ -135,13 +135,13 @@ func main() {
 	}
 
 	logger.Infof("Service registered instance [%s:%d] success on [%s] target cluster: [chat]", InstanceIP, InstancePort, ServiceName)
-	logger.Info("Programme running，press Ctrl+C to exit")
+	logger.Info("Program running，press Ctrl+C to exit")
 
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
 	<-quit
 
-	logger.Info("Received shut up signal，deregistering instance...")
+	logger.Info("Received shutdown signal，deregistering instance...")
 	_, err = client.DeregisterInstance(vo.DeregisterInstanceParam{
 		Ip:          InstanceIP,
 		Port:        InstancePort,
