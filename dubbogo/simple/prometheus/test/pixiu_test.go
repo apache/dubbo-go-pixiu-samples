@@ -18,6 +18,7 @@
 package prometheus
 
 import (
+	"context"
 	"io"
 	"net/http"
 	"strings"
@@ -68,7 +69,7 @@ func TestLocal(t *testing.T) {
 
 	go func() {
 		server := &http.Server{Addr: ":9091", Handler: metricServer}
-		defer server.Close()
+		server.Shutdown(context.Background())
 		server.ListenAndServe()
 	}()
 
