@@ -37,10 +37,9 @@ func main() {
 		msg := route[strings.LastIndex(route, "/")+1:]
 
 		http.HandleFunc(route, func(w http.ResponseWriter, r *http.Request) {
-			// 打印日志，显示后端接收到的请求
+			
 			log.Printf("[backend] %s %s Headers=%v", r.Method, r.URL.Path, r.Header)
 
-			// 返回 JSON
 			w.Header().Set("Content-Type", "application/json")
 			_ = json.NewEncoder(w).Encode(Resp{
 				Message: msg,
