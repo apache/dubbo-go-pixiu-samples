@@ -34,6 +34,8 @@ array+=("http/simple")
 ## grpc proxy
 array+=("grpc/deprecated")
 
+array+=("plugins/opa")
+
 for((i=0;i<${#array[*]};i++))
 do
 	sh ./integrate_test.sh ${array[i]}

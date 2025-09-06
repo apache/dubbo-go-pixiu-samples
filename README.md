@@ -38,7 +38,8 @@ samples for [dubbo-go-pixiu](https://github.com/apache/dubbo-go-pixiu)
 
 - plugins: this directory contains some plugins for pixiu
   - plugins/ratelimit: rate limit plugin for pixiu
-
+  - plugins/opa: opa plugin for pixiu
+  
 - seata: this demonstrates how to configure the Seata filter to interact with the Seata TC for distributed transaction coordination.
 
 - shutdown: this directory demonstrates how to gracefully shut down

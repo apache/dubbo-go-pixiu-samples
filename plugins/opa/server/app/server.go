@@ -37,7 +37,7 @@ func main() {
 		msg := route[strings.LastIndex(route, "/")+1:]
 
 		http.HandleFunc(route, func(w http.ResponseWriter, r *http.Request) {
-			
+
 			log.Printf("[backend] %s %s Headers=%v", r.Method, r.URL.Path, r.Header)
 
 			w.Header().Set("Content-Type", "application/json")
