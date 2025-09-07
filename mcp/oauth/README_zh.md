@@ -1,5 +1,7 @@
 # Dubbo-go-pixiu MCP OAuth 授权示例
 
+[English](./README.md) | 中文
+
 ## 简介
 
 本示例演示了如何在 Pixiu Gateway 中集成 OAuth2 授权来保护 MCP (Model Context Protocol) 端点。该示例实现了完整的 OAuth2 授权码流程（带 PKCE），展示了三层架构的集成：

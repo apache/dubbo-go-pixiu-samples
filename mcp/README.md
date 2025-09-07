@@ -1,5 +1,7 @@
 # MCP Samples Index
 
+English | [中文](./README_zh.md)
+
 This directory contains two MCP samples:
 
 - `simple/`: MCP without authorization

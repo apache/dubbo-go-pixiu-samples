@@ -1,5 +1,7 @@
 # Dubbo-go-pixiu MCP Sample
 
+English | [中文](./README_zh.md)
+
 ## Introduction
 
 This sample demonstrates how to use the MCP (Model Context Protocol) filter in Dubbo-go-pixiu to expose backend HTTP API services as MCP tools for Large Language Models (LLM) to call.

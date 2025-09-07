@@ -1,5 +1,7 @@
 # Dubbo-go-pixiu MCP 示例
 
+[English](./README.md) | 中文
+
 ## 简介
 
 本示例演示了如何使用 Dubbo-go-pixiu 的 MCP (Model Context Protocol) 过滤器，将后端 HTTP API 服务暴露为 MCP 工具，供大型语言模型 (LLM) 调用。

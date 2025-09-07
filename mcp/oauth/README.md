@@ -1,5 +1,7 @@
 # Dubbo-go-pixiu MCP OAuth Authorization Example
 
+English | [中文](./README_zh.md)
+
 ## Overview
 
 This example demonstrates how to integrate OAuth2 authorization in Pixiu Gateway to protect MCP (Model Context Protocol) endpoints. It implements a complete OAuth2 Authorization Code flow with PKCE, showcasing a three-tier architecture integration:
