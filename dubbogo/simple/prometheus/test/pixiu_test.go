@@ -19,6 +19,7 @@ package prometheus
 
 import (
 	"context"
+	"errors"
 	"io"
 	"net/http"
 	"strings"
@@ -27,6 +28,8 @@ import (
 )
 
 import (
+	"github.com/dubbogo/gost/log/logger"
+
 	"github.com/stretchr/testify/assert"
 )
 
@@ -38,7 +41,6 @@ type _testMetric struct {
 func (tt *_testMetric) ServeHTTP(writer http.ResponseWriter, request *http.Request) {
 	body, _ := io.ReadAll(request.Body)
 	tt.buf = string(body)
-	//logger.Info("read (%d, content-length: %d) => %s\n", len(tt.buf), request.ContentLength, string(tt.buf))
 	writer.WriteHeader(200)
 
 	select {
@@ -69,8 +71,12 @@ func TestLocal(t *testing.T) {
 
 	go func() {
 		server := &http.Server{Addr: ":9091", Handler: metricServer}
+
+		if err := server.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
+			logger.Errorf("Prometheus mock server exit with fail: %v", err)
+		}
+
 		server.Shutdown(context.Background())
-		server.ListenAndServe()
 	}()
 
 	time.Sleep(100 * time.Millisecond)
