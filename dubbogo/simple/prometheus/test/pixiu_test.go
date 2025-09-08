@@ -38,7 +38,6 @@ type _testMetric struct {
 func (tt *_testMetric) ServeHTTP(writer http.ResponseWriter, request *http.Request) {
 	body, _ := io.ReadAll(request.Body)
 	tt.buf = string(body)
-	//logger.Info("read (%d, content-length: %d) => %s\n", len(tt.buf), request.ContentLength, string(tt.buf))
 	writer.WriteHeader(200)
 
 	select {
@@ -69,7 +68,7 @@ func TestLocal(t *testing.T) {
 
 	go func() {
 		server := &http.Server{Addr: ":9091", Handler: metricServer}
-		server.Shutdown(context.Background())
+		defer server.Shutdown(context.TODO())
 		server.ListenAndServe()
 	}()
 
