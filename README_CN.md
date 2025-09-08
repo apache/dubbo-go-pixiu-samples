@@ -38,7 +38,7 @@
 
 - plugins：此目录包含 pixiu 的一些插件
   - plugins/ratelimit：pixiu 的 ratelimit 插件
-  - plugins/opa: pixiu 的 opa插件
+  - plugins/opa: pixiu 的 Open Policy Agent 策略控制能力集成示例
   
 - seata：演示了如何配置 Seata filter 与 Seata TC 交互对分布式事务进行协调
 

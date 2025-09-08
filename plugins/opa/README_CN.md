@@ -1,6 +1,6 @@
 # OPA 插件示例
 
-[English](README.md)
+[English](README.md)| 中文
 
 OPA 过滤器可以提供开箱即用的授权能力，确保服务的安全性和稳定性。
 
@@ -29,9 +29,9 @@ OPA 过滤器可以提供开箱即用的授权能力，确保服务的安全性�
             entrypoint: "data.http.authz.allow"
 ```
 
-### 设置进入点
+### 设置 **entrypoint**
 
-- 第二步，设置进入点。进入点必须同包匹配
+- 第二步，设置 entrypoint。entrypoint 必须同包匹配
 
 ```yaml
        		entrypoint: "data.http.authz.allow"
