@@ -19,6 +19,8 @@ package prometheus
 
 import (
 	"context"
+	"errors"
+	"github.com/dubbogo/gost/log/logger"
 	"io"
 	"net/http"
 	"strings"
@@ -68,8 +70,12 @@ func TestLocal(t *testing.T) {
 
 	go func() {
 		server := &http.Server{Addr: ":9091", Handler: metricServer}
-		defer server.Shutdown(context.TODO())
-		server.ListenAndServe()
+
+		if err := server.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
+			logger.Errorf("Prometheus mock server exit with fail: %v", err)
+		}
+
+		server.Shutdown(context.Background())
 	}()
 
 	time.Sleep(100 * time.Millisecond)
