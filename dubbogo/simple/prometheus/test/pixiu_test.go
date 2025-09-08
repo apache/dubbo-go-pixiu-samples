@@ -20,7 +20,6 @@ package prometheus
 import (
 	"context"
 	"errors"
-	"github.com/dubbogo/gost/log/logger"
 	"io"
 	"net/http"
 	"strings"
@@ -29,6 +28,7 @@ import (
 )
 
 import (
+	"github.com/dubbogo/gost/log/logger"
 	"github.com/stretchr/testify/assert"
 )
 
