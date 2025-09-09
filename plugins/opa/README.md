@@ -1,6 +1,6 @@
 # This sample for OPA filter.
 
-English|[中文](README_CN.md)
+English | [中文](README_CN.md)
 
 The OPA filter can provide out-of-the-box authorization capability to ensure service security and stability.
 

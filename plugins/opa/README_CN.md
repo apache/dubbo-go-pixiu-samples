@@ -1,6 +1,6 @@
 # OPA 插件示例
 
-[English](README.md)| 中文
+[English](README.md) | 中文
 
 OPA 过滤器可以提供开箱即用的授权能力，确保服务的安全性和稳定性。
 
