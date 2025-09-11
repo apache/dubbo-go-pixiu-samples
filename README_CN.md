@@ -39,6 +39,7 @@
 - mcp: 演示 MCP (Model Context Protocol) 过滤器，将 HTTP API 暴露为 LLM 工具
   - mcp/simple: 基础的 MCP 服务集成示例，展示如何将 HTTP API 转换为 MCP 工具
   - mcp/oauth: MCP OAuth 授权示例，演示如何使用 OAuth2 保护 MCP 端点，支持 PKCE 授权码流程
+  - mcp/nacos: MCP Nacos 集成示例，演示如何使用 Nacos 作为 MCP Server 的注册中心和配置中心
 
 - plugins：此目录包含 pixiu 的一些插件
   - plugins/ratelimit：pixiu 的 ratelimit 插件
