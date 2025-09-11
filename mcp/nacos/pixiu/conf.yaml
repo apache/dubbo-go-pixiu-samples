@@ -13,11 +13,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# MCP OAuth (Authorization) Sample Configuration
-# - Only protects the /mcp endpoint via MCP Authorization filter
-# - Uses a local authorization server at http://localhost:9000
-# - Uses remote JWKS served by the local authorization server
-
 static_resources:
   listeners:
     - name: "net/http"
