@@ -50,10 +50,14 @@ jobs:
       - name: Check License Header
         uses: apache/skywalking-eyes/header@main # NOSONAR
 
+      - name: Check Golang fmt
+        run: |
+          gofmt -s -w .
+          git diff --exit-code
+
       - name: Check Import Formatting
         run: |
           imports-formatter
-          gofmt -s -w .
           git diff --exit-code
 
   golangci:
