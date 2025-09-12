@@ -27,4 +27,9 @@ header:
     - '**/*.mod'
     - '**/*.sum'
     -  '**/*.json'
+
   comment: on-failure
+
+  dependency:
+    files:
+      - go.mod
