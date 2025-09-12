@@ -34,7 +34,7 @@ func main() {
 		msg := router[strings.LastIndex(router, "/")+1:]
 		http.HandleFunc(router, func(w http.ResponseWriter, r *http.Request) {
 			logger.Info("request received for", msg)
-			_, _ = w.Write([]byte(fmt.Sprintf(`{"message":"%s","status":200}`, msg)))
+			fmt.Fprintf(w, `{"message":"%s","status":200}`, msg)
 		})
 	}
 	logger.Info("Listening on 1314")

@@ -70,7 +70,7 @@ func main() {
 		account := &Account{}
 		err := context.BindJSON(account)
 		if err == nil {
-			fmt.Println(fmt.Sprintf("account %d canceled!", account.ID))
+			fmt.Printf("account %d canceled!\n", account.ID)
 			context.JSON(200, gin.H{
 				"success": true,
 				"message": fmt.Sprintf("account %d canceled!", account.ID),

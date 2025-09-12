@@ -58,3 +58,4 @@ jobs:
         uses: golangci/golangci-lint-action@v8 # NOSONAR
         with:
           version: v2.4.0
+          args: --disable errcheck

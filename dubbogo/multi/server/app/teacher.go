@@ -137,11 +137,7 @@ func (db *TeacherDB) existCode(code int64) bool {
 	}
 
 	_, ok := db.codeIndex[code]
-	if ok {
-		return true
-	}
-
-	return false
+	return ok
 }
 
 // Teacher teacher obj.
