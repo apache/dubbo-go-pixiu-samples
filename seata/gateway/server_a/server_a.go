@@ -43,7 +43,7 @@ func main() {
 
 	r.POST("/service-a/begin", func(context *gin.Context) {
 		xid := context.Request.Header.Get("x_seata_xid")
-		fmt.Println(fmt.Sprintf("xid %s", xid))
+		fmt.Printf("xid %s", xid)
 		account := &Account{
 			ID:     1000024549,
 			Amount: 200,

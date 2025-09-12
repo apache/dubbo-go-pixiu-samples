@@ -134,11 +134,7 @@ func (db *userDB) existName(name string) bool {
 	}
 
 	_, ok := db.nameIndex[name]
-	if ok {
-		return true
-	}
-
-	return false
+	return ok
 }
 
 func (db *userDB) existCode(code int64) bool {
@@ -147,11 +143,7 @@ func (db *userDB) existCode(code int64) bool {
 	}
 
 	_, ok := db.codeIndex[code]
-	if ok {
-		return true
-	}
-
-	return false
+	return ok
 }
 
 // User user obj.
