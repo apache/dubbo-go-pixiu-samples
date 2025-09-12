@@ -29,7 +29,3 @@ header:
     -  '**/*.json'
 
   comment: on-failure
-
-  dependency:
-    files:
-      - go.mod
