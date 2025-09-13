@@ -125,7 +125,6 @@ func (db *StudentDB) existName(name string) bool {
 	}
 
 	_, ok := db.nameIndex[name]
-
 	return ok
 }
 
