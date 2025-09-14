@@ -20,81 +20,58 @@ name: CI
 
 on:
   push:
-    branches: [ master, develop ]
   pull_request:
-    branches: "*"
+  pull_request_target:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 jobs:
-
-  build:
-    name: ${{ matrix.os }} - Go ${{ matrix.go_version }}
-    runs-on: ${{ matrix.os }}
-    strategy:
-      # If you want to matrix build , you can append the following list.
-      matrix:
-        go_version:
-          - 1.23
-
-        os:
-          - ubuntu-latest
-
-    # https://docs.github.com/cn/actions/reference/encrypted-secrets
-    env:
-      DING_TOKEN: ${{ secrets.PROXY_DING_TOKEN }}
-      DING_SIGN: ${{ secrets.PROXY_DING_SIGN }}
-
+  license-check-and-import-format:
+    name: License Check and Import Format
+    runs-on: ubuntu-latest
     steps:
-      - name: Set up Go 1.x
-        uses: actions/setup-go@v5
-        with:
-          go-version: ${{ matrix.go_version }}
-        id: go
-
-      - name: Check out code into the Go module directory
-        uses: actions/checkout@v4
-
-      - name: Check License Header
-        uses: apache/skywalking-eyes@v0.7.0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Cache dependencies
+      - uses: actions/checkout@v5
+      - name: Cache imports-formatter
+        id: cache-go-bin
         uses: actions/cache@v4
         with:
-          # Cache
-          path: ~/go/pkg/mod
-          # Cache key
-          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
-          # An ordered list of keys to use for restoring the cache if no cache hit occurred for key
+          path: ~/go/bin
+          key: ${{ runner.os }}-go-imports-formatter-${{ hashFiles('**/go.sum') }}
           restore-keys: |
-            ${{ runner.os }}-go-
+            ${{ runner.os }}-go-imports-formatter-
 
-      - name: Get dependencies
+      - name: Download imports-formatter if not cached
+        if: steps.cache-go-bin.outputs.cache-hit != 'true'
         run: |
-          if [ -f Gopkg.toml ]; then
-              curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
-              dep ensure
-          else
-              go get -v -t -d ./...
-          fi
           go install github.com/dubbogo/tools/cmd/imports-formatter@latest
 
-      - name: Format Code
+      - name: Check License Header
+        uses: apache/skywalking-eyes/header@main # NOSONAR
+
+      - name: Check Golang fmt
         run: |
-          go fmt ./... && GOROOT=$(go env GOROOT) imports-formatter && git status && [[ -z `git status -s` ]]
-          # diff -u <(echo -n) <(gofmt -d -s .)
+          gofmt -s -w .
+          git diff --exit-code
 
-      - name: Install go ci lint
-        run: curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.64.8
+      - name: Check Import Formatting
+        run: |
+          imports-formatter
+          git diff --exit-code
 
-      - name: Run Linter
-        run: GO111MODULE=on golangci-lint run --timeout=10m -v --disable-all --enable=govet --enable=staticcheck --enable=ineffassign --enable=misspell
-
-      # integration test
-#      - name: Integration Test
-#        run: |
-#          chmod +x start_integrate_test.sh && chmod +x integrate_test.sh && ./start_integrate_test.sh
-
-
-      - name: Hello world
-        run: echo Hello world ${{ secrets.PROXY_DING_TOKEN }} ${{ secrets.PROXY_DING_SIGN }}
+  golangci:
+    needs: license-check-and-import-format
+    name: Golang Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-go@v6
+        with:
+          go-version-file: 'go.mod'
+          cache: true
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@v8 # NOSONAR
+        with:
+          version: v2.4.0
+          args: --disable errcheck
