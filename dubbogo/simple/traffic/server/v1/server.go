@@ -30,7 +30,7 @@ func main() {
 	for _, router := range routers {
 		msg := router[strings.LastIndex(router, "/")+1:]
 		http.HandleFunc(router, func(w http.ResponseWriter, r *http.Request) {
-			_, _ = w.Write([]byte(fmt.Sprintf(`{"server": "v1","message":"%s","status":200}`, msg)))
+			fmt.Fprintf(w, `{"server": "v1","message":"%s","status":200}`, msg)
 		})
 	}
 

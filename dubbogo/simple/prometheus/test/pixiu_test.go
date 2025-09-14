@@ -18,6 +18,8 @@
 package prometheus
 
 import (
+	"context"
+	"errors"
 	"io"
 	"net/http"
 	"strings"
@@ -26,45 +28,73 @@ import (
 )
 
 import (
+	"github.com/dubbogo/gost/log/logger"
+
 	"github.com/stretchr/testify/assert"
 )
 
 type _testMetric struct {
-	buf string
+	metricChan chan string
+	buf        string
 }
 
 func (tt *_testMetric) ServeHTTP(writer http.ResponseWriter, request *http.Request) {
 	body, _ := io.ReadAll(request.Body)
 	tt.buf = string(body)
-	//logger.Info("read (%d, content-length: %d) => %s\n", len(tt.buf), request.ContentLength, string(tt.buf))
 	writer.WriteHeader(200)
+
+	select {
+	case tt.metricChan <- tt.buf:
+	default:
+	}
+}
+
+func waitForMetric(t *testing.T, metricServer *_testMetric, expectedSubstring string) {
+	timeout := time.After(2 * time.Second)
+	for {
+		select {
+		case receivedMetric := <-metricServer.metricChan:
+			if strings.Contains(receivedMetric, expectedSubstring) {
+				return
+			}
+		case <-timeout:
+			t.Fatalf("timed out waiting for metric. last received: %q; expected to contain: %q", metricServer.buf, expectedSubstring)
+		}
+	}
 }
 
 func TestLocal(t *testing.T) {
 	metricServer := &_testMetric{
-		buf: "",
+		buf:        "",
+		metricChan: make(chan string, 10),
 	}
-	http.Handle("/metrics", metricServer)
-	go http.ListenAndServe(":9091", metricServer)
+
+	go func() {
+		server := &http.Server{Addr: ":9091", Handler: metricServer}
+
+		if err := server.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
+			logger.Errorf("Prometheus mock server exit with fail: %v", err)
+		}
+
+		server.Shutdown(context.Background())
+	}()
+
+	time.Sleep(100 * time.Millisecond)
 
 	verify(t, "http://localhost:8888/health", http.StatusOK)
-	assert.Contains(t, metricServer.buf, "pixiu_requests_total")
-	metricServer.buf = metricServer.buf[0:0]
+	waitForMetric(t, metricServer, "pixiu_requests_total")
 
 	s := verify(t, "http://localhost:8888/user", http.StatusOK)
 	assert.True(t, strings.Contains(s, "user"))
-	assert.Contains(t, metricServer.buf, "pixiu_requests_total")
-	metricServer.buf = metricServer.buf[0:0]
+	waitForMetric(t, metricServer, "pixiu_requests_total")
 
 	s = verify(t, "http://localhost:8888/user/pixiu", http.StatusOK)
 	assert.True(t, strings.Contains(s, "pixiu"))
-	assert.Contains(t, metricServer.buf, "pixiu_requests_total")
-	metricServer.buf = metricServer.buf[0:0]
+	waitForMetric(t, metricServer, "pixiu_requests_total")
 
 	s = verify(t, "http://localhost:8888/prefix", http.StatusOK)
 	assert.True(t, strings.Contains(s, "prefix"))
-	assert.Contains(t, metricServer.buf, "pixiu_requests_total")
-	metricServer.buf = metricServer.buf[0:0]
+	waitForMetric(t, metricServer, "pixiu_requests_total")
 }
 
 func verify(t *testing.T, url string, status int) string {
