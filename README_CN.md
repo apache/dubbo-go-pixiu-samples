@@ -32,7 +32,9 @@
 - http/grpc：将http请求转换为 grpc 请求，支持配置 proto 文件或动态从开启反射功能的 grpc server中获取 proto 信息
 - http/simple：此目录包含常见的 Http 请求代理功能，作为常见的 API 网关
 
-- llm：pixiu 调用 LLM 的简单示例
+- llm：pixiu-ai-gateway 的示例
+  - llm/bestpractice: 展示了如何使用 pixiu-ai-gateway 作为LLM的统一入口，支持模型回退、失败重试、prometheus+grafana 监控等功能。
+  - llm/nacos: 演示了如何使用 nacos 作为 pixiu-ai-gateway 的 llm 服务的注册中心
 
 - mcp: 演示了如何使用 Dubbo-go-pixiu 的 MCP (Model Context Protocol) 过滤器，将后端 HTTP API 服务暴露为 MCP 工具，供大型语言模型 (LLM) 调用。
 

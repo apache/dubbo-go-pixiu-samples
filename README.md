@@ -33,6 +33,8 @@ samples for [dubbo-go-pixiu](https://github.com/apache/dubbo-go-pixiu)
 - http/simple: this directory contains common Http request proxying features that serve as common API gateways
 
 - llm: simple sample for pixiu to call llm
+  - llm/bestpractice: this sample demonstrates how to use pixiu-ai-gateway as a unified entry point for LLM, supporting model fallback, failure retry, prometheus+grafana monitoring, and other functions.
+  - llm/nacos: this sample demonstrates how to use nacos as the registry center for the llm service of pixiu-ai-gateway.
 
 - mcp: this sample demonstrates how to use the MCP (Model Context Protocol) filter in pixiu to expose backend HTTP API services as MCP tools for Large Language Models (LLM) to call.
 
