@@ -24,9 +24,10 @@ import (
 	"crypto/sha256"
 	"encoding/base64"
 	"encoding/json"
-	"fmt"
 	"log"
 	"time"
+
+	"github.com/pkg/errors"
 )
 
 const (
@@ -77,7 +78,7 @@ func issueJWT(audience, scope string) (string, error) {
 
 	sig, err := rsa.SignPKCS1v15(rand.Reader, privKey, crypto.SHA256, digest)
 	if err != nil {
-		return "", fmt.Errorf("failed to sign token: %w", err)
+		return "", errors.Wrap(err, "failed to sign token")
 	}
 
 	sigEnc := base64.RawURLEncoding.EncodeToString(sig)
