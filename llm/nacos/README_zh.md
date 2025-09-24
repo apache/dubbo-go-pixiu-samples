@@ -10,7 +10,7 @@
 1. 将你的 DeepSeek API 添加到 `.env` 文件中，更多详情请参阅 [deepseek](https://platform.deepseek.com)。
 
     ```shell
-    $ cp pathto/dubbo-go-pixiu-samples/llm/nacos/.env.example pathto/dubbo-go-pixiu-samples/llm/nacos/.env
+    cp pathto/dubbo-go-pixiu-samples/llm/nacos/.env.example pathto/dubbo-go-pixiu-samples/llm/nacos/.env
     ```
 
 2. Docker Compose
@@ -24,13 +24,13 @@
 通过执行以下命令运行Pixiu服务器：
 
 ```shell
-$ cd pathto/dubbo-go-pixiu
-$ go run ./cmd/pixiu/*.go gateway start -c pathto/dubbo-go-pixiu-samples/llm/nacos/pixiu/conf.yaml
+cd pathto/dubbo-go-pixiu
+go run ./cmd/pixiu/*.go gateway start -c pathto/dubbo-go-pixiu-samples/llm/nacos/pixiu/conf.yaml
 ```
 
 ### **运行客户端代码**
 
 ```shell
-$ cd pathto/dubbo-go-pixiu-samples/llm/nacos
-$ go run ./go-client/client.go
+cd pathto/dubbo-go-pixiu-samples/llm/nacos
+go run ./go-client/client.go
 ```

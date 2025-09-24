@@ -9,7 +9,7 @@ This sample demonstrates register service through nacos, and how to make a llm c
 1. Add your DeepSeek API to `.env` file, see [deepseek](https://platform.deepseek.com) for more details.
 
     ```shell
-    $ cp pathto/dubbo-go-pixiu-samples/llm/nacos/.env.example pathto/dubbo-go-pixiu-samples/llm/nacos/.env
+    cp pathto/dubbo-go-pixiu-samples/llm/nacos/.env.example pathto/dubbo-go-pixiu-samples/llm/nacos/.env
     ```
    
 2. Docker Compose
@@ -23,13 +23,13 @@ This sample demonstrates register service through nacos, and how to make a llm c
 Run the Pixiu server by executing:
 
 ```shell
-$ cd pathto/dubbo-go-pixiu
-$ go run ./cmd/pixiu/*.go gateway start -c pathto/dubbo-go-pixiu-samples/llm/nacos/pixiu/conf.yaml
+cd pathto/dubbo-go-pixiu
+go run ./cmd/pixiu/*.go gateway start -c pathto/dubbo-go-pixiu-samples/llm/nacos/pixiu/conf.yaml
 ```
 
 ### **Run the client code**
 
 ```shell
-$ cd pathto/dubbo-go-pixiu-samples/llm/nacos
-$ go run ./go-client/client.go
+cd pathto/dubbo-go-pixiu-samples/llm/nacos
+go run ./go-client/client.go
 ```

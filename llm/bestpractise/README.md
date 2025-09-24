@@ -9,7 +9,7 @@ This sample demonstrates how to make a llm call using Dubbo-go-pixiu, and use pr
 1. Add your DeepSeek API to `.env` file, see [deepseek](https://platform.deepseek.com) for more details.
 
     ```shell
-    $ cp pathto/dubbo-go-pixiu-samples/llm/bestpractise/test/.env.example pathto/dubbo-go-pixiu-samples/llm/bestpractise/test/.env
+    cp pathto/dubbo-go-pixiu-samples/llm/bestpractise/test/.env.example pathto/dubbo-go-pixiu-samples/llm/bestpractise/test/.env
     ```
    
 2. Edit the `prometheus.yml` file to set the correct IP address.
@@ -24,15 +24,15 @@ This sample demonstrates how to make a llm call using Dubbo-go-pixiu, and use pr
 Run the Pixiu server by executing:
 
 ```shell
-$ cd pathto/dubbo-go-pixiu
-$ go run ./cmd/pixiu/*.go gateway start -c pathto/dubbo-go-pixiu-samples/llm/bestpractise/pixiu/conf.yaml
+cd pathto/dubbo-go-pixiu
+go run ./cmd/pixiu/*.go gateway start -c pathto/dubbo-go-pixiu-samples/llm/bestpractise/pixiu/conf.yaml
 ```
 
 ### **Run the client code**
 
 ```shell
-$ cd pathto/dubbo-go-pixiu-samples/llm/bestpractise
-$ go run ./go-client/client.go
+cd pathto/dubbo-go-pixiu-samples/llm/bestpractise
+go run ./go-client/client.go
 ```
 
 ### **View Grafana Dashboard**

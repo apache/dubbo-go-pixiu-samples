@@ -10,7 +10,7 @@
 1. 将你的 DeepSeek API 添加到 `.env` 文件中，更多详情请参阅 [deepseek](https://platform.deepseek.com)。
 
     ```shell
-    $ cp pathto/dubbo-go-pixiu-samples/llm/bestpractise/test/.env.example pathto/dubbo-go-pixiu-samples/llm/bestpractise/test/.env
+    cp pathto/dubbo-go-pixiu-samples/llm/bestpractise/test/.env.example pathto/dubbo-go-pixiu-samples/llm/bestpractise/test/.env
     ```
 2. 根据真实情况修改 prometheus.yml 文件中的 IP 地址。
 
@@ -24,15 +24,15 @@
 通过执行以下命令运行Pixiu服务器：
 
 ```shell
-$ cd pathto/dubbo-go-pixiu
-$ go run ./cmd/pixiu/*.go gateway start -c pathto/dubbo-go-pixiu-samples/llm/bestpractise/pixiu/conf.yaml
+cd pathto/dubbo-go-pixiu
+go run ./cmd/pixiu/*.go gateway start -c pathto/dubbo-go-pixiu-samples/llm/bestpractise/pixiu/conf.yaml
 ```
 
 ### **运行客户端代码**
 
 ```shell
-$ cd pathto/dubbo-go-pixiu-samples/llm/bestpractise
-$ go run ./go-client/client.go
+cd pathto/dubbo-go-pixiu-samples/llm/bestpractise
+go run ./go-client/client.go
 ```
 
 ### **查看 Grafana 仪表盘**
