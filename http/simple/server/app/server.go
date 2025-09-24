@@ -50,14 +50,14 @@ func user(w http.ResponseWriter, r *http.Request) {
 		}
 		_, ok := cache.Get(user.Name)
 		if ok {
-			w.Header().Set(constant.HeaderKeyContextType, constant.HeaderValueJsonUtf8)
+			w.Header().Set("Content-Type", constant.HeaderValueJsonUtf8)
 			w.Write([]byte("{\"message\":\"data is exist\"}"))
 			return
 		}
 		user.ID = randSeq(5)
 		if cache.Add(&user) {
 			b, _ := json.Marshal(&user)
-			w.Header().Set(constant.HeaderKeyContextType, constant.HeaderValueJsonUtf8)
+			w.Header().Set("Content-Type", constant.HeaderValueJsonUtf8)
 			w.Write(b)
 			return
 		}
@@ -77,7 +77,7 @@ func user(w http.ResponseWriter, r *http.Request) {
 		// w.WriteHeader(200)
 		if b {
 			b, _ := json.Marshal(u)
-			w.Header().Set(constant.HeaderKeyContextType, constant.HeaderValueJsonUtf8)
+			w.Header().Set("Content-Type", constant.HeaderValueJsonUtf8)
 			w.Write(b)
 			return
 		}

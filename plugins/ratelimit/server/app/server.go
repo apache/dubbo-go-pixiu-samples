@@ -36,7 +36,7 @@ func handle(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case constant.Get:
 		// w.WriteHeader(200)
-		w.Header().Set(constant.HeaderKeyContextType, constant.HeaderValueJsonUtf8)
+		w.Header().Set("Content-Type", constant.HeaderValueJsonUtf8)
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte("resp"))
 	}

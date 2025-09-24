@@ -35,6 +35,6 @@ func main() {
 
 func testFunc(w http.ResponseWriter, r *http.Request) {
 	time.Sleep(3 * time.Second)
-	w.Header().Set(constant.HeaderKeyContextType, constant.HeaderValueJsonUtf8)
+	w.Header().Set("Content-Type", constant.HeaderValueJsonUtf8)
 	w.Write([]byte("{\"message\":\"receive\"}"))
 }
