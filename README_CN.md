@@ -50,6 +50,10 @@
   - shutdown/triple：演示如何优雅关闭带有 triple listener 的 Pixiu 服务。
 
 - springcloud：http代理功能，从 spring cloud 服务注册中心中获取集群信息，动态管理 cluster 和 route 功能
+  
+- tools：开发和测试工具集合
+  - tools/authserver：OAuth2 授权服务器实现，提供完整的 OAuth2 授权码流程支持，包含 PKCE、JWT 令牌生成和验证等功能
+
 - xds：pixiu 集成 xds
 
 ## 如何运行

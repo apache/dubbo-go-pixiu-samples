@@ -50,6 +50,10 @@ samples for [dubbo-go-pixiu](https://github.com/apache/dubbo-go-pixiu)
   - shutdown/triple: this demonstrates how to gracefully shut down the Pixiu server with triple listener.
 
 - springcloud: Http proxy function, get cluster information from spring cloud service registry, dynamic management of cluster and route function
+
+- tools: development and testing tools collection
+  - tools/authserver: OAuth2 authorization server implementation, providing complete OAuth2 authorization code flow support with PKCE, JWT token generation and validation
+
 - xds: pixiu with xds
 
 ## How To Run

@@ -18,27 +18,12 @@ Client → Authorization Server (OAuth2) → Pixiu Gateway (MCP) → Backend API
     获取访问令牌                        JWT验证/MCP处理           实际API调用
 ```
 
-## 目录结构
-
-```
-mcp/oauth/
-├── authserver/          # OAuth2 授权服务器
-│   ├── server.go       # 主服务器
-│   ├── oauth.go        # OAuth2 流程实现
-│   ├── jwt.go          # JWT 令牌处理
-│   └── ...             # 其他辅助文件
-├── pixiu/
-│   └── conf.yaml       # Pixiu 网关配置（OAuth + MCP）
-└── test/
-    └── mcp_oauth_test.go  # 集成测试
-```
-
 ## 快速开始
 
 ### 1. 启动后端 API 服务器
 
 ```bash
-cd ../simple/server
+cd mcp/simple/server
 go run server.go
 # 服务将在 http://localhost:8081 启动
 ```
@@ -46,7 +31,7 @@ go run server.go
 ### 2. 启动 OAuth2 授权服务器
 
 ```bash
-cd authserver
+cd tools/authserver
 go run *.go
 # 授权服务器将在 http://localhost:9000 启动
 ```

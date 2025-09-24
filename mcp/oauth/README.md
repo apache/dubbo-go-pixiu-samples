@@ -18,27 +18,12 @@ Client → Authorization Server (OAuth2) → Pixiu Gateway (MCP) → Backend API
    Get Access Token                   JWT Validation/MCP      Actual API Calls
 ```
 
-## Directory Structure
-
-```
-mcp/oauth/
-├── authserver/          # OAuth2 Authorization Server
-│   ├── server.go       # Main server
-│   ├── oauth.go        # OAuth2 flow implementation
-│   ├── jwt.go          # JWT token handling
-│   └── ...             # Other auxiliary files
-├── pixiu/
-│   └── conf.yaml       # Pixiu Gateway configuration (OAuth + MCP)
-└── test/
-    └── mcp_oauth_test.go  # Integration tests
-```
-
 ## Quick Start
 
 ### 1. Start Backend API Server
 
 ```bash
-cd ../simple/server
+cd mcp/simple/server
 go run server.go
 # Service will start at http://localhost:8081
 ```
@@ -46,7 +31,7 @@ go run server.go
 ### 2. Start OAuth2 Authorization Server
 
 ```bash
-cd authserver
+cd tools/authserver
 go run *.go
 # Authorization server will start at http://localhost:9000
 ```
@@ -55,7 +40,7 @@ go run *.go
 
 ```bash
 # Execute in dubbo-go-pixiu project root directory
-pixiu gateway start -c /path/to/dubbo-go-pixiu-samples/mcp/oauth/pixiu/conf.yaml
+go run cmd/pixiu/*.go gateway start -c /path/to/dubbo-go-pixiu-samples/mcp/oauth/pixiu/conf.yaml
 # Gateway will start at http://localhost:8888, protecting /mcp endpoint
 ```
 
@@ -210,10 +195,6 @@ Add new tool definitions in the `tools` section of `pixiu/conf.yaml`:
     timeout: "10s"
 ```
 
-### Custom Authorization Scopes
-
-Modify authorization server code to support different scopes like `read`, `write`, `admin`, etc.
-
 ## Security Considerations
 
 ⚠️ **Important**: This example is for development and demonstration purposes only. Production environments require additional considerations:
@@ -223,6 +204,3 @@ Modify authorization server code to support different scopes like `read`, `write
 - Use secure key management
 - Add request rate limiting and monitoring
 - Implement token refresh mechanisms
-- Validate all input parameters
-- Use secure session management
-- Implement proper error handling without information leakage
