@@ -16,19 +16,15 @@
 # specific language governing permissions and limitations
 # under the License.
 #
-name: reviewdog
-on: [pull_request]
-jobs:
-  golangci-lint:
-    name: review
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out code into the Go module directory
-        uses: actions/checkout@v4
-        with:
-          persist-credentials: false
-          submodules: true
-      - name: golangci-lint
-        uses: ./.github/actions/review-dog
-        with:
-          golangci_lint_flags: "--timeout=10m"
+
+curl -X POST "http://localhost:8888/chat/completions" \
+    -H "Content-Type: application/json" \
+    -H "Authorization: Bearer $OPENAI_API_KEY" \
+    -d '{
+        "model": "deepseek-chat",
+        "messages": [
+          {"role": "system", "content": "You are a helpful assistant."},
+          {"role": "user", "content": "Hello!"}
+        ],
+        "stream": true
+    }'

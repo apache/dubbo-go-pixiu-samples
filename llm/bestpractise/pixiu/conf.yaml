@@ -26,24 +26,26 @@ static_resources:
           address: "0.0.0.0"
           port: 8888
       filter_chains:
-          filters:
-            - name: dgp.filter.httpconnectionmanager
-              config:
-                route_config:
-                  routes:
-                    - match:
-                        prefix: "/chat/completions"
-                      route:
-                        cluster: "chat"
-                        cluster_not_found_response_code: 505
-                http_filters:
-                  - name: dgp.filter.http.httpproxy
-                    config:
-                      maxIdleConns: 100
-                      maxIdleConnsPerHost: 100
-                      maxConnsPerHost: 100
-                      scheme: "https"
-                  # - name: dgp.filter.llm.tokenizer
+        filters:
+          - name: dgp.filter.httpconnectionmanager
+            config:
+              route_config:
+                routes:
+                  - match:
+                      prefix: "/chat/completions"
+                    route:
+                      cluster: "chat"
+                      cluster_not_found_response_code: 505
+              http_filters:
+                - name: dgp.filter.llm.proxy
+                  config:
+                    maxIdleConns: 100
+                    maxIdleConnsPerHost: 100
+                    maxConnsPerHost: 100
+                    scheme: "https"
+                - name: dgp.filter.llm.tokenizer
+                  config:
+                    log_to_console: true
       config:
         idle_timeout: 5s
         read_timeout: 50s
@@ -53,9 +55,18 @@ static_resources:
       lb_policy: "lb"
       endpoints:
         - id: 1
+          socket_address:
+            domains:
+              - "api.deepseek.com"
           llm_meta:
-            provider: "deepseek"
+            retry_policy:
+              name: "CountBased"
+              times: 3
   shutdown_config:
     timeout: "60s"
     step_timeout: "10s"
     reject_policy: "immediacy"
+
+metric:
+  enable: true
+  prometheus_port: 2222

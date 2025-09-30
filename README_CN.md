@@ -32,7 +32,9 @@
 - http/grpc：将http请求转换为 grpc 请求，支持配置 proto 文件或动态从开启反射功能的 grpc server中获取 proto 信息
 - http/simple：此目录包含常见的 Http 请求代理功能，作为常见的 API 网关
 
-- llm：pixiu 调用 LLM 的简单示例
+- llm：pixiu-ai-gateway 的示例
+  - llm/bestpractice: 展示了如何使用 pixiu-ai-gateway 作为LLM的统一入口，支持模型回退、失败重试、prometheus+grafana 监控等功能。
+  - llm/nacos: 演示了如何使用 nacos 作为 pixiu-ai-gateway 的 llm 服务的注册中心
 
 - mcp: 演示 MCP (Model Context Protocol) 过滤器，将 HTTP API 暴露为 LLM 工具
   - mcp/simple: 基础的 MCP 服务集成示例，展示如何将 HTTP API 转换为 MCP 工具
@@ -40,7 +42,8 @@
 
 - plugins：此目录包含 pixiu 的一些插件
   - plugins/ratelimit：pixiu 的 ratelimit 插件
-
+  - plugins/opa: pixiu 的 Open Policy Agent 策略控制能力集成示例
+  
 - seata：演示了如何配置 Seata filter 与 Seata TC 交互对分布式事务进行协调
 
 - shutdown：此目录演示优雅关闭

@@ -33,6 +33,8 @@ samples for [dubbo-go-pixiu](https://github.com/apache/dubbo-go-pixiu)
 - http/simple: this directory contains common Http request proxying features that serve as common API gateways
 
 - llm: simple sample for pixiu to call llm
+  - llm/bestpractice: this sample demonstrates how to use pixiu-ai-gateway as a unified entry point for LLM, supporting model fallback, failure retry, prometheus+grafana monitoring, and other functions.
+  - llm/nacos: this sample demonstrates how to use nacos as the registry center for the llm service of pixiu-ai-gateway.
 
 - mcp: demonstrates MCP (Model Context Protocol) filter to expose HTTP APIs as LLM tools
   - mcp/simple: basic MCP service integration example showing how to convert HTTP APIs to MCP tools
@@ -40,7 +42,8 @@ samples for [dubbo-go-pixiu](https://github.com/apache/dubbo-go-pixiu)
 
 - plugins: this directory contains some plugins for pixiu
   - plugins/ratelimit: rate limit plugin for pixiu
-
+  - plugins/opa: Open Policy Agent policy control capabilities
+  
 - seata: this demonstrates how to configure the Seata filter to interact with the Seata TC for distributed transaction coordination.
 
 - shutdown: this directory demonstrates how to gracefully shut down

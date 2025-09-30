@@ -1,3 +1,5 @@
+#!/bin/bash
+
 #
 #  Licensed to the Apache Software Foundation (ASF) under one or more
 #  contributor license agreements.  See the NOTICE file distributed with
@@ -13,32 +15,40 @@
 #  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
-
-array=("dubbogo/simple/body")
-array+=("dubbogo/simple/jaeger")
-array+=("dubbogo/simple/mix")
-array+=("dubbogo/simple/proxy")
-array+=("dubbogo/simple/query")
-array+=("dubbogo/simple/uri")
-array+=("dubbogo/simple/resolve")
-array+=("dubbogo/simple/zookeeper")
-array+=("dubbogo/simple/nacos")
-array+=("dubbogo/simple/triple")
-array+=("dubbogo/simple/direct")
-array+=("dubbogo/simple/prometheus")
-
 #
-##http
-array+=("http/grpc")
-array+=("http/simple")
-## grpc proxy
-array+=("grpc/deprecated")
 
-for((i=0;i<${#array[*]};i++))
-do
-	sh ./integrate_test.sh ${array[i]}
-	result=$?
-	if [ $result -gt 0 ]; then
-    exit $result
-	fi
+array=(
+  "dubbogo/simple/body"
+  "dubbogo/simple/jaeger"
+  "dubbogo/simple/mix"
+  "dubbogo/simple/proxy"
+  "dubbogo/simple/query"
+  "dubbogo/simple/uri"
+  "dubbogo/simple/resolve"
+  "dubbogo/simple/zookeeper"
+  "dubbogo/simple/nacos"
+  "dubbogo/simple/triple"
+  "dubbogo/simple/direct"
+  "dubbogo/simple/prometheus"
+  # http
+  "http/grpc"
+  "http/simple"
+  # grpc proxy
+  "grpc/deprecated"
+  # plugins
+  "plugins/opa"
+)
+
+for t in "${array[@]}"; do
+  echo "::group::> start: $t"
+  bash ./integrate_test.sh "$t"
+  result=$?
+  echo "::endgroup::"
+  if [ "$result" -ne 0 ]; then
+    echo "[ERROR] failed: $t (exit code: $result)"
+    exit "$result"
+  fi
+  echo "> ok: $t"
 done
+
+echo "> all tests passed."
