@@ -35,6 +35,8 @@ array=(
   "http/simple"
   # grpc proxy
   "grpc/deprecated"
+  # plugins
+  "plugins/opa"
 )
 
 for t in "${array[@]}"; do
