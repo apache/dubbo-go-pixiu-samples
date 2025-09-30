@@ -67,7 +67,7 @@ func handleDynamicClientRegistration(w http.ResponseWriter, r *http.Request) {
 		writeJSON(w, http.StatusInternalServerError, map[string]string{"error": "server_error", "error_description": "failed to generate client ID"})
 		return
 	}
-	
+
 	var clientSecret string
 	if req.TokenEndpointAuthMethod != "none" {
 		clientSecret, err = generateRandomString(32)

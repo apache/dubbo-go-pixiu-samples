@@ -90,7 +90,7 @@ func handleAuthorize(w http.ResponseWriter, r *http.Request) {
 		writeJSON(w, http.StatusInternalServerError, map[string]string{"error": "server_error", "error_description": "failed to generate authorization code"})
 		return
 	}
-	
+
 	authCodes[code] = AuthCodeInfo{
 		ClientID:            clientID,
 		RedirectURI:         redirectURI,

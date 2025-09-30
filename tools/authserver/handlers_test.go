@@ -83,7 +83,7 @@ func TestGenerateRandomString(t *testing.T) {
 	require.NoError(t, err)
 	assert.NotEmpty(t, s32)
 	assert.NotEqual(t, s32, s32_another, "Two generated strings should not be the same")
-	
+
 	// Test with zero length (edge case)
 	s0, err := generateRandomString(0)
 	require.NoError(t, err)
