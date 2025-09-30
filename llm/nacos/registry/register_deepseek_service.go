@@ -102,7 +102,7 @@ func main() {
 
 		"id": "1",
 
-		"llm-meta.provider": "deepseek",
+		"address": "api.deepseek.com",
 
 		"llm-meta.retry_policy.name": "CountBased",
 

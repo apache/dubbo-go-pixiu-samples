@@ -55,8 +55,10 @@ static_resources:
       lb_policy: "lb"
       endpoints:
         - id: 1
+          socket_address:
+            domains:
+              - "api.deepseek.com"
           llm_meta:
-            provider: "deepseek"
             retry_policy:
               name: "CountBased"
               times: 3
