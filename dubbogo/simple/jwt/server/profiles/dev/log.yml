@@ -20,7 +20,6 @@ level: "debug"
 development: true
 disableCaller: false
 disableStacktrace: false
-sampling:
 encoding: "console"
 
 # encoder
