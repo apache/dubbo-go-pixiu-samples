@@ -51,7 +51,7 @@ func handleDynamicClientRegistration(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	for _, ru := range req.RedirectURIs {
-		if !(strings.HasPrefix(ru, "http://") || strings.HasPrefix(ru, "https://")) {
+		if !strings.HasPrefix(ru, "http://") && !strings.HasPrefix(ru, "https://") {
 			writeJSON(w, http.StatusBadRequest, map[string]string{"error": "invalid_redirect_uri", "error_description": "redirect_uris must be absolute http(s) URLs"})
 			return
 		}
