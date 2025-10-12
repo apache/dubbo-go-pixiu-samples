@@ -15,6 +15,10 @@
  * limitations under the License.
  */
 
+// Basic tests for the MCP tools (no authorization). These tests exercise the
+// JSON-RPC initialize flow, tools discovery, and typical tool calls against the
+// mock backend. They are intended to validate the sample configuration in
+// mcp/simple/pixiu/conf.yaml.
 package test
 
 import (
@@ -34,7 +38,7 @@ const (
 	backendURL  = "http://localhost:8081"
 )
 
-// JSONRPCRequest represents JSON-RPC request structure
+// JSONRPCRequest represents a minimal JSON-RPC 2.0 request envelope.
 type JSONRPCRequest struct {
 	JSONRPC string `json:"jsonrpc"`
 	ID      any    `json:"id"`
@@ -42,7 +46,7 @@ type JSONRPCRequest struct {
 	Params  any    `json:"params,omitempty"`
 }
 
-// JSONRPCResponse represents JSON-RPC response structure
+// JSONRPCResponse represents a minimal JSON-RPC 2.0 response envelope.
 type JSONRPCResponse struct {
 	JSONRPC string `json:"jsonrpc"`
 	ID      any    `json:"id"`
@@ -50,13 +54,14 @@ type JSONRPCResponse struct {
 	Error   any    `json:"error,omitempty"`
 }
 
-// ToolCallParams represents tool call parameters
+// ToolCallParams represents parameters for tools/call requests.
 type ToolCallParams struct {
 	Name      string         `json:"name"`
 	Arguments map[string]any `json:"arguments"`
 }
 
-// Send JSON-RPC request
+// sendJSONRPCRequest posts a JSON-RPC request to /mcp and returns the decoded
+// response. It fails the test on transport or protocol errors.
 func sendJSONRPCRequest(t *testing.T, method string, params any) *JSONRPCResponse {
 	req := JSONRPCRequest{
 		JSONRPC: "2.0",
@@ -97,7 +102,7 @@ func sendJSONRPCRequest(t *testing.T, method string, params any) *JSONRPCRespons
 	return &jsonResp
 }
 
-// Check if service is available
+// checkServiceAvailable performs a quick HTTP GET and returns true if 200 OK.
 func checkServiceAvailable(url string) bool {
 	client := &http.Client{Timeout: 5 * time.Second}
 	resp, err := client.Get(url)

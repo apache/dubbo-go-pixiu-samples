@@ -36,7 +36,9 @@
   - llm/bestpractice: 展示了如何使用 pixiu-ai-gateway 作为LLM的统一入口，支持模型回退、失败重试、prometheus+grafana 监控等功能。
   - llm/nacos: 演示了如何使用 nacos 作为 pixiu-ai-gateway 的 llm 服务的注册中心
 
-- mcp: 演示了如何使用 Dubbo-go-pixiu 的 MCP (Model Context Protocol) 过滤器，将后端 HTTP API 服务暴露为 MCP 工具，供大型语言模型 (LLM) 调用。
+- mcp: 演示 MCP (Model Context Protocol) 过滤器，将 HTTP API 暴露为 LLM 工具
+  - mcp/simple: 基础的 MCP 服务集成示例，展示如何将 HTTP API 转换为 MCP 工具
+  - mcp/oauth: MCP OAuth 授权示例，演示如何使用 OAuth2 保护 MCP 端点，支持 PKCE 授权码流程
 
 - plugins：此目录包含 pixiu 的一些插件
   - plugins/ratelimit：pixiu 的 ratelimit 插件
@@ -51,6 +53,10 @@
   - shutdown/triple：演示如何优雅关闭带有 triple listener 的 Pixiu 服务。
 
 - springcloud：http代理功能，从 spring cloud 服务注册中心中获取集群信息，动态管理 cluster 和 route 功能
+  
+- tools：开发和测试工具集合
+  - tools/authserver：OAuth2 授权服务器实现，提供完整的 OAuth2 授权码流程支持，包含 PKCE、JWT 令牌生成和验证等功能
+
 - xds：pixiu 集成 xds
 
 ## 如何运行
