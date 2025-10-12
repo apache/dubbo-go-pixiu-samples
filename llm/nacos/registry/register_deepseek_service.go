@@ -86,13 +86,6 @@ func main() {
 		logger.Fatalf("Unable to process config: %v", err)
 	}
 
-	apiKeys := []map[string]string{}
-	apiKeys = append(apiKeys, map[string]string{
-		"name": "api_key_1",
-		"key":  os.Getenv("API_KEY"),
-	})
-	apiKeysJSON, err := json.Marshal(apiKeys)
-
 	if err != nil {
 		logger.Fatalf("Unable to process apikeys: %v", err)
 	}
@@ -110,7 +103,7 @@ func main() {
 
 		"name": "deepseek-v2-chat-instance",
 
-		"llm-meta.api_keys": string(apiKeysJSON),
+		"llm-meta.api_keys": os.Getenv("API_KEY"),
 
 		"llm-meta.fallback": "false",
 	}
