@@ -18,7 +18,7 @@
 // Basic tests for the MCP tools (no authorization). These tests exercise the
 // JSON-RPC initialize flow, tools discovery, and typical tool calls against the
 // mock backend. They are intended to validate the sample configuration in
-// mcp/simple/pixiu/conf.yaml.
+// mcp/nacos/pixiu/conf.yaml.
 package test
 
 import (
