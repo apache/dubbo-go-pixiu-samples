@@ -13,7 +13,7 @@ MCP 是一种专为 LLM 与外部工具交互而设计的协议，基于 JSON-RP
 ### 1. 启动后端服务
 
 ```shell
-cd mcp/simple/server
+cd mcp/simple/server/app
 go run server.go
 ```
 

@@ -39,6 +39,7 @@ samples for [dubbo-go-pixiu](https://github.com/apache/dubbo-go-pixiu)
 - mcp: demonstrates MCP (Model Context Protocol) filter to expose HTTP APIs as LLM tools
   - mcp/simple: basic MCP service integration example showing how to convert HTTP APIs to MCP tools
   - mcp/oauth: MCP OAuth authorization example demonstrating how to protect MCP endpoints with OAuth2, supporting PKCE authorization code flow
+  - mcp/nacos: MCP Nacos integration example, demonstrating how to use Nacos as the MCP Server.
 
 - plugins: this directory contains some plugins for pixiu
   - plugins/ratelimit: rate limit plugin for pixiu

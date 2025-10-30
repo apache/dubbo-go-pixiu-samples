@@ -13,7 +13,7 @@ MCP is a protocol designed for LLMs to interact with external tools, implemented
 ### 1. Start Backend Service
 
 ```shell
-cd mcp/simple/server
+cd mcp/simple/server/app
 go run server.go
 ```
 
