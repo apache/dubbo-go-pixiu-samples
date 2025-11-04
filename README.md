@@ -1,78 +1,100 @@
-# Dubbo-go-pixiu Samples
+# Dubbo-Go-Pixiu-Samples
 
 ![CI](https://github.com/apache/dubbo-go-samples/workflows/CI/badge.svg)
+![License](https://img.shields.io/badge/license-Apache--2.0-green.svg)
 
-samples for [dubbo-go-pixiu](https://github.com/apache/dubbo-go-pixiu)
+Examples for [dubbo-go-pixiu](https://github.com/apache/dubbo-go-pixiu)
 
-[中文 🇨🇳](./README_CN.md)
+**English** | [中文](README_CN.md)
 
-## What It Contains
+---
 
-- dubbogo/simple: this directory contains some simple samples for dubbogo and pixiu
-  - dubbogo/simple/bestdo: include jaeger and http to dubbo
-  - dubbogo/simple/body: http to dubbo with api_config.yaml
-  - dubbogo/simple/csrf: csrf protection
-  - dubbogo/simple/direct: http to dubbo with direct generic call
-  - dubbogo/simple/nacos_farconf: pixiu uses nacos as a remote config center
-  - dubbogo/simple/jaeger: pixiu with jaeger
-  - dubbogo/simple/jwt: jwt authentication
-  - dubbogo/simple/nacos: http to dubbo with nacos registry
-  - dubbogo/simple/prometheus: pixiu with prometheus
-  - dubbogo/simple/dubboproxy: dubbo to http transform and http to dubbo transform
-  - dubbogo/simple/resolve: convert http requests to dubbo requests, following the default http to dubbo conversion rules
-  - dubbogo/simple/traffic: traffic splitting and canary release
-  - dubbogo/simple/triple: http to triple
-  - dubbogo/simple/zookeeper: pixiu with dubbo using zookeeper as registry center
+**Dubbo-Go-Pixiu-Samples** is a collection of examples built on **Dubbo-Go-Pixiu**, demonstrating how to use Dubbo-Go-Pixiu as an API gateway to handle various protocol conversions and microservice integration scenarios.
+This project includes multiple samples covering conversions such as HTTP to Dubbo, gRPC to HTTP, Dubbo to HTTP, and integrations with common microservice components like Jaeger, Prometheus, and Nacos.
 
-- dubbohttpproxy: dubbo to http transform and http to dubbo transform
-- dubbotripleproxy: example of inter-conversion of dubbo and triple protocol requests
+👉 **Quick Start:** Want to get hands-on quickly? Check out our [HOWTO Guide](HOWTO.md) to learn how to run the sample code.
 
-- grpc/simple: this sample demonstrates how to use pixiu as a gateway for a standard gRPC service, supporting unary, client-side streaming, server-side streaming, and bidirectional streaming RPCs.
+## Contents
 
-- http/grpc: convert http requests to grpc requests, support configuring proto files or dynamically obtaining proto information from a grpc server with reflection enabled.
-- http/simple: this directory contains common Http request proxying features that serve as common API gateways
+* **dubbogo/simple**: Basic examples of dubbogo and pixiu
 
-- llm: simple sample for pixiu to call llm
-  - llm/bestpractice: this sample demonstrates how to use pixiu-ai-gateway as a unified entry point for LLM, supporting model fallback, failure retry, prometheus+grafana monitoring, and other functions.
-  - llm/nacos: this sample demonstrates how to use nacos as the registry center for the llm service of pixiu-ai-gateway.
+  * `bestdo`: Includes Jaeger and HTTP-to-Dubbo conversion
+  * `body`: HTTP to Dubbo using `api_config.yaml`
+  * `csrf`: CSRF protection
+  * `direct`: Direct generic HTTP-to-Dubbo call
+  * `nacos_farconf`: Pixiu using Nacos as a remote configuration center
+  * `jaeger`: Pixiu integration with Jaeger
+  * `jwt`: JWT authentication
+  * `nacos`: HTTP to Dubbo using Nacos as a registry center
+  * `prometheus`: Pixiu integration with Prometheus
+  * `dubboproxy`: Dubbo-to-HTTP and HTTP-to-Dubbo conversion
+  * `resolve`: Converts HTTP requests to Dubbo requests following default conversion rules
+  * `traffic`: Traffic splitting and canary release
+  * `triple`: HTTP to Triple protocol
+  * `zookeeper`: Pixiu integration with Dubbo using Zookeeper as the registry center
 
-- mcp: demonstrates MCP (Model Context Protocol) filter to expose HTTP APIs as LLM tools
-  - mcp/simple: basic MCP service integration example showing how to convert HTTP APIs to MCP tools
-  - mcp/oauth: MCP OAuth authorization example demonstrating how to protect MCP endpoints with OAuth2, supporting PKCE authorization code flow
-  - mcp/nacos: MCP Nacos integration example, demonstrating how to use Nacos as the MCP Server.
+* **dubbohttpproxy**: Dubbo-to-HTTP and HTTP-to-Dubbo conversion
 
-- plugins: this directory contains some plugins for pixiu
-  - plugins/ratelimit: rate limit plugin for pixiu
-  - plugins/opa: Open Policy Agent policy control capabilities
-  
-- seata: this demonstrates how to configure the Seata filter to interact with the Seata TC for distributed transaction coordination.
+* **dubbotripleproxy**: Conversion between Dubbo2 and Triple protocol requests
 
-- shutdown: this directory demonstrates how to gracefully shut down
-  - shutdown/dubbo: this demonstrates how to gracefully shut down the Pixiu server with dubbo listener.
-  - shutdown/http: this demonstrates how to gracefully shut down the Pixiu server with http listener.
-  - shutdown/http2: this demonstrates how to gracefully shut down the Pixiu server with http2 listener.
-  - shutdown/triple: this demonstrates how to gracefully shut down the Pixiu server with triple listener.
+* **grpc/simple**: Demonstrates how to use Pixiu as a gateway for standard gRPC services, supporting unary calls, client streaming, server streaming, and bidirectional streaming.
 
-- springcloud: Http proxy function, get cluster information from spring cloud service registry, dynamic management of cluster and route function
+* **http/grpc**: Converts HTTP requests to gRPC requests, supporting configuration via proto files or dynamic retrieval from a gRPC server with reflection enabled.
 
-- tools: development and testing tools collection
-  - tools/authserver: OAuth2 authorization server implementation, providing complete OAuth2 authorization code flow support with PKCE, JWT token generation and validation
+* **http/simple**: Common HTTP proxy examples demonstrating typical API gateway functionality.
 
-- xds: pixiu with xds
+* **llm**: Examples for pixiu-ai-gateway
 
-## How To Run
+  * `bestpractice`: Shows how to use pixiu-ai-gateway as a unified LLM entry point, supporting model fallback, retry on failure, and Prometheus + Grafana monitoring.
+  * `nacos`: Demonstrates using Nacos as the service registry for pixiu-ai-gateway LLM services.
 
-Please refer [How To Run](HOWTO.md) for the instructions.
+* **mcp**: Demonstrates the MCP (Model Context Protocol) filter that exposes HTTP APIs as LLM tools.
 
-## Dubbo-go-pixiu ecosystem other projects
+  * `simple`: Basic MCP service integration example showing how to convert HTTP APIs into MCP tools.
+  * `oauth`: MCP OAuth authorization example demonstrating OAuth2 protection for MCP endpoints, supporting the PKCE authorization code flow.
+  * `nacos`: MCP Nacos integration example showing how to use Nacos as both the registry and configuration center for MCP servers.
 
-- [pixiu-admin](https://github.com/dubbo-go-pixiu/pixiu-admin) Dubbo-go-pixiu Admin is a comprehensive management platform for the dubbo-go-pixiu Gateway. It provides a centralized control panel for configuring, monitoring, and managing gateway resources through both a web-based user interface and RESTful APIs.
-- [pixiu-api](https://github.com/dubbo-go-pixiu/pixiu-api) Dubbo-go-pixiu API is a gateway framework that serves as the API configuration model for the dubbo-go-pixiu ecosystem. It provides a set of APIs and configuration models to build, configure, and extend API gateway functionality for microservices, with a particular focus on integration with Dubbo services.
-- [benchmark](https://github.com/dubbo-go-pixiu/benchmark) The benchmark system allows users to measure and analyze key performance metrics such as latency, throughput, and Queries Per Second (QPS) under various load conditions to evaluate the efficiency of the protocol conversion process.
+* **plugins**: Pixiu plugin examples
 
-## How to contribute
+  * `ratelimit`: Pixiu rate limiting plugin
+  * `opa`: Pixiu Open Policy Agent (OPA) integration example for policy-based access control
 
-If you want to add more samples, pls. read on:
-1. Create new sub directory and give it an appropriate name for your new sample. Pls follow the layout of the existing sample if you are not sure how to organize your code.
-2. Make sure your sample work as expected before submit PR, and make sure GitHub CI passes after PR is submitted. Pls refer to the existing sample on how to test the sample.
-3. Pls provide README.md to explain your samples.
+* **seata**: Demonstrates how to configure the Seata filter to interact with Seata TC for distributed transaction coordination
+
+* **shutdown**: Demonstrates graceful shutdown
+
+  * `dubbo`: Graceful shutdown for Pixiu services with Dubbo listener
+  * `http`: Graceful shutdown for Pixiu services with HTTP listener
+  * `http2`: Graceful shutdown for Pixiu services with HTTP/2 listener
+  * `triple`: Graceful shutdown for Pixiu services with Triple listener
+
+* **springcloud**: HTTP proxy using Spring Cloud service registry for dynamic cluster and route management
+
+* **tools**: Development and testing utilities
+
+  * `authserver`: OAuth2 authorization server implementation providing full authorization code flow with PKCE, JWT token generation, and validation
+
+* **xds**: Pixiu integration with xDS
+
+## Other Projects in the Dubbo-Go-Pixiu Ecosystem
+
+* **[pixiu-admin](https://github.com/apache/dubbo-go-pixiu/tree/develop/admin)**
+  Dubbo-Go-Pixiu Admin is a comprehensive management platform for the Dubbo-Go-Pixiu gateway. It provides a centralized control plane for configuring, monitoring, and managing gateway resources via a web-based UI and RESTful APIs.
+
+* **[pixiu-api](https://github.com/dubbo-go-pixiu/pixiu-api)**
+  Dubbo-Go-Pixiu API provides the API models for the ecosystem and integrates with Pixiu Admin.
+
+* **[benchmark](https://github.com/apache/dubbo-go-pixiu/tree/develop/tools/benchmark)**
+  The benchmarking system allows users to measure and analyze key performance metrics—such as latency, throughput, and QPS—under various load conditions to evaluate protocol conversion efficiency.
+
+## Contributing
+
+If you’d like to add new examples, please follow these steps:
+
+1. Choose a proper name for your example and create a subdirectory. Refer to existing examples for directory structure guidance.
+2. Ensure all examples run successfully locally before submitting your PR, and confirm CI tests pass on GitHub.
+3. Provide both English and Chinese versions of your example’s README.md file.
+
+## License
+
+This project is licensed under the [Apache License 2.0](LICENSE).

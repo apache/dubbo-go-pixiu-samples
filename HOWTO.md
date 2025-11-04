@@ -7,7 +7,6 @@
 Generally, the directory structure of an example is as follows:
 
 ```
-
 http/simple/
 ├── docker
 │   └── docker-compose.yml # docker-compose file for starting docker services
@@ -17,9 +16,8 @@ http/simple/
 │   └── app
 │       └── server.go      # Service provider code
 │─ test
-│   └── pixiu_test.go     # Test cases
+│   └── pixiu_test.go      # Test cases
 └── request.sh             # Request script
-
 ```
 
 You can quickly run the examples and integration tests of dubbo-go-pixiu-samples using bash commands.
