@@ -1,0 +1,159 @@
+# Licensed to the Apache Software Foundation (ASF) under one or more
+# contributor license agreements.  See the NOTICE file distributed with
+# this work for additional information regarding copyright ownership.
+# The ASF licenses this file to You under the Apache License, Version 2.0
+# (the "License"); you may not use this file except in compliance with
+# the License.  You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+openapi: 3.0.0
+info:
+  title: User API
+  description: 一个用于管理用户和帖子的模拟 API。
+  version: 1.0.0
+servers:
+  - url: http://localhost:8081
+    description: 模拟服务器
+
+paths:
+  /api/users/{id}:
+    get:
+      summary: "get_user"
+      description: "通过 ID 获取用户信息，可选择是否包含个人资料详情"
+      operationId: "getUserById"
+      parameters:
+        - name: id
+          in: path
+          description: "要检索的用户 ID"
+          required: true
+          schema:
+            type: integer
+        - name: include_profile
+          in: query
+          description: "是否包含用户个人资料信息"
+          required: false
+          schema:
+            type: boolean
+            default: false
+      responses:
+        '200':
+          description: "成功获取用户信息"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+                  email:
+                    type: string
+
+  /api/users/search:
+    get:
+      summary: "search_users"
+      description: "通过姓名或邮箱搜索用户，支持分页"
+      operationId: "searchUsers"
+      parameters:
+        - name: q
+          in: query
+          description: "搜索查询（姓名或邮箱）"
+          required: true
+          schema:
+            type: string
+        - name: page
+          in: query
+          description: "分页的页码"
+          required: false
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          description: "每页的结果数量 (1-100)"
+          required: false
+          schema:
+            type: integer
+            default: 10
+      responses:
+        '200':
+          description: "成功的搜索结果"
+
+  /api/users:
+    post:
+      summary: "create_user"
+      description: "创建一个新的用户账户"
+      operationId: "createUser"
+      requestBody:
+        description: "新用户的数据"
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - email
+              properties:
+                name:
+                  type: string
+                  description: "用户的全名"
+                email:
+                  type: string
+                  description: "用户的电子邮件地址"
+                age:
+                  type: integer
+                  description: "用户的年龄"
+      responses:
+        '201':
+          description: "用户创建成功"
+
+  /api/users/{user_id}/posts:
+    get:
+      summary: "get_user_posts"
+      description: "获取特定用户的所有帖子，并按状态筛选"
+      operationId: "getUserPosts"
+      parameters:
+        - name: user_id
+          in: path
+          description: "要获取帖子的用户 ID"
+          required: true
+          schema:
+            type: integer
+        - name: status
+          in: query
+          description: "按状态筛选帖子"
+          required: false
+          schema:
+            type: string
+            default: "published"
+            enum: ["published", "draft", "all"]
+      responses:
+        '200':
+          description: "成功获取帖子列表"
+
+  /api/health:
+    get:
+      summary: "health_check"
+      description: "检查服务器服务的健康状况和状态"
+      operationId: "healthCheck"
+      responses:
+        '200':
+          description: "服务健康"
+
+  /:
+    get:
+      summary: "get_server_info"
+      description: "获取基本服务器信息和可用的端点"
+      operationId: "getServerInfo"
+      responses:
+        '200':
+          description: "服务器信息"

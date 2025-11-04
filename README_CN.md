@@ -1,10 +1,18 @@
-# Dubbo-go-pixiu 示例
+# Dubbo-Go-Pixiu-Samples
 
 ![CI](https://github.com/apache/dubbo-go-samples/workflows/CI/badge.svg)
+![许可证](https://img.shields.io/badge/license-Apache--2.0-green.svg)
 
 [dubbo-go-pixiu](https://github.com/apache/dubbo-go-pixiu) 的示例
 
-[English](./README.md)
+[English](README.md) | **中文**
+
+---
+
+**Dubbo-Go-Pixiu-Samples** 是一个基于 **Dubbo-Go-Pixiu** 的示例集合，展示了如何使用 Dubbo-Go-Pixiu 作为 API 网关来处理各种协议转换和微服务集成场景。该项目包含多个示例，涵盖了从 HTTP 到 Dubbo、gRPC 到 HTTP、Dubbo 到 HTTP 等多种协议转换，以及与常见微服务组件（如 Jaeger、Prometheus、Nacos 等）的集成。
+
+👉 **立即体验：** 想快速上手？请阅读我们的 [HOWTO 指南](HOWTO.md)，了解如何运行示例代码。
+
 
 ## 包含内容
 
@@ -39,6 +47,7 @@
 - mcp: 演示 MCP (Model Context Protocol) 过滤器，将 HTTP API 暴露为 LLM 工具
   - mcp/simple: 基础的 MCP 服务集成示例，展示如何将 HTTP API 转换为 MCP 工具
   - mcp/oauth: MCP OAuth 授权示例，演示如何使用 OAuth2 保护 MCP 端点，支持 PKCE 授权码流程
+  - mcp/nacos: MCP Nacos 集成示例，演示如何使用 Nacos 作为 MCP Server 的注册中心和配置中心
 
 - plugins：此目录包含 pixiu 的一些插件
   - plugins/ratelimit：pixiu 的 ratelimit 插件
@@ -59,15 +68,11 @@
 
 - xds：pixiu 集成 xds
 
-## 如何运行
-
-请参考 [如何运行](HOWTO_CN.md) 获取相关说明。
-
 ## Dubbo-go-pixiu 生态系统的其他项目
 
--   **[pixiu-admin](https://github.com/dubbo-go-pixiu/pixiu-admin)** Dubbo-go-pixiu Admin 是 dubbo-go-pixiu 网关的综合管理平台。它提供了一个集中的控制面板，用于通过基于 Web 的用户界面和 RESTful API 来配置、监控和管理网关资源。
--   **[pixiu-api](https://github.com/dubbo-go-pixiu/pixiu-api)** Dubbo-go-pixiu API 是 dubbo-go-pixiu 生态系统的 API 配置模型。它提供了一组 API 和配置模型，用于构建、配置和扩展微服务的 API 网关功能，尤其侧重于与 Dubbo 服务的集成。
--   **[benchmark](https://github.com/dubbo-go-pixiu/benchmark)** 该基准测试系统允许用户在各种负载条件下测量和分析关键性能指标，如延迟、吞吐量和每秒查询数 (QPS)，以评估协议转换过程的效率。
+-   **[pixiu-admin](https://github.com/apache/dubbo-go-pixiu/tree/develop/admin)** Dubbo-go-pixiu Admin 是 dubbo-go-pixiu 网关的综合管理平台。它提供了一个集中的控制面板，用于通过基于 Web 的用户界面和 RESTful API 来配置、监控和管理网关资源。
+-   **[pixiu-api](https://github.com/dubbo-go-pixiu/pixiu-api)** Dubbo-go-pixiu API 是 dubbo-go-pixiu 生态系统的 API 模型。用于与 pixiu-admin 的集成。
+-   **[benchmark](https://github.com/apache/dubbo-go-pixiu/tree/develop/tools/benchmark)** 该基准测试系统允许用户在各种负载条件下测量和分析关键性能指标，如延迟、吞吐量和每秒查询数 (QPS)，以评估协议转换过程的效率。
 
 ## 如何贡献
 
@@ -76,3 +81,7 @@
 1. 为您的示例起合适的名字并创建子目录。如果您不太确定如何做，请参考现有示例摆放目录结构
 2. 提交 PR 之前请确保在本地运行通过，提交 PR 之后请确保 GitHub 上的集成测试通过。请参考现有示例增加对应的测试
 3. 请提供示例相关的 README.md 的中英文版本
+
+## 许可证
+
+本项目采用 [Apache License 2.0](LICENSE) 开源许可。
