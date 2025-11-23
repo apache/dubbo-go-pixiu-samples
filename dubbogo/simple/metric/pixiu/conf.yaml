@@ -32,49 +32,50 @@ static_resources:
               route_config:
                 routes:
                   - match:
-                      prefix: /health
-                    route:
-                      cluster: user
-                      cluster_not_found_response_code: 505
-                  - match:
-                      prefix: /user
-                    route:
-                      cluster: user
-                      cluster_not_found_response_code: 505
-                  - match:
-                      prefix: /prefix
+                      prefix: /api/v1
                     route:
                       cluster: user
                       cluster_not_found_response_code: 505
               http_filters:
-                - name: dgp.filter.http.prometheusmetric
+                - name: dgp.filter.http.apiconfig
                   config:
-                    metric_collect_rules:
-                      metric_path: "/metrics"
-                      push_gateway_url: "http://127.0.0.1:9091"
-                      counter_push: true
-                      push_interval_threshold: 1
-                      push_job_name: "prometheus"
-                - name: dgp.filter.http.httpproxy                    
+                    path: $PROJECT_DIR/pixiu/api_config.yaml
+                - name: dgp.filter.http.dubboproxy
+                  config:
+                    dubboProxyConfig:
+                      registries:
+                        "zookeeper":
+                          protocol: "zookeeper"
+                          timeout: "3s"
+                          address: "127.0.0.1:2181"
+                          username: ""
+                          password: ""
+                      timeout_config:
+                        connect_timeout: 5s
+                        request_timeout: 5s
+                - name: dgp.filter.http.metric
+                  config:
+              server_name: "metric_demo"
+              generate_request_id: false
       config:
         idle_timeout: 5s
         read_timeout: 5s
         write_timeout: 5s
   clusters:
     - name: "user"
-      lb_policy: "lb"
-      endpoints:
-        - id: 1
-          socket_address:
-            address: 127.0.0.1
-            port: 1314
-      health_checks:
-        - protocol: "tcp"
-          timeout: 1s
-          interval: 2s
-          healthy_threshold: 4
-          unhealthy_threshold: 4
+      lb_policy: "RoundRobin"
+      registries:
+        "zookeeper":
+          timeout: "3s"
+          address: "127.0.0.1:2181"
+          username: ""
+          password: ""
   shutdown_config:
     timeout: "60s"
     step_timeout: "10s"
     reject_policy: "immediacy"
+
+metric:
+  enable: true
+  prometheus_port: 9091
+
