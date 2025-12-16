@@ -38,8 +38,9 @@ func TestPost1(t *testing.T) {
 	req.Header.Set("x-dubbo-service-protocol", "dubbo")
 	req.Header.Set("x-dubbo-service-version", "1.0.0")
 	req.Header.Set("x-dubbo-service-group", "test")
-	
 	assert.NoError(t, err)
+	
+	req.Header.Add("Content-Type", "application/json")
 	resp, err := client.Do(req)
 	assert.NoError(t, err)
 	assert.NotNil(t, resp)
