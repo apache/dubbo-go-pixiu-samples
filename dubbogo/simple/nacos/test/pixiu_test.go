@@ -33,15 +33,34 @@ func TestPost1(t *testing.T) {
 	url := "http://localhost:8881/BDTService/com.dubbogo.pixiu.UserService/GetUserByName"
 	data := "[\"tc\"]"
 	client := &http.Client{Timeout: 5 * time.Second}
-	req, err := http.NewRequest("POST", url, strings.NewReader(data))
-	req.Header.Set("x-dubbo-http1.1-dubbo-version", "1.0.0")
-	req.Header.Set("x-dubbo-service-protocol", "dubbo")
-	req.Header.Set("x-dubbo-service-version", "1.0.0")
-	req.Header.Set("x-dubbo-service-group", "test")
 
-	assert.NoError(t, err)
-	req.Header.Add("Content-Type", "application/json")
-	resp, err := client.Do(req)
+	// Retry logic: wait for service registration in Nacos and Pixiu route setup
+	var resp *http.Response
+	var err error
+	maxRetries := 15
+	retryInterval := 2 * time.Second
+
+	for i := 0; i < maxRetries; i++ {
+		req, reqErr := http.NewRequest("POST", url, strings.NewReader(data))
+		assert.NoError(t, reqErr)
+		req.Header.Set("x-dubbo-http1.1-dubbo-version", "1.0.0")
+		req.Header.Set("x-dubbo-service-protocol", "dubbo")
+		req.Header.Set("x-dubbo-service-version", "1.0.0")
+		req.Header.Set("x-dubbo-service-group", "test")
+		req.Header.Add("Content-Type", "application/json")
+
+		resp, err = client.Do(req)
+		if err == nil && resp != nil && resp.StatusCode == 200 {
+			break
+		}
+
+		t.Logf("Attempt %d/%d: waiting for service registration... (status: %v)", i+1, maxRetries, resp)
+		if resp != nil {
+			resp.Body.Close()
+		}
+		time.Sleep(retryInterval)
+	}
+
 	assert.NoError(t, err)
 	assert.NotNil(t, resp)
 	assert.Equal(t, 200, resp.StatusCode)
