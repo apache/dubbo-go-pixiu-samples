@@ -38,7 +38,6 @@ func TestPost1(t *testing.T) {
 	req.Header.Add("Content-Type", "application/json")
 	req.Header.Add("tri-req-id", "test-req-id-1")
 	req.Header.Add("tri-req-id", "test-req-id-2")
-	req.Header.Add("tri-service-version", "svc-version-1")
 	resp, err := client.Do(req)
 	assert.NoError(t, err)
 	assert.NotNil(t, resp)
