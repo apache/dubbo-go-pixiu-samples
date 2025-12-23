@@ -19,7 +19,7 @@ package pixiu.authz
 
 default allow := false
 
-allow if{
+allow if {
   input.path == "/UserService"
   input.headers["Test_header"][0] == "1"
 }

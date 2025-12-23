@@ -1,4 +1,4 @@
-# This sample for OPA filter.
+# Sample for OPA filter
 
 English | [中文](README_CN.md)
 
@@ -8,11 +8,11 @@ The OPA filter can provide out-of-the-box authorization capability to ensure ser
 
 **Recommendation:** Use server mode (remote OPA) for production; embedded mode is for compatibility and simple demos.
 
-### Entrypoint reminder
+### Entrypoint Reminder
 - `entrypoint` must match your policy package/rule path (e.g., `data.pixiu.authz.allow`).
 - Filter order: OPA must be before the HTTP proxy filter.
 
-### Embedded mode
+### Embedded Mode
 
 - Backend: `go run /path_to/dubbo-go-pixiu-samples/plugins/opa/embedded/server/app/server.go`
 - Pixiu: `go run /path_to/dubbo-go-pixiu/cmd/pixiu/*.go gateway start -c /path_to/dubbo-go-pixiu-samples/plugins/opa/embedded/pixiu/conf.yaml`
@@ -55,7 +55,7 @@ The OPA filter can provide out-of-the-box authorization capability to ensure ser
   - Deny: `curl -s http://127.0.0.1:8888/UserService` / `curl -s http://127.0.0.1:8888/OtherService`
   - Allow: `curl -s http://127.0.0.1:8888/UserService -H "Test_header: 1"`
 
-### Server mode
+### Server Mode
 
 - OPA + uploader:
   ```bash

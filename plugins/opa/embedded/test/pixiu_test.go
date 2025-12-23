@@ -58,7 +58,10 @@ func doEmbeddedRequest(t *testing.T, path string, headerVal *string) (int, strin
 	}
 	defer resp.Body.Close()
 
-	body, _ := io.ReadAll(resp.Body)
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		t.Fatalf("failed to read response body: %v", err)
+	}
 	return resp.StatusCode, string(body)
 }
 

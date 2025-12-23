@@ -8,7 +8,7 @@ OPA 过滤器提供基于策略的鉴权能力。
 
 **推荐：** 生产环境优先使用 Server 模式（远程 OPA），嵌入模式主要用于兼容和简单演示。
 
-### Entrypoint 提醒
+### Entrypoint
 - `entrypoint` 必须与策略包名/规则路径匹配（如 `data.pixiu.authz.allow`）。
 - 过滤器顺序：OPA 必须放在 HTTP proxy 过滤器之前。
 
