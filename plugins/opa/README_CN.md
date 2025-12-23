@@ -2,111 +2,121 @@
 
 [English](README.md) | 中文
 
-OPA 过滤器可以提供开箱即用的授权能力，确保服务的安全性和稳定性。
+OPA 过滤器提供基于策略的鉴权能力。
 
-> 该过滤器基于 [Open Policy Agent](https://www.openpolicyagent.org/)，更多内容请参阅 [官方文档](https://www.openpolicyagent.org/docs/latest/)。
+> 过滤器基于 [Open Policy Agent](https://www.openpolicyagent.org/)，更多见官方文档：https://www.openpolicyagent.org/docs/latest/。
 
-### 创建 API:
+**推荐：** 生产环境优先使用 Server 模式（远程 OPA），嵌入模式主要用于兼容和简单演示。
 
-- 创建一个简单的 Http API，参考 [创建一个简单的Http API](../../dubbogo/http/README.md)，然后我们获得了一个可访问的路径。
+### Entrypoint
+- `entrypoint` 必须与策略包名/规则路径匹配（如 `data.pixiu.authz.allow`）。
+- 过滤器顺序：OPA 必须放在 HTTP proxy 过滤器之前。
 
-- 测试命令: `curl http://localhost:8888/UserService`
+### 嵌入模式
 
-### 设置过滤器
+- 后端：`go run /path_to/dubbo-go-pixiu-samples/plugins/opa/embedded/server/app/server.go`
+- Pixiu：`go run /path_to/dubbo-go-pixiu/cmd/pixiu/*.go gateway start -c /path_to/dubbo-go-pixiu-samples/plugins/opa/embedded/pixiu/conf.yaml`
+- Pixiu 关键配置（内联策略）：
+  ```yaml
+  http_filters:
+    - name: dgp.filter.http.opa
+      config:
+        policy: |
+          package pixiu
+          default allow := false
+          allow {
+            input.path == "/UserService"
+            input.headers["Test_header"][0] == "1"
+          }
+        entrypoint: data.pixiu.allow
+    - name: dgp.filter.http.httpproxy
+      config: {}
+  clusters:
+    - name: "user"
+      endpoints:
+        - socket_address:
+            address: 127.0.0.1
+            port: 1314
+  ```
+- Go test：
+  ```bash
+  cd /path_to/dubbo-go-pixiu-samples/plugins/opa/embedded/test
+  go test -v .
+  # 预期：
+  # === RUN   TestEmbeddedUserServiceAllow
+  # --- PASS: TestEmbeddedUserServiceAllow
+  # === RUN   TestEmbeddedUserServiceDeny
+  # --- PASS: TestEmbeddedUserServiceDeny
+  # === RUN   TestEmbeddedOtherServiceDeny
+  # --- PASS: TestEmbeddedOtherServiceDeny
+  # PASS
+  ```
+- Curl（通过 Pixiu）：
+  - 拒绝：`curl -s http://127.0.0.1:8888/UserService` / `curl -s http://127.0.0.1:8888/OtherService`
+  - 允许：`curl -s http://127.0.0.1:8888/UserService -H "Test_header: 1"`
 
-- 第一步，定义策略。OPA 过滤器需要在配置中内联 Rego 策略。例如：
+### Server 模式
 
-```yaml
-            policy: |
-              package http.authz
-
-              default allow = false
-
-              allow {
-                input.method == "GET"
-                input.path == "/status"
-              }
-            entrypoint: "data.http.authz.allow"
-```
-
-### 设置 **entrypoint**
-
-- 第二步，设置 entrypoint。entrypoint 必须同包匹配
-
-```yaml
-       		entrypoint: "data.http.authz.allow"
-```
-
-
-
-- 第三步，确保过滤器顺序。**OPA 过滤器必须放在 HTTP proxy 过滤器之前**，如下所示：
-
-```yaml
-filters:
-  - name: dgp.filter.httpconnectionmanager
-    config:
-      route_config:
-        # ... 你的路由
-      http_filters:
-        - name: dgp.filter.http.opa
-          config:
-            policy: |
-              package http.authz
-
-              default allow = false
-
-              allow {
-                input.method == "GET"
-                input.path == "/status"
-              }
-            entrypoint: "data.http.authz.allow"
-        # HTTP proxy 过滤器必须在 OPA 过滤器之后
-        - name: dgp.filter.http.proxy
-          config:
-```
-
-### 测试:
-
-```cmd
-go run /path_to/dubbo-go-pixiu/cmd/pixiu/*.go gateway start -c /path_to/dubbo-go-pixiu-samples/plugins/opa/pixiu/conf.yaml
-go run /path_to/dubbo-go-pixiu-samples/plugins/opa/server/app/*
-```
-
-##### Go Test
-
-```
-go test -v /path_to/dubbo-go-pixiu-samples/plugins/opa/test
-=== RUN   TestUserServiceAllow
---- PASS: TestUserServiceAllow (0.02s)
-=== RUN   TestUserServiceDeny
---- PASS: TestUserServiceDeny (0.00s)
-=== RUN   TestOtherServiceDeny
---- PASS: TestOtherServiceDeny (0.00s)
-PASS
-```
-
-###### 使用 Curl 测试
-
-- 拒绝请求:
-
-```bash
-curl -s http://127.0.0.1:8888/OtherService
-```
-
-​	预期输出:
-
-```
-null
-```
-
-- 允许请求:
-
-```
-curl -s http://127.0.0.1:8888/UserService -H "Test_header: 1"
-```
-
-​	预期输出:
-
-```
-{"message":"UserService","result":"pass"}
-```
+- OPA + 上传器：
+  ```bash
+  cd /path_to/dubbo-go-pixiu-samples/plugins/opa/server-mode/docker
+  docker-compose up
+  ```
+  - 宿主 8182 -> 容器 8181，`policy-uploader` 自动上传策略 `pixiu-authz`。
+- 后端：`cd /path_to/dubbo-go-pixiu-samples/plugins/opa/server-mode && go run server/app/*.go`
+- Pixiu：`go run /path_to/dubbo-go-pixiu/cmd/pixiu/*.go gateway start -c /path_to/dubbo-go-pixiu-samples/plugins/opa/server-mode/pixiu/conf.yaml`
+- Pixiu 关键配置（远程 OPA）：
+  ```yaml
+  http_filters:
+    - name: dgp.filter.http.opa
+      config:
+        server_url: "http://127.0.0.1:8182"
+        decision_path: "/v1/data/pixiu/authz/allow"
+        timeout_ms: 500
+    - name: dgp.filter.http.httpproxy
+      config: {}
+  clusters:
+    - name: "user"
+      endpoints:
+        - socket_address:
+            address: 127.0.0.1
+            port: 1314
+  ```
+- OPA 策略（compose 自动上传）：`plugins/opa/server-mode/remote/policy.rego`
+  ```rego
+  package pixiu.authz
+  default allow := false
+  allow {
+    input.path == "/UserService"
+    input.headers["Test_header"][0] == "1"
+  }
+  ```
+- Go test：
+  ```bash
+  cd /path_to/dubbo-go-pixiu-samples/plugins/opa/server-mode/test
+  go test -v .
+  # 预期：
+  # === RUN   TestServerModeUserServiceAllow
+  # --- PASS: TestServerModeUserServiceAllow
+  # === RUN   TestServerModeUserServiceDeny
+  # --- PASS: TestServerModeUserServiceDeny
+  # === RUN   TestServerModeOtherServiceDeny
+  # --- PASS: TestServerModeOtherServiceDeny
+  # PASS
+  ```
+- Curl（通过 Pixiu）：
+  - 拒绝：`curl -s http://127.0.0.1:8888/UserService` / `curl -s http://127.0.0.1:8888/OtherService`
+  - 允许：`curl -s http://127.0.0.1:8888/UserService -H "Test_header: 1"`
+- Curl（直接 OPA 决策，宿主 8182）：
+  - 允许：
+    ```bash
+    curl -s -X POST -H "Content-Type: application/json" \
+      -d '{"input":{"path":"/UserService","headers":{"Test_header":["1"]}}}' \
+      http://127.0.0.1:8182/v1/data/pixiu/authz/allow
+    ```
+  - 拒绝：
+    ```bash
+    curl -s -X POST -H "Content-Type: application/json" \
+      -d '{"input":{"path":"/UserService","headers":{}}}' \
+      http://127.0.0.1:8182/v1/data/pixiu/authz/allow
+    ```

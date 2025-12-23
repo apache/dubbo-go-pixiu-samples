@@ -57,7 +57,7 @@ This project includes multiple samples covering conversions such as HTTP to Dubb
 * **plugins**: Pixiu plugin examples
 
   * `ratelimit`: Pixiu rate limiting plugin
-  * `opa`: Pixiu Open Policy Agent (OPA) integration example for policy-based access control
+  * `opa`: Pixiu Open Policy Agent (OPA) integration example for policy-based access control (embedded Rego sample and server-mode sample)
 
 * **seata**: Demonstrates how to configure the Seata filter to interact with Seata TC for distributed transaction coordination
 

@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,37 +15,38 @@
  * limitations under the License.
  */
 
-package test
+package main
 
 import (
-	"io"
+	"encoding/json"
+	"log"
 	"net/http"
 	"strings"
-	"testing"
-	"time"
 )
 
-import (
-	"github.com/stretchr/testify/assert"
-)
+type Resp struct {
+	Message string `json:"message"`
+	Result  string `json:"result"`
+}
 
-func TestUserServiceAllow(t *testing.T) {
-	url := "http://localhost:8888/UserService"
-	client := &http.Client{Timeout: 5 * time.Second}
+func main() {
+	routers := []string{"/UserService", "/OtherService"}
 
-	req, err := http.NewRequest("GET", url, nil)
-	assert.NoError(t, err)
+	for _, rt := range routers {
+		route := rt
+		msg := route[strings.LastIndex(route, "/")+1:]
 
-	// Must add header to pass OPA
-	req.Header.Set("Test_header", "1")
+		http.HandleFunc(route, func(w http.ResponseWriter, r *http.Request) {
+			log.Printf("[backend] %s %s Headers=%v", r.Method, r.URL.Path, r.Header)
 
-	resp, err := client.Do(req)
-	assert.NoError(t, err)
-	assert.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
+			w.Header().Set("Content-Type", "application/json")
+			_ = json.NewEncoder(w).Encode(Resp{
+				Message: msg,
+				Result:  "pass",
+			})
+		})
+	}
 
-	body, _ := io.ReadAll(resp.Body)
-	// OPA allows -> backend returns "pass" JSON
-	assert.True(t, strings.Contains(string(body), "pass"))
-	assert.True(t, strings.Contains(string(body), "UserService"))
+	log.Println("Starting sample backend on :1314 ...")
+	log.Fatal(http.ListenAndServe(":1314", nil))
 }
