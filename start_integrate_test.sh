@@ -36,7 +36,8 @@ array=(
   # grpc proxy
   "grpc/deprecated"
   # plugins
-  "plugins/opa"
+  "plugins/opa/embedded"
+  "plugins/opa/server-mode"
 )
 
 for t in "${array[@]}"; do
