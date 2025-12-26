@@ -44,7 +44,7 @@ func main() {
 	flag.Parse()
 
 	// Connect to Pixiu gateway (or directly to gRPC server)
-	conn, err := grpc.Dial(*serverAddr, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.NewClient(*serverAddr, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatalf("failed to connect: %v", err)
 	}

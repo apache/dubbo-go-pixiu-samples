@@ -42,7 +42,7 @@ const (
 )
 
 func getClient(t *testing.T) (pb.EchoServiceClient, func()) {
-	conn, err := grpc.Dial(pixiuAddr, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.NewClient(pixiuAddr, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	require.NoError(t, err, "Failed to connect to Pixiu gateway")
 
 	cleanup := func() {
