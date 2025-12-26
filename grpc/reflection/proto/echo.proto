@@ -1,0 +1,68 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+syntax = "proto3";
+
+package echo;
+
+option go_package = "github.com/dubbo-go-pixiu/samples/grpc/reflection/proto";
+
+// EchoService demonstrates gRPC Server Reflection capabilities.
+// This service is designed to test dynamic message parsing through reflection.
+service EchoService {
+  // Echo returns the message back with additional metadata.
+  rpc Echo(EchoRequest) returns (EchoResponse);
+
+  // StreamEcho demonstrates server streaming with reflection support.
+  rpc StreamEcho(EchoRequest) returns (stream EchoResponse);
+
+  // ClientStreamEcho demonstrates client streaming with reflection support.
+  rpc ClientStreamEcho(stream EchoRequest) returns (EchoResponse);
+
+  // BidirectionalEcho demonstrates bidirectional streaming.
+  rpc BidirectionalEcho(stream EchoRequest) returns (stream EchoResponse);
+}
+
+// EchoRequest contains the message to be echoed.
+message EchoRequest {
+  // The message content to echo back.
+  string message = 1;
+
+  // Optional metadata for testing field-level operations.
+  map<string, string> metadata = 2;
+
+  // Timestamp for latency measurement.
+  int64 timestamp = 3;
+}
+
+// EchoResponse contains the echoed message with server info.
+message EchoResponse {
+  // The original message content.
+  string message = 1;
+
+  // Server-side timestamp.
+  int64 server_timestamp = 2;
+
+  // Indicates if reflection was used to decode the message.
+  bool reflection_enabled = 3;
+
+  // Server identifier for load balancing verification.
+  string server_id = 4;
+
+  // Echo of the request metadata.
+  map<string, string> metadata = 5;
+}
