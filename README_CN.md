@@ -37,6 +37,11 @@
 
 - grpc/simple: 演示了如何使用 Pixiu 作为标准 gRPC 服务的网关，支持一元调用、客户端流、服务端流和双向流通信。
 
+- grpc/reflection: 演示了 gRPC 服务端反射与 Pixiu 的集成，支持三种反射模式：
+  - `passthrough` - 高性能二进制透传模式
+  - `reflection` - 使用服务端反射进行完整的动态消息解码
+  - `hybrid` - 反射与透传回退相结合，提供最佳灵活性
+
 - http/grpc：将http请求转换为 grpc 请求，支持配置 proto 文件或动态从开启反射功能的 grpc server中获取 proto 信息
 - http/simple：此目录包含常见的 Http 请求代理功能，作为常见的 API 网关
 

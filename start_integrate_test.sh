@@ -35,6 +35,7 @@ array=(
   "http/simple"
   # grpc proxy
   "grpc/deprecated"
+  "grpc/reflection"
   # plugins
   "plugins/opa/embedded"
   "plugins/opa/server-mode"

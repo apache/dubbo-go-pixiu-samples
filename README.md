@@ -39,6 +39,11 @@ This project includes multiple samples covering conversions such as HTTP to Dubb
 
 * **grpc/simple**: Demonstrates how to use Pixiu as a gateway for standard gRPC services, supporting unary calls, client streaming, server streaming, and bidirectional streaming.
 
+* **grpc/reflection**: Demonstrates gRPC Server Reflection with Pixiu, supporting three reflection modes:
+  * `passthrough` - High-performance binary pass-through mode
+  * `reflection` - Full dynamic message decoding using server reflection
+  * `hybrid` - Reflection with passthrough fallback for optimal flexibility
+
 * **http/grpc**: Converts HTTP requests to gRPC requests, supporting configuration via proto files or dynamic retrieval from a gRPC server with reflection enabled.
 
 * **http/simple**: Common HTTP proxy examples demonstrating typical API gateway functionality.
