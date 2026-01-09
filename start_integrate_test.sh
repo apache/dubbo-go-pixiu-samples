@@ -37,7 +37,8 @@ array=(
   "grpc/deprecated"
   "grpc/reflection"
   # plugins
-  "plugins/opa"
+  "plugins/opa/embedded"
+  "plugins/opa/server-mode"
 )
 
 for t in "${array[@]}"; do
