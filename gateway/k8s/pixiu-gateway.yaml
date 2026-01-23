@@ -1,0 +1,298 @@
+---
+# Source: pixiu-gateway/templates/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: pixiu-gateway-sa
+  namespace: default
+  labels:
+    control-plane: pixiu-gateway
+---
+# Source: pixiu-gateway/templates/rbac.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: pixiu-gateway-role
+  labels:
+    control-plane: pixiu-gateway
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - events
+    verbs:
+      - create
+      - patch
+  - apiGroups:
+      - ""
+    resources:
+      - namespaces
+      - pods
+      - services
+      - configmaps
+    verbs:
+      - get
+      - list
+      - watch
+      - create
+      - update
+      - patch
+      - delete
+  - apiGroups:
+      - apps
+    resources:
+      - deployments
+    verbs:
+      - get
+      - list
+      - watch
+      - create
+      - update
+      - patch
+      - delete
+  - apiGroups:
+      - coordination.k8s.io
+    resources:
+      - leases
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - discovery.k8s.io
+    resources:
+      - endpointslices
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - gateway.networking.k8s.io
+    resources:
+      - gatewayclasses
+      - gateways
+    verbs:
+      - get
+      - list
+      - watch
+      - update
+      - patch
+  - apiGroups:
+      - gateway.networking.k8s.io
+    resources:
+      - gatewayclasses/status
+      - gateways/status
+      - httproutes/status
+      - referencegrants/status
+    verbs:
+      - get
+      - update
+      - patch
+  - apiGroups:
+      - gateway.networking.k8s.io
+    resources:
+      - httproutes
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - gateway.networking.k8s.io
+    resources:
+      - referencegrants
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - ""
+    resources:
+      - secrets
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - pixiu.apache.org
+    resources:
+      - pixiugatewaypolicies
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - pixiu.apache.org
+    resources:
+      - pixiugatewaypolicies/status
+    verbs:
+      - get
+      - update
+      - patch
+  - apiGroups:
+      - pixiu.apache.org
+    resources:
+      - pixiuclusterpolicies
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - pixiu.apache.org
+    resources:
+      - pixiuclusterpolicies/status
+    verbs:
+      - get
+      - update
+      - patch
+  - apiGroups:
+      - pixiu.apache.org
+    resources:
+      - pixiufilterpolicies
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - pixiu.apache.org
+    resources:
+      - pixiufilterpolicies/status
+    verbs:
+      - get
+      - update
+      - patch
+---
+# Source: pixiu-gateway/templates/rbac.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: pixiu-gateway-rolebinding
+  labels:
+    control-plane: pixiu-gateway
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: pixiu-gateway-role
+subjects:
+  - kind: ServiceAccount
+    name: pixiu-gateway-sa
+    namespace: default
+---
+# Source: pixiu-gateway/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: pixiu-gateway
+  namespace: default
+  labels:
+    control-plane: pixiu-gateway
+spec:
+  selector:
+    control-plane: pixiu-gateway
+  ports:
+    - name: metrics
+      protocol: TCP
+      port: 8080
+      targetPort: 8080
+    - name: health
+      protocol: TCP
+      port: 8081
+      targetPort: 8081
+  type: ClusterIP
+---
+# Source: pixiu-gateway/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pixiu-gateway
+  namespace: default
+  labels:
+    control-plane: pixiu-gateway
+    helm.sh/chart: pixiu-gateway-1.0.0
+    app.kubernetes.io/name: pixiu-gateway
+    app.kubernetes.io/instance: pixiu-gateway
+    app.kubernetes.io/version: "latest"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      control-plane: pixiu-gateway
+      app.kubernetes.io/name: pixiu-gateway
+      app.kubernetes.io/instance: pixiu-gateway
+  template:
+    metadata:
+      labels:
+        control-plane: pixiu-gateway
+        app.kubernetes.io/name: pixiu-gateway
+        app.kubernetes.io/instance: pixiu-gateway
+    spec:
+      serviceAccountName: pixiu-gateway-sa
+      containers:
+        - name: pixiu-gateway
+          image: mfordjody/pixiugateway-controller:debug
+          imagePullPolicy: Always
+          command:
+            - /usr/local/bin/pg-controller
+          args:
+            - --config-path=/config/pg.yaml
+            - --log-level=info
+          ports:
+            - containerPort: 8081
+              name: health
+              protocol: TCP
+            - containerPort: 8080
+              name: metrics
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 8081
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: 8081
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          resources:
+            limits:
+              cpu: 500m
+              memory: 512Mi
+            requests:
+              cpu: 10m
+              memory: 64Mi
+---
+# Source: pixiu-gateway/templates/config.yaml
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: pixiu
+  namespace: default
+spec:
+  gatewayClassName: pg
+  listeners:
+    - name: http
+      protocol: HTTP
+      port: 8888
+    - name: dubbo
+      protocol: TCP
+      port: 8889
+    - name: triple
+      protocol: GRPC
+      port: 9999
+    - name: http2
+      protocol: HTTP2
+      port: 8881
+---
+# Source: pixiu-gateway/templates/config.yaml
+apiVersion: gateway.networking.k8s.io/v1
+kind: GatewayClass
+metadata:
+  name: pg
+spec:
+  controllerName: pixiu.apache.org/pixiu-gateway-controller
