@@ -59,7 +59,7 @@ spec:
     spec:
       containers:
         - name: server
-          image: dubboregistry/helloworld-go-server:master
+          image: dubbogopixiu/helloworld-go-server:master
           imagePullPolicy: IfNotPresent
           ports:
             - name: triple

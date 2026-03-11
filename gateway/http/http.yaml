@@ -87,8 +87,4 @@ spec:
                 cluster: "helloworld-dubbo-go-server"
                 cluster_not_found_response_code: 505
         httpFilters:
-          - name: dgp.filter.http.httpproxy
-            config:
-              timeoutConfig:
-                connectTimeout: 5s
-                requestTimeout: 5s
+          - name: dgp.filter.http.grpcproxy
