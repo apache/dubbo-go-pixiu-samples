@@ -1,0 +1,101 @@
+#
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+#
+
+---
+# This file is intended to be rendered by verify.sh (envsubst).
+static_resources:
+  listeners:
+    - name: "kvcache_real_engine"
+      protocol_type: "HTTP"
+      address:
+        socket_address:
+          address: "0.0.0.0"
+          port: ${PIXIU_LISTEN_PORT}
+      filter_chains:
+        filters:
+          - name: dgp.filter.httpconnectionmanager
+            config:
+              route_config:
+                routes:
+                  - match:
+                      prefix: "/v1/chat/completions"
+                    route:
+                      cluster: "real_llm"
+                      cluster_not_found_response_code: 505
+              http_filters:
+                - name: dgp.filter.ai.kvcache
+                  config:
+                    enabled: true
+                    vllm_endpoint: "${VLLM_ENDPOINT}"
+                    lmcache_endpoint: "${LMCACHE_ENDPOINT}"
+                    default_model: "${MODEL_NAME}"
+                    request_timeout: 5s
+                    lookup_routing_timeout: 150ms
+                    hot_window: 5m
+                    hot_max_records: 500
+                    token_cache:
+                      enabled: true
+                      max_size: 20000
+                      ttl: 20m
+                    cache_strategy:
+                      enable_compression: true
+                      enable_pinning: true
+                      enable_eviction: true
+                      memory_threshold: ${MEMORY_THRESHOLD}
+                      hot_content_threshold: ${HOT_CONTENT_THRESHOLD}
+                      load_threshold: ${LOAD_THRESHOLD}
+                      pin_instance_id: "${PIN_INSTANCE_ID}"
+                      pin_location: "${PIN_LOCATION}"
+                      compress_instance_id: "${COMPRESS_INSTANCE_ID}"
+                      compress_location: "${COMPRESS_LOCATION}"
+                      compress_method: "zstd"
+                      evict_instance_id: "${EVICT_INSTANCE_ID}"
+                - name: dgp.filter.llm.proxy
+                  config:
+                    timeout: 90s
+                    maxIdleConns: 200
+                    maxIdleConnsPerHost: 200
+                    maxConnsPerHost: 200
+                    scheme: "${LLM_SCHEME}"
+      config:
+        idle_timeout: 120s
+        read_timeout: 120s
+        write_timeout: 120s
+
+  clusters:
+    - name: "real_llm"
+      lb_policy: "round_robin"
+      endpoints:
+        - id: "${ENGINE_ENDPOINT_A_ID}"
+          socket_address:
+            address: "${ENGINE_ENDPOINT_A_HOST}"
+            port: ${ENGINE_ENDPOINT_A_PORT}
+        - id: "${ENGINE_ENDPOINT_B_ID}"
+          socket_address:
+            address: "${ENGINE_ENDPOINT_B_HOST}"
+            port: ${ENGINE_ENDPOINT_B_PORT}
+
+  shutdown_config:
+    timeout: "30s"
+    step_timeout: "5s"
+    reject_policy: "immediacy"
+
+metric:
+  enable: true
+  prometheus_port: ${PIXIU_PROM_PORT}

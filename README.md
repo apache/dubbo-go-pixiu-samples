@@ -79,6 +79,10 @@ This project includes multiple samples covering conversions such as HTTP to Dubb
 
   * `authserver`: OAuth2 authorization server implementation providing full authorization code flow with PKCE, JWT token generation, and validation
 
+* **ai**: AI gateway sample collection
+
+  * `kvcache`: Two-layer KVCache samples. `mock` validates Pixiu + kvcache filter integration locally (tokenize/lookup/pin/route hint); `real-engine` is for BYOE integration with real vLLM + LMCache controller.
+
 * **xds**: Pixiu integration with xDS
 
 ## Other Projects in the Dubbo-Go-Pixiu Ecosystem

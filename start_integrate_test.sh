@@ -39,6 +39,8 @@ array=(
   # plugins
   "plugins/opa/embedded"
   "plugins/opa/server-mode"
+  # ai
+  "ai/kvcache/mock"
 )
 
 for t in "${array[@]}"; do
