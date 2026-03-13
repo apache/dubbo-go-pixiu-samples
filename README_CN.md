@@ -73,6 +73,9 @@
 
 - xds：pixiu 集成 xds
 
+- ai：AI 网关示例集合
+  - ai/kvcache：提供两层 KVCache 示例。`mock` 用于本地快速验证 Pixiu + kvcache filter 链路（tokenize/lookup/pin/route hint）；`real-engine` 用于 BYOE 场景，对接真实 vLLM + LMCache controller。
+
 ## Dubbo-go-pixiu 生态系统的其他项目
 
 -   **[pixiu-admin](https://github.com/apache/dubbo-go-pixiu/tree/develop/admin)** Dubbo-go-pixiu Admin 是 dubbo-go-pixiu 网关的综合管理平台。它提供了一个集中的控制面板，用于通过基于 Web 的用户界面和 RESTful API 来配置、监控和管理网关资源。
