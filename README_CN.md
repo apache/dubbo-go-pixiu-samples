@@ -26,6 +26,7 @@
   - dubbogo/simple/jwt：JWT 认证
   - dubbogo/simple/nacos：http 到 dubbo，使用 nacos 作为注册中心
   - dubbogo/simple/prometheus：pixiu 集成 prometheus
+  - dubbogo/simple/saml：使用 Keycloak 的 SAML 认证
   - dubbogo/simple/dubboproxy：dubbo 到 http 转换和 http 到 dubbo 转换
   - dubbogo/simple/resolve：将 http 请求转换为 dubbo 请求，按照默认http to dubbo转换规则
   - dubbogo/simple/traffic：流量切分和金丝雀发布

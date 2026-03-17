@@ -27,6 +27,7 @@ This project includes multiple samples covering conversions such as HTTP to Dubb
   * `jwt`: JWT authentication
   * `nacos`: HTTP to Dubbo using Nacos as a registry center
   * `prometheus`: Pixiu integration with Prometheus
+  * `saml`: SAML authentication with Keycloak
   * `dubboproxy`: Dubbo-to-HTTP and HTTP-to-Dubbo conversion
   * `resolve`: Converts HTTP requests to Dubbo requests following default conversion rules
   * `traffic`: Traffic splitting and canary release

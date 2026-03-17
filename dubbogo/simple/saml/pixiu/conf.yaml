@@ -1,0 +1,71 @@
+---
+static_resources:
+  listeners:
+    - name: "net/http"
+      address:
+        socket_address:
+          protocol_type: "HTTP"
+          address: "0.0.0.0"
+          port: 8888
+      filter_chains:
+        filters:
+          - name: dgp.filter.httpconnectionmanager
+            config:
+              route_config:
+                routes:
+                  - match:
+                      prefix: /health
+                    route:
+                      cluster: user
+                      cluster_not_found_response_code: 505
+                  - match:
+                      prefix: /saml/metadata
+                    route:
+                      cluster: user
+                      cluster_not_found_response_code: 505
+                  - match:
+                      prefix: /saml/acs
+                    route:
+                      cluster: user
+                      cluster_not_found_response_code: 505
+                  - match:
+                      prefix: /app
+                    route:
+                      cluster: user
+                      cluster_not_found_response_code: 505
+              http_filters:
+                - name: dgp.filter.http.auth.saml
+                  config:
+                    entity_id: "pixiu-saml-sp"
+                    acs_url: "http://localhost:8888/saml/acs"
+                    metadata_url: "http://localhost:8888/saml/metadata"
+                    idp_metadata_url: "http://localhost:18080/realms/pixiu/protocol/saml/descriptor"
+                    cert_file: "C:/Users/Tianlinmao/Desktop/GoLand/Dubbo-go/dubbo-go-pixiu-samples/dubbogo/simple/saml/certs/sp.crt"
+                    key_file: "C:/Users/Tianlinmao/Desktop/GoLand/Dubbo-go/dubbo-go-pixiu-samples/dubbogo/simple/saml/certs/sp.key"
+                    allow_idp_initiated: true
+                    rules:
+                      - match:
+                          prefix: /app
+                    forward_attributes:
+                      - saml_attribute: "email"
+                        header: "X-User-Email"
+                      - saml_attribute: "displayName"
+                        header: "X-User-Name"
+                - name: dgp.filter.http.httpproxy
+
+      config:
+        idle_timeout: 5s
+        read_timeout: 5s
+        write_timeout: 5s
+  clusters:
+    - name: "user"
+      lb_policy: "lb"
+      endpoints:
+        - id: 1
+          socket_address:
+            address: 127.0.0.1
+            port: 1314
+  shutdown_config:
+    timeout: "60s"
+    step_timeout: "10s"
+    reject_policy: "immediacy"
