@@ -252,7 +252,7 @@ spec:
       serviceAccountName: pixiu-gateway-sa
       containers:
         - name: pixiu-gateway
-          image: dubboregistry/pixiu-gateway:v1.1.0
+          image: dubbogopixiu/pixiu-gateway:v1.1.0
           imagePullPolicy: IfNotPresent
           command:
             - /usr/local/bin/pixiu-gateway
