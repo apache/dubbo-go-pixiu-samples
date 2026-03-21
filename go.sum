@@ -151,6 +151,8 @@ github.com/apache/dubbo-go-hessian2 v1.9.1/go.mod h1:xQUjE7F8PX49nm80kChFvepA/Av
 github.com/apache/dubbo-go-hessian2 v1.9.3/go.mod h1:xQUjE7F8PX49nm80kChFvepA/AvqAZ0oh/UaB6+6pBE=
 github.com/apache/dubbo-go-hessian2 v1.12.5 h1:19lJz2Md0EYF2bOtEvFqXEQRYvLz04GfsoocsBWlLWQ=
 github.com/apache/dubbo-go-hessian2 v1.12.5/go.mod h1:QP9Tc0w/B/mDopjusebo/c7GgEfl6Lz8jeuFg8JA6yw=
+github.com/apache/dubbo-go-pixiu v1.0.1-rc1 h1:x5f01WeeKjrh5i72cqnY6lJflQMlVHf/yKIeOgnJi8w=
+github.com/apache/dubbo-go-pixiu v1.0.1-rc1/go.mod h1:sB/a6+UCTA4ZAqm0RFKBU23ba1GsdMvKOY5QGZukct8=
 github.com/apache/thrift v0.12.0/go.mod h1:cp2SuWMxlEZw2r+iP2GNCdIi4C1qmUzdZFSVb+bacwQ=
 github.com/apache/thrift v0.13.0/go.mod h1:cp2SuWMxlEZw2r+iP2GNCdIi4C1qmUzdZFSVb+bacwQ=
 github.com/apolloconfig/agollo/v4 v4.4.0 h1:bIIRTEN4f7HgLx97/cNpduEvP9qQ7BkCyDOI2j800VM=

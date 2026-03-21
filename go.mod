@@ -227,5 +227,3 @@ require (
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	mosn.io/proxy-wasm-go-host v0.1.0 // indirect
 )
-
-replace github.com/apache/dubbo-go-pixiu => /home/chen/dubbo-go-pixiu
