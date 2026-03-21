@@ -64,6 +64,7 @@ var eventCounter uint64
 func main() {
 	addr := envOrDefault("LLM_B_ADDR", ":18092")
 	engineID := envOrDefault("LLM_B_ID", "mock-llm-b")
+	responseDelay := envDurationMSOrDefault("MOCK_LLM_RESPONSE_DELAY_MS", 150)
 	stats := &engineStats{}
 
 	mux := http.NewServeMux()
@@ -107,6 +108,9 @@ func main() {
 		stats.mu.Lock()
 		stats.chatCalls++
 		stats.mu.Unlock()
+		if responseDelay > 0 {
+			time.Sleep(responseDelay)
+		}
 
 		resp := llmResponse{
 			ID:       nextEventID("chatcmpl"),
@@ -149,4 +153,16 @@ func envOrDefault(key string, fallback string) string {
 		return fallback
 	}
 	return val
+}
+
+func envDurationMSOrDefault(key string, fallbackMS int) time.Duration {
+	val, ok := os.LookupEnv(key)
+	if !ok || strings.TrimSpace(val) == "" {
+		return time.Duration(fallbackMS) * time.Millisecond
+	}
+	ms, err := strconv.Atoi(strings.TrimSpace(val))
+	if err != nil || ms < 0 {
+		return time.Duration(fallbackMS) * time.Millisecond
+	}
+	return time.Duration(ms) * time.Millisecond
 }

@@ -78,14 +78,20 @@ static_resources:
     - name: "mock_llm"
       lb_policy: "round_robin"
       endpoints:
-        - id: "mock-llm-a"
+        - ID: "mock-llm-a"
           socket_address:
             address: "127.0.0.1"
             port: 18091
-        - id: "mock-llm-b"
+          llm_meta:
+            retry_policy:
+              name: "NoRetry"
+        - ID: "mock-llm-b"
           socket_address:
             address: "127.0.0.1"
             port: 18092
+          llm_meta:
+            retry_policy:
+              name: "NoRetry"
 
   shutdown_config:
     timeout: "10s"

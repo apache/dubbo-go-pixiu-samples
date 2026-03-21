@@ -105,10 +105,11 @@ func main() {
 	preferredEndpoint := envOrDefault("PREFERRED_ENDPOINT_ID", "mock-llm-b")
 	engineAID := envOrDefault("LLM_A_ID", "mock-llm-a")
 	engineBID := envOrDefault("LLM_B_ID", "mock-llm-b")
+	responseDelay := envDurationMSOrDefault("MOCK_LLM_RESPONSE_DELAY_MS", 150)
 
 	controller := buildControllerMux(preferredEndpoint)
-	engineA := buildEngineAMux(engineAID)
-	engineB := buildEngineBMux(engineBID)
+	engineA := buildEngineAMux(engineAID, responseDelay)
+	engineB := buildEngineBMux(engineBID, responseDelay)
 
 	errCh := make(chan error, 3)
 	go serve("mock-controller", controllerAddr, controller, errCh)
@@ -239,7 +240,7 @@ func handleTokenEvent(stats *controllerStats, w http.ResponseWriter, r *http.Req
 	writeJSON(w, http.StatusOK, eventResp{EventID: nextEventID(op), NumTokens: len(req.Tokens)})
 }
 
-func buildEngineAMux(engineID string) http.Handler {
+func buildEngineAMux(engineID string, responseDelay time.Duration) http.Handler {
 	stats := &engineAStats{}
 	mux := http.NewServeMux()
 
@@ -294,6 +295,9 @@ func buildEngineAMux(engineID string) http.Handler {
 		stats.mu.Lock()
 		stats.chatCalls++
 		stats.mu.Unlock()
+		if responseDelay > 0 {
+			time.Sleep(responseDelay)
+		}
 
 		resp := llmResponse{
 			ID:       nextEventID("chatcmpl"),
@@ -315,7 +319,7 @@ func buildEngineAMux(engineID string) http.Handler {
 	return mux
 }
 
-func buildEngineBMux(engineID string) http.Handler {
+func buildEngineBMux(engineID string, responseDelay time.Duration) http.Handler {
 	stats := &engineBStats{}
 	mux := http.NewServeMux()
 
@@ -358,6 +362,9 @@ func buildEngineBMux(engineID string) http.Handler {
 		stats.mu.Lock()
 		stats.chatCalls++
 		stats.mu.Unlock()
+		if responseDelay > 0 {
+			time.Sleep(responseDelay)
+		}
 
 		resp := llmResponse{
 			ID:       nextEventID("chatcmpl"),
@@ -455,6 +462,18 @@ func envOrDefault(key string, fallback string) string {
 		return fallback
 	}
 	return val
+}
+
+func envDurationMSOrDefault(key string, fallbackMS int) time.Duration {
+	val, ok := os.LookupEnv(key)
+	if !ok || strings.TrimSpace(val) == "" {
+		return time.Duration(fallbackMS) * time.Millisecond
+	}
+	ms, err := strconv.Atoi(strings.TrimSpace(val))
+	if err != nil || ms < 0 {
+		return time.Duration(fallbackMS) * time.Millisecond
+	}
+	return time.Duration(ms) * time.Millisecond
 }
 
 func max(a int, b int) int {
