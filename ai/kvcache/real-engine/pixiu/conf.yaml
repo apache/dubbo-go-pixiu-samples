@@ -82,14 +82,20 @@ static_resources:
     - name: "real_llm"
       lb_policy: "round_robin"
       endpoints:
-        - id: "${ENGINE_ENDPOINT_A_ID}"
+        - ID: "${ENGINE_ENDPOINT_A_ID}"
           socket_address:
             address: "${ENGINE_ENDPOINT_A_HOST}"
             port: ${ENGINE_ENDPOINT_A_PORT}
-        - id: "${ENGINE_ENDPOINT_B_ID}"
+          llm_meta:
+            retry_policy:
+              name: "NoRetry"
+        - ID: "${ENGINE_ENDPOINT_B_ID}"
           socket_address:
             address: "${ENGINE_ENDPOINT_B_HOST}"
             port: ${ENGINE_ENDPOINT_B_PORT}
+          llm_meta:
+            retry_policy:
+              name: "NoRetry"
 
   shutdown_config:
     timeout: "30s"
