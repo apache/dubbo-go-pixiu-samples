@@ -41,6 +41,7 @@ array=(
   "plugins/opa/server-mode"
   # ai
   "ai/kvcache/mock"
+  "auth/saml"
 )
 
 for t in "${array[@]}"; do

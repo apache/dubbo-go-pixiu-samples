@@ -27,7 +27,6 @@ This project includes multiple samples covering conversions such as HTTP to Dubb
   * `jwt`: JWT authentication
   * `nacos`: HTTP to Dubbo using Nacos as a registry center
   * `prometheus`: Pixiu integration with Prometheus
-  * `saml`: SAML authentication with Keycloak
   * `dubboproxy`: Dubbo-to-HTTP and HTTP-to-Dubbo conversion
   * `resolve`: Converts HTTP requests to Dubbo requests following default conversion rules
   * `traffic`: Traffic splitting and canary release
@@ -48,6 +47,10 @@ This project includes multiple samples covering conversions such as HTTP to Dubb
 * **http/grpc**: Converts HTTP requests to gRPC requests, supporting configuration via proto files or dynamic retrieval from a gRPC server with reflection enabled.
 
 * **http/simple**: Common HTTP proxy examples demonstrating typical API gateway functionality.
+
+* **auth**: Authentication filter samples
+
+  * `saml`: SAML authentication with Keycloak
 
 * **llm**: Examples for pixiu-ai-gateway
 

@@ -24,20 +24,21 @@ works end to end.
 ## Files
 
 ```text
-saml/
-├── certs/
-│   ├── sp.crt
-│   └── sp.key
-├── docker/
-│   ├── docker-compose.yml
-│   └── docker-health-check.sh
-├── pixiu/
-│   └── conf.yaml
-├── server/
-│   └── app/
-│       └── server.go
-└── test/
-    └── pixiu_test.go
+auth/
+└── saml/
+    ├── certs/
+    │   ├── sp.crt
+    │   └── sp.key
+    ├── docker/
+    │   ├── docker-compose.yml
+    │   └── docker-health-check.sh
+    ├── pixiu/
+    │   └── conf.yaml
+    ├── server/
+    │   └── app/
+    │       └── server.go
+    └── test/
+        └── pixiu_test.go
 ```
 
 ## Prerequisites
@@ -45,23 +46,12 @@ saml/
 - Docker
 - Go
 - the `dubbo-go-pixiu` source tree on your machine so Pixiu can be started from source
-- Bash helper scripts under `dubbogo/simple/start.sh` are recommended because they render `$PROJECT_DIR` in the Pixiu config before startup
+- GNU Make and Bash if you want to render the sample config or run the full integration flow
 
 ## Step 1: Start Keycloak
 
-Recommended:
-
 ```bash
-cd dubbogo/simple
-./start.sh prepare saml
-```
-
-This starts Keycloak and renders the sample config into `saml/dist/...`.
-
-Manual Docker startup is also fine:
-
-```bash
-cd dubbogo/simple/saml/docker
+cd auth/saml/docker
 docker compose up -d
 ./docker-health-check.sh
 ```
@@ -123,28 +113,39 @@ This URL matches the `idp_metadata_url` used in `pixiu/conf.yaml`.
 ## Step 3: Start the backend server
 
 ```bash
-cd dubbogo/simple/saml
+cd auth/saml
 go run server/app/*.go
 ```
 
 The backend listens on `http://localhost:1314`.
 
-## Step 4: Start Pixiu
+## Step 4: Render the Pixiu config
 
-Recommended from `dubbogo/simple`:
-
-```bash
-./start.sh startPixiu saml
-```
-
-If you prefer to start Pixiu manually, use the rendered config produced by
-`./start.sh prepare saml`, not the source `pixiu/conf.yaml` file:
+The sample config uses `$PROJECT_DIR` for certificate paths, so render the
+final config first:
 
 ```bash
-go run cmd/pixiu/*.go gateway start -c /path/to/dubbogo/simple/saml/dist/<os>_<arch>/pixiuconf/conf.yaml
+cd /path/to/dubbo-go-pixiu-samples
+make PROJECT_DIR=$(pwd)/auth/saml \
+  PIXIU_DIR=/path/to/dubbo-go-pixiu \
+  PROJECT_NAME=saml \
+  BASE_DIR=$(pwd)/auth/saml/dist \
+  -f igt/Makefile config
 ```
 
-## Step 5: Verify the sample
+This generates a concrete config under
+`auth/saml/dist/<os>_<arch>/pixiuconf/conf.yaml`.
+
+## Step 5: Start Pixiu
+
+Start Pixiu with the rendered config:
+
+```bash
+cd /path/to/dubbo-go-pixiu
+go run cmd/pixiu/*.go gateway start -c /path/to/dubbo-go-pixiu-samples/auth/saml/dist/<os>_<arch>/pixiuconf/conf.yaml
+```
+
+## Step 6: Verify the sample
 
 ### Check the SP metadata endpoint
 
@@ -177,10 +178,10 @@ Expected flow:
 }
 ```
 
-## Step 6: Run the smoke tests
+## Step 7: Run the smoke tests
 
 ```bash
-go test -v ./dubbogo/simple/saml/test
+go test -v ./auth/saml/test
 ```
 
 The tests verify:
@@ -189,6 +190,13 @@ The tests verify:
 - the Pixiu config contains the SAML filter
 - the metadata endpoint responds
 - the protected route redirects unauthenticated users to Keycloak
+
+## Step 8: Run the full integration flow
+
+```bash
+cd /path/to/dubbo-go-pixiu-samples
+./integrate_test.sh auth/saml
+```
 
 ## Notes
 

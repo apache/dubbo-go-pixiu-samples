@@ -40,8 +40,8 @@ static_resources:
                     acs_url: "http://localhost:8888/saml/acs"
                     metadata_url: "http://localhost:8888/saml/metadata"
                     idp_metadata_url: "http://localhost:18080/realms/pixiu/protocol/saml/descriptor"
-                    cert_file: "C:/Users/Tianlinmao/Desktop/GoLand/Dubbo-go/dubbo-go-pixiu-samples/dubbogo/simple/saml/certs/sp.crt"
-                    key_file: "C:/Users/Tianlinmao/Desktop/GoLand/Dubbo-go/dubbo-go-pixiu-samples/dubbogo/simple/saml/certs/sp.key"
+                    cert_file: "$PROJECT_DIR/certs/sp.crt"
+                    key_file: "$PROJECT_DIR/certs/sp.key"
                     allow_idp_initiated: true
                     rules:
                       - match:
