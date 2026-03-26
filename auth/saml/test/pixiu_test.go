@@ -76,8 +76,10 @@ func TestPixiuConfigContainsSAMLFilter(t *testing.T) {
 }
 
 func TestMetadataEndpoint(t *testing.T) {
+	gatewayURL := requireSAMLIntegration(t)
+
 	client := &http.Client{Timeout: 5 * time.Second}
-	req, err := http.NewRequest(http.MethodGet, "http://localhost:8888/saml/metadata", nil)
+	req, err := http.NewRequest(http.MethodGet, gatewayURL+"/saml/metadata", nil)
 	if err != nil {
 		t.Fatalf("create request: %v", err)
 	}
@@ -107,6 +109,8 @@ func TestMetadataEndpoint(t *testing.T) {
 }
 
 func TestProtectedRouteRedirectsToIDP(t *testing.T) {
+	gatewayURL := requireSAMLIntegration(t)
+
 	client := &http.Client{
 		Timeout: 5 * time.Second,
 		CheckRedirect: func(req *http.Request, via []*http.Request) error {
@@ -114,7 +118,7 @@ func TestProtectedRouteRedirectsToIDP(t *testing.T) {
 		},
 	}
 
-	req, err := http.NewRequest(http.MethodGet, "http://localhost:8888/app", nil)
+	req, err := http.NewRequest(http.MethodGet, gatewayURL+"/app", nil)
 	if err != nil {
 		t.Fatalf("create request: %v", err)
 	}
@@ -133,7 +137,7 @@ func TestProtectedRouteRedirectsToIDP(t *testing.T) {
 	if location == "" {
 		t.Fatalf("expected redirect location header")
 	}
-	if !strings.Contains(location, "18080") && !strings.Contains(location, "/protocol/saml") {
+	if !isKeycloakSAMLRedirect(location) {
 		t.Fatalf("expected redirect to Keycloak, got %s", location)
 	}
 }

@@ -19,8 +19,9 @@ package main
 
 import (
 	"encoding/json"
-	"log"
 	"net/http"
+
+	"github.com/dubbogo/gost/log/logger"
 )
 
 type appResponse struct {
@@ -42,8 +43,8 @@ func main() {
 		})
 	})
 
-	log.Println("Starting sample server ...")
-	log.Fatal(http.ListenAndServe(":1314", nil))
+	logger.Info("Starting sample server ...")
+	logger.Fatal(http.ListenAndServe(":1314", nil))
 }
 
 func writeJSON(w http.ResponseWriter, code int, body appResponse) {

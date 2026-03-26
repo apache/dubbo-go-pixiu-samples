@@ -184,6 +184,19 @@ curl http://localhost:8888/saml/metadata
 go test -v ./auth/saml/test
 ```
 
+默认情况下这里只运行静态检查。真正依赖 Pixiu/Keycloak 的在线探测已经做了
+显式门控，因此在干净环境里执行 `go test` 不会直接失败。
+
+如果已经启动好 Pixiu 和 Keycloak，可以显式开启在线检查：
+
+```bash
+RUN_SAML_INTEGRATION_TESTS=1 go test -v ./auth/saml/test
+```
+
+如果 Pixiu 不是监听在 `http://127.0.0.1:8888`，可以通过
+`SAML_GATEWAY_URL` 覆盖默认地址。`go test -short ./auth/saml/test`
+也会显式跳过在线探测。
+
 这些测试会检查：
 
 - 示例所需文件是否存在

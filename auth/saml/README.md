@@ -184,6 +184,18 @@ Expected flow:
 go test -v ./auth/saml/test
 ```
 
+By default this runs the static checks only. The live Pixiu/Keycloak probes are
+guarded so `go test` stays green in a clean environment.
+
+To opt in to the live checks after Pixiu and Keycloak are running:
+
+```bash
+RUN_SAML_INTEGRATION_TESTS=1 go test -v ./auth/saml/test
+```
+
+Set `SAML_GATEWAY_URL` if Pixiu is not listening on `http://127.0.0.1:8888`.
+`go test -short ./auth/saml/test` also skips the live probes explicitly.
+
 The tests verify:
 
 - the sample files are present
