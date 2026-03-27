@@ -23,6 +23,7 @@ header:
     - '.gitignore'
     - '.gitmodules'
     - 'LICENSE'
+    - 'auth/saml/certs/**'
     - '**/*.md'
     - '**/*.mod'
     - '**/*.sum'
