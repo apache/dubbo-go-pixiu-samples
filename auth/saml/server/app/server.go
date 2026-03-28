@@ -52,5 +52,7 @@ func main() {
 func writeJSON(w http.ResponseWriter, code int, body appResponse) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(code)
-	_ = json.NewEncoder(w).Encode(body)
+	if err := json.NewEncoder(w).Encode(body); err != nil {
+		logger.Warnf("failed to encode JSON response: %v", err)
+	}
 }

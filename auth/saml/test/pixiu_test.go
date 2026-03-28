@@ -24,7 +24,6 @@ import (
 	"path/filepath"
 	"strings"
 	"testing"
-	"time"
 )
 
 func sampleFile(rel string) string {
@@ -78,7 +77,7 @@ func TestPixiuConfigContainsSAMLFilter(t *testing.T) {
 func TestMetadataEndpoint(t *testing.T) {
 	gatewayURL := requireSAMLIntegration(t)
 
-	client := &http.Client{Timeout: 5 * time.Second}
+	client := newSAMLTestHTTPClient()
 	req, err := http.NewRequest(http.MethodGet, gatewayURL+"/saml/metadata", nil)
 	if err != nil {
 		t.Fatalf("create request: %v", err)
@@ -112,7 +111,7 @@ func TestProtectedRouteRedirectsToIDP(t *testing.T) {
 	gatewayURL := requireSAMLIntegration(t)
 
 	client := &http.Client{
-		Timeout: 5 * time.Second,
+		Timeout: samlTestTimeout,
 		CheckRedirect: func(req *http.Request, via []*http.Request) error {
 			return http.ErrUseLastResponse
 		},

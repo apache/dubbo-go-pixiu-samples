@@ -29,9 +29,12 @@ const (
 	defaultSAMLGatewayURL   = "http://127.0.0.1:8888"
 	samlGatewayURLEnv       = "SAML_GATEWAY_URL"
 	samlIntegrationTestsEnv = "RUN_SAML_INTEGRATION_TESTS"
+	samlTestTimeout         = 5 * time.Second
 )
 
-var samlTestHTTPClient = &http.Client{Timeout: 5 * time.Second}
+func newSAMLTestHTTPClient() *http.Client {
+	return &http.Client{Timeout: samlTestTimeout}
+}
 
 func envOrDefault(key string, fallback string) string {
 	if v := os.Getenv(key); v != "" {
@@ -63,7 +66,7 @@ func requireSAMLIntegration(t *testing.T) string {
 }
 
 func checkSAMLServiceAvailable(url string) bool {
-	resp, err := samlTestHTTPClient.Get(url)
+	resp, err := newSAMLTestHTTPClient().Get(url)
 	if err != nil {
 		return false
 	}
