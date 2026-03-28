@@ -45,6 +45,9 @@
 - http/grpc：将http请求转换为 grpc 请求，支持配置 proto 文件或动态从开启反射功能的 grpc server中获取 proto 信息
 - http/simple：此目录包含常见的 Http 请求代理功能，作为常见的 API 网关
 
+- auth：认证过滤器示例
+  - auth/saml：使用 Keycloak 的 SAML 认证
+
 - llm：pixiu-ai-gateway 的示例
   - llm/bestpractice: 展示了如何使用 pixiu-ai-gateway 作为LLM的统一入口，支持模型回退、失败重试、prometheus+grafana 监控等功能。
   - llm/nacos: 演示了如何使用 nacos 作为 pixiu-ai-gateway 的 llm 服务的注册中心

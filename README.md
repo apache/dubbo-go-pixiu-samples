@@ -48,6 +48,10 @@ This project includes multiple samples covering conversions such as HTTP to Dubb
 
 * **http/simple**: Common HTTP proxy examples demonstrating typical API gateway functionality.
 
+* **auth**: Authentication filter samples
+
+  * `saml`: SAML authentication with Keycloak
+
 * **llm**: Examples for pixiu-ai-gateway
 
   * `bestpractice`: Shows how to use pixiu-ai-gateway as a unified LLM entry point, supporting model fallback, retry on failure, and Prometheus + Grafana monitoring.
