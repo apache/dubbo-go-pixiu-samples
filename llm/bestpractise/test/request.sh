@@ -19,7 +19,7 @@
 
 curl -X POST "http://localhost:8888/chat/completions" \
     -H "Content-Type: application/json" \
-    -H "Authorization: Bearer $OPENAI_API_KEY" \
+    -H "Authorization: Bearer $API_KEY" \
     -d '{
         "model": "deepseek-chat",
         "messages": [
