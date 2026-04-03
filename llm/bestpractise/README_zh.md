@@ -10,7 +10,8 @@
 1. 将你的 DeepSeek API 添加到 `.env` 文件中，更多详情请参阅 [deepseek](https://platform.deepseek.com)。
 
     ```shell
-    cp pathto/dubbo-go-pixiu-samples/llm/bestpractise/test/.env.example pathto/dubbo-go-pixiu-samples/llm/bestpractise/test/.env
+    cp pathto/dubbo-go-pixiu-samples/llm/bestpractise/.env.example pathto/dubbo-go-pixiu-samples/llm/bestpractise/.env
+    cp pathto/dubbo-go-pixiu-samples/llm/bestpractise/go-client/.env.example pathto/dubbo-go-pixiu-samples/llm/bestpractise/go-client/.env
     ```
 2. 根据真实情况修改 prometheus.yml 文件中的 IP 地址。
 
