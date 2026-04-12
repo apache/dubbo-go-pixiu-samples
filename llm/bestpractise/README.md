@@ -6,10 +6,11 @@ This sample demonstrates how to make a llm call using Dubbo-go-pixiu, and use pr
 
 ## 2. **Preparation**
 
-1. Add your DeepSeek API to `.env` file, see [deepseek](https://platform.deepseek.com) for more details.
+1. Add your DeepSeek API to the `.env` files, see [deepseek](https://platform.deepseek.com) for more details.
 
     ```shell
-    cp pathto/dubbo-go-pixiu-samples/llm/bestpractise/test/.env.example pathto/dubbo-go-pixiu-samples/llm/bestpractise/test/.env
+    cp pathto/dubbo-go-pixiu-samples/llm/bestpractise/.env.example pathto/dubbo-go-pixiu-samples/llm/bestpractise/.env
+    cp pathto/dubbo-go-pixiu-samples/llm/bestpractise/go-client/.env.example pathto/dubbo-go-pixiu-samples/llm/bestpractise/go-client/.env
     ```
    
 2. Edit the `prometheus.yml` file to set the correct IP address.
