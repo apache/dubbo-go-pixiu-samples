@@ -35,8 +35,6 @@ resources:
               mapTo: opt.values
             - name: requestBody.types
               mapTo: opt.types
-            - name: uri.application
-              mapTo: opt.application
             - name: uri.interface
               mapTo: opt.interface
             - name: queryStrings.method

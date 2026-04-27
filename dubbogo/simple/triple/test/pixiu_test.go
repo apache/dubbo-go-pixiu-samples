@@ -31,7 +31,7 @@ import (
 
 func TestPost1(t *testing.T) {
 	url := "http://localhost:8881/BDTService/org.apache.dubbogo.samples.api.Greeter/SayHello"
-	data := "{\"name\":\"test\"}"
+	data := "{\"types\":\"string\",\"values\":\"test\"}"
 	client := &http.Client{Timeout: 5 * time.Second}
 	req, err := http.NewRequest("POST", url, strings.NewReader(data))
 	assert.NoError(t, err)
