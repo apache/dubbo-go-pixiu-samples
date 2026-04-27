@@ -26,7 +26,7 @@ import (
 )
 
 import (
-	"dubbo.apache.org/dubbo-go/v3/config"
+	"dubbo.apache.org/dubbo-go/v3"
 	_ "dubbo.apache.org/dubbo-go/v3/imports"
 
 	"github.com/dubbogo/gost/log/logger"
@@ -38,7 +38,7 @@ var survivalTimeout = int(3e9)
 // export DUBBO_GO_CONFIG_PATH="../profiles/dev/server.yml"
 // export APP_LOG_CONF_FILE="../profiles/dev/log.yml"
 func main() {
-	config.Load()
+	dubbo.Load()
 	initSignal()
 }
 

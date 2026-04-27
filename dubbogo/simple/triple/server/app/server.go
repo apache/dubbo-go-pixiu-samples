@@ -26,7 +26,7 @@ import (
 )
 
 import (
-	"dubbo.apache.org/dubbo-go/v3/config"
+	"dubbo.apache.org/dubbo-go/v3"
 	_ "dubbo.apache.org/dubbo-go/v3/imports"
 
 	"github.com/dubbogo/gost/log/logger"
@@ -40,8 +40,8 @@ var (
 
 // export DUBBO_GO_CONFIG_PATH=$PATH_TO_SAMPLES/rpc/triple/pb/dubbogo-grpc/server/dubbogo-server/conf/dubbogo.yml
 func main() {
-	config.SetProviderService(&GreeterProvider{})
-	if err := config.Load(); err != nil {
+	dubbo.SetProviderService(&GreeterProvider{})
+	if err := dubbo.Load(); err != nil {
 		panic(err)
 	}
 	initSignal()

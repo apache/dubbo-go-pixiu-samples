@@ -26,8 +26,8 @@ import (
 )
 
 import (
-	dconfig "dubbo.apache.org/dubbo-go/v3/config"
-	"dubbo.apache.org/dubbo-go/v3/config/generic" //nolint
+	"dubbo.apache.org/dubbo-go/v3/client"
+	"dubbo.apache.org/dubbo-go/v3/filter/generic"
 	"dubbo.apache.org/dubbo-go/v3/protocol/dubbo"
 
 	hessian "github.com/apache/dubbo-go-hessian2"
@@ -39,26 +39,25 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func newDubboRefConf(iface, protocol string) dconfig.ReferenceConfig {
-	refConf := dconfig.ReferenceConfig{
-		InterfaceName:  iface,
-		Cluster:        "failover",
-		RegistryIDs:    []string{"zk"},
-		Protocol:       protocol,
-		Generic:        "true",
-		URL:            "dubbo://127.0.0.1:8889/" + iface,
-		Group:          "test",
-		Version:        "1.0.0",
-		RequestTimeout: "10s",
-	}
-	rootConfig := dconfig.NewRootConfigBuilder().
-		Build()
-	if err := dconfig.Load(dconfig.WithRootConfig(rootConfig)); err != nil {
+func newDubboGenericService(iface, protocol string) *generic.GenericService {
+	cli, err := client.NewClient()
+	if err != nil {
 		panic(err)
 	}
-	_ = refConf.Init(rootConfig)
-	refConf.GenericLoad("dubbo.io")
-	return refConf
+
+	svc, err := cli.NewGenericService(
+		iface,
+		client.WithClusterFailOver(),
+		client.WithProtocol(protocol),
+		client.WithGroup("test"),
+		client.WithVersion("1.0.0"),
+		client.WithRequestTimeout(10*time.Second),
+		client.WithURL("dubbo://127.0.0.1:8889/"+iface),
+	)
+	if err != nil {
+		panic(err)
+	}
+	return svc
 }
 
 func TestDubboListenShutdown(t *testing.T) {
@@ -70,11 +69,11 @@ func TestDubboListenShutdown(t *testing.T) {
 	time.Sleep(3 * time.Second) // wait start already
 
 	// start client
-	tripleRefConf := newDubboRefConf("com.dubbogo.pixiu.TripleUserService", dubbo.DUBBO)
+	tripleService := newDubboGenericService("com.dubbogo.pixiu.TripleUserService", dubbo.DUBBO)
 	req_wg := &sync.WaitGroup{}
 	req_wg.Add(2)
 	call_func := func() {
-		_, err := tripleRefConf.GetRPCService().(*generic.GenericService).Invoke(
+		_, err := tripleService.Invoke(
 			context.TODO(),
 			"TestByDubbo",
 			[]string{"java.lang.String"},

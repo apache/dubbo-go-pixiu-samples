@@ -23,9 +23,9 @@ import (
 )
 
 import (
+	"dubbo.apache.org/dubbo-go/v3/client"
 	"dubbo.apache.org/dubbo-go/v3/common/constant"
-	"dubbo.apache.org/dubbo-go/v3/config"
-	"dubbo.apache.org/dubbo-go/v3/config/generic" //nolint
+	"dubbo.apache.org/dubbo-go/v3/filter/generic"
 	_ "dubbo.apache.org/dubbo-go/v3/imports"
 
 	hessian "github.com/apache/dubbo-go-hessian2"
@@ -36,8 +36,8 @@ import (
 )
 
 func TestTriple2Dubbo(t *testing.T) {
-	tripleRefConf := newTripleRefConf("com.dubbogo.pixiu.DubboUserService", tpconst.TRIPLE)
-	resp, err := tripleRefConf.GetRPCService().(*generic.GenericService).Invoke(
+	tripleService := newTripleGenericService("com.dubbogo.pixiu.DubboUserService", tpconst.TRIPLE)
+	resp, err := tripleService.Invoke(
 		context.TODO(),
 		"GetUserByName",
 		[]string{"java.lang.String"},
@@ -50,26 +50,22 @@ func TestTriple2Dubbo(t *testing.T) {
 	logger.Infof("GetUser1(userId string) res: %+v", resp)
 }
 
-func newTripleRefConf(iface, protocol string) config.ReferenceConfig {
-
-	refConf := config.ReferenceConfig{
-		InterfaceName: iface,
-		Cluster:       "failover",
-		RegistryIDs:   []string{"zk"},
-		Protocol:      protocol,
-		Generic:       "true",
-		Group:         "test",
-		Version:       "1.0.0",
-		URL:           "tri://127.0.0.1:9999/" + iface + "?" + constant.SerializationKey + "=hessian2",
-	}
-
-	rootConfig := config.NewRootConfigBuilder().
-		Build()
-	if err := config.Load(config.WithRootConfig(rootConfig)); err != nil {
+func newTripleGenericService(iface, protocol string) *generic.GenericService {
+	cli, err := client.NewClient()
+	if err != nil {
 		panic(err)
 	}
-	_ = refConf.Init(rootConfig)
-	refConf.GenericLoad(appName)
 
-	return refConf
+	svc, err := cli.NewGenericService(
+		iface,
+		client.WithClusterFailOver(),
+		client.WithProtocol(protocol),
+		client.WithGroup("test"),
+		client.WithVersion("1.0.0"),
+		client.WithURL("tri://127.0.0.1:9999/"+iface+"?"+constant.SerializationKey+"=hessian2"),
+	)
+	if err != nil {
+		panic(err)
+	}
+	return svc
 }

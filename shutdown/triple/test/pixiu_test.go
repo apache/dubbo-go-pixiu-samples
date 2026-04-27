@@ -26,9 +26,9 @@ import (
 )
 
 import (
+	"dubbo.apache.org/dubbo-go/v3/client"
 	"dubbo.apache.org/dubbo-go/v3/common/constant"
-	dconfig "dubbo.apache.org/dubbo-go/v3/config"
-	"dubbo.apache.org/dubbo-go/v3/config/generic" //nolint
+	"dubbo.apache.org/dubbo-go/v3/filter/generic"
 
 	hessian "github.com/apache/dubbo-go-hessian2"
 
@@ -43,29 +43,25 @@ import (
 
 var count int32
 
-func newTripleRefConf(iface, protocol string) dconfig.ReferenceConfig {
-
-	refConf := dconfig.ReferenceConfig{
-		InterfaceName:  iface,
-		Cluster:        "failover",
-		RegistryIDs:    []string{"zk"},
-		Protocol:       protocol,
-		Generic:        "true",
-		Group:          "test",
-		Version:        "1.0.0",
-		URL:            "tri://127.0.0.1:9999/" + iface + "?" + constant.SerializationKey + "=hessian2",
-		RequestTimeout: "10s",
-	}
-
-	rootConfig := dconfig.NewRootConfigBuilder().
-		Build()
-	if err := dconfig.Load(dconfig.WithRootConfig(rootConfig)); err != nil {
+func newTripleGenericService(iface, protocol string) *generic.GenericService {
+	cli, err := client.NewClient()
+	if err != nil {
 		panic(err)
 	}
-	_ = refConf.Init(rootConfig)
-	refConf.GenericLoad("dubbo.io")
 
-	return refConf
+	svc, err := cli.NewGenericService(
+		iface,
+		client.WithClusterFailOver(),
+		client.WithProtocol(protocol),
+		client.WithGroup("test"),
+		client.WithVersion("1.0.0"),
+		client.WithRequestTimeout(10*time.Second),
+		client.WithURL("tri://127.0.0.1:9999/"+iface+"?"+constant.SerializationKey+"=hessian2"),
+	)
+	if err != nil {
+		panic(err)
+	}
+	return svc
 }
 
 func TestTripleListenShutdown(t *testing.T) {
@@ -77,11 +73,11 @@ func TestTripleListenShutdown(t *testing.T) {
 	time.Sleep(3 * time.Second) // wait start already
 
 	// start client
-	tripleRefConf := newTripleRefConf("com.dubbogo.pixiu.TripleUserService", tpconst.TRIPLE)
+	tripleService := newTripleGenericService("com.dubbogo.pixiu.TripleUserService", tpconst.TRIPLE)
 	call_wg := &sync.WaitGroup{}
 	call_wg.Add(3)
 	call_func := func() {
-		rsp, err := tripleRefConf.GetRPCService().(*generic.GenericService).Invoke(
+		rsp, err := tripleService.Invoke(
 			context.TODO(),
 			"TestByTriple",
 			[]string{"java.lang.String"},

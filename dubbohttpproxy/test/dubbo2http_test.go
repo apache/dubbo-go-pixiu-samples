@@ -23,8 +23,8 @@ import (
 )
 
 import (
-	"dubbo.apache.org/dubbo-go/v3/config"
-	"dubbo.apache.org/dubbo-go/v3/config/generic" //nolint
+	"dubbo.apache.org/dubbo-go/v3/client"
+	"dubbo.apache.org/dubbo-go/v3/filter/generic"
 	_ "dubbo.apache.org/dubbo-go/v3/imports"
 	"dubbo.apache.org/dubbo-go/v3/protocol/dubbo"
 
@@ -33,11 +33,9 @@ import (
 	"github.com/dubbogo/gost/log/logger"
 )
 
-const appName = "dubbo.io"
-
 func TestDubbo2Triple(t *testing.T) {
-	tripleRefConf := newDubboRefConf("com.dubbogo.pixiu.TripleUserService", dubbo.DUBBO)
-	resp, err := tripleRefConf.GetRPCService().(*generic.GenericService).Invoke(
+	tripleService := newDubboGenericService("com.dubbogo.pixiu.TripleUserService", dubbo.DUBBO)
+	resp, err := tripleService.Invoke(
 		context.TODO(),
 		"GetUserById",
 		[]string{"java.lang.String"},
@@ -50,26 +48,22 @@ func TestDubbo2Triple(t *testing.T) {
 	logger.Infof("GetUserByCode string) res: %+v", resp)
 }
 
-func newDubboRefConf(iface, protocol string) config.ReferenceConfig {
-
-	refConf := config.ReferenceConfig{
-		InterfaceName: iface,
-		Cluster:       "failover",
-		RegistryIDs:   []string{"zk"},
-		Protocol:      protocol,
-		Generic:       "true",
-		URL:           "dubbo://127.0.0.1:8889/" + iface,
-		Group:         "test",
-		Version:       "1.0.0",
-	}
-
-	rootConfig := config.NewRootConfigBuilder().
-		Build()
-	if err := config.Load(config.WithRootConfig(rootConfig)); err != nil {
+func newDubboGenericService(iface, protocol string) *generic.GenericService {
+	cli, err := client.NewClient()
+	if err != nil {
 		panic(err)
 	}
-	_ = refConf.Init(rootConfig)
-	refConf.GenericLoad(appName)
 
-	return refConf
+	svc, err := cli.NewGenericService(
+		iface,
+		client.WithClusterFailOver(),
+		client.WithProtocol(protocol),
+		client.WithGroup("test"),
+		client.WithVersion("1.0.0"),
+		client.WithURL("dubbo://127.0.0.1:8889/"+iface),
+	)
+	if err != nil {
+		panic(err)
+	}
+	return svc
 }

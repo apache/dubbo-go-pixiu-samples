@@ -28,7 +28,7 @@ import (
 )
 
 import (
-	"dubbo.apache.org/dubbo-go/v3/config"
+	"dubbo.apache.org/dubbo-go/v3"
 	_ "dubbo.apache.org/dubbo-go/v3/imports"
 
 	"github.com/dubbogo/gost/log/logger"
@@ -40,7 +40,7 @@ var survivalTimeout = int(3e9)
 func main() {
 	createNacosNamespace()
 
-	config.Load()
+	dubbo.Load()
 
 	initSignal()
 }

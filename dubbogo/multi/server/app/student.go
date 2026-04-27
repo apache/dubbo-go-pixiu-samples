@@ -26,13 +26,13 @@ import (
 )
 
 import (
-	"dubbo.apache.org/dubbo-go/v3/config"
+	"dubbo.apache.org/dubbo-go/v3"
 
 	hessian "github.com/apache/dubbo-go-hessian2"
 )
 
 func init() {
-	config.SetProviderService(new(StudentProvider))
+	dubbo.SetProviderService(new(StudentProvider))
 	// ------for hessian2------
 	hessian.RegisterPOJO(&Student{})
 

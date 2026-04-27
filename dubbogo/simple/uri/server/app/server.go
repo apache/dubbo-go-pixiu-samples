@@ -26,7 +26,7 @@ import (
 )
 
 import (
-	"dubbo.apache.org/dubbo-go/v3/config"
+	"dubbo.apache.org/dubbo-go/v3"
 	_ "dubbo.apache.org/dubbo-go/v3/imports"
 
 	"github.com/dubbogo/gost/log/logger"
@@ -39,7 +39,7 @@ var survivalTimeout = int(3e9)
 //	export CONF_PROVIDER_FILE_PATH="xxx"
 //	export APP_LOG_CONF_FILE="xxx"
 func main() {
-	config.Load()
+	dubbo.Load()
 	logger.Infof("dubbo version is: %s", Version)
 	initSignal()
 }

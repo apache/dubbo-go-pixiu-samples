@@ -26,7 +26,7 @@ import (
 )
 
 import (
-	"dubbo.apache.org/dubbo-go/v3/config"
+	"dubbo.apache.org/dubbo-go/v3"
 	_ "dubbo.apache.org/dubbo-go/v3/imports"
 
 	"github.com/dubbogo/gost/log/logger"
@@ -38,7 +38,7 @@ const Version = "2.7.5"
 var survivalTimeout = int(3e9)
 
 func main() {
-	config.Load()
+	dubbo.Load()
 	logger.Info("dubbo version is: %s", Version)
 	initSignal()
 }
