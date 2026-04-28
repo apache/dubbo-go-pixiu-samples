@@ -19,7 +19,7 @@
 name: pixiu
 description: pixiu sample
 resources:
-  - path: '/api/v1/test-dubbo/:application/:interface'
+  - path: '/api/v1/test-dubbo/:interface'
     type: restful
     description: common
     methods:

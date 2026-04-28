@@ -28,5 +28,5 @@ func (s *GreeterProvider) SayHello(ctx context.Context, name string) (string, er
 }
 
 func (s *GreeterProvider) Reference() string {
-	return "GreeterProvider"
+	return "org.apache.dubbogo.samples.api.Greeter"
 }
