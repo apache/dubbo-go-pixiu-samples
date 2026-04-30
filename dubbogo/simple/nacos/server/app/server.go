@@ -40,7 +40,9 @@ var survivalTimeout = int(3e9)
 func main() {
 	createNacosNamespace()
 
-	dubbo.Load()
+	if err := dubbo.Load(); err != nil {
+		panic(err)
+	}
 
 	initSignal()
 }

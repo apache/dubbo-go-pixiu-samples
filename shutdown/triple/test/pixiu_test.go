@@ -44,7 +44,7 @@ import (
 var count int32
 
 func newTripleGenericService(iface, protocol string) *generic.GenericService {
-	cli, err := client.NewClient()
+	cli, err := client.NewClient(client.WithClientRequestTimeout(10 * time.Second))
 	if err != nil {
 		panic(err)
 	}
@@ -64,6 +64,15 @@ func newTripleGenericService(iface, protocol string) *generic.GenericService {
 	return svc
 }
 
+func newTripleContext(iface string) context.Context {
+	return context.WithValue(context.Background(), constant.AttachmentKey, map[string]string{
+		constant.PathKey:      iface,
+		constant.InterfaceKey: iface,
+		constant.GroupKey:     "test",
+		constant.VersionKey:   "1.0.0",
+	})
+}
+
 func TestTripleListenShutdown(t *testing.T) {
 	count = 0
 
@@ -78,7 +87,7 @@ func TestTripleListenShutdown(t *testing.T) {
 	call_wg.Add(3)
 	call_func := func() {
 		rsp, err := tripleService.Invoke(
-			context.TODO(),
+			newTripleContext("com.dubbogo.pixiu.TripleUserService"),
 			"TestByTriple",
 			[]string{"java.lang.String"},
 			[]hessian.Object{"0001"},
@@ -102,5 +111,5 @@ func TestTripleListenShutdown(t *testing.T) {
 	}()
 	server.GetServer().GetListenerManager().GetListenerService("0.0.0.0-9999-TRIPLE").ShutDown(wg)
 	call_wg.Wait()
-	assert.Equal(t, count, int32(2))
+	assert.Equal(t, int32(2), count)
 }

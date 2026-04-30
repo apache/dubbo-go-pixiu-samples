@@ -38,7 +38,9 @@ const Version = "2.7.5"
 var survivalTimeout = int(3e9)
 
 func main() {
-	dubbo.Load()
+	if err := dubbo.Load(); err != nil {
+		panic(err)
+	}
 	logger.Info("dubbo version is: %s", Version)
 	initSignal()
 }

@@ -35,7 +35,9 @@ import (
 var survivalTimeout = int(3e9)
 
 func main() {
-	dubbo.Load()
+	if err := dubbo.Load(); err != nil {
+		panic(err)
+	}
 	initSignal()
 }
 

@@ -27,6 +27,7 @@ import (
 
 import (
 	"dubbo.apache.org/dubbo-go/v3/client"
+	"dubbo.apache.org/dubbo-go/v3/common/constant"
 	"dubbo.apache.org/dubbo-go/v3/filter/generic"
 	"dubbo.apache.org/dubbo-go/v3/protocol/dubbo"
 
@@ -40,7 +41,7 @@ import (
 )
 
 func newDubboGenericService(iface, protocol string) *generic.GenericService {
-	cli, err := client.NewClient()
+	cli, err := client.NewClient(client.WithClientRequestTimeout(10 * time.Second))
 	if err != nil {
 		panic(err)
 	}
@@ -60,6 +61,15 @@ func newDubboGenericService(iface, protocol string) *generic.GenericService {
 	return svc
 }
 
+func newDubboContext(iface string) context.Context {
+	return context.WithValue(context.Background(), constant.AttachmentKey, map[string]string{
+		constant.PathKey:      iface,
+		constant.InterfaceKey: iface,
+		constant.GroupKey:     "test",
+		constant.VersionKey:   "1.0.0",
+	})
+}
+
 func TestDubboListenShutdown(t *testing.T) {
 	count := int32(0)
 
@@ -74,7 +84,7 @@ func TestDubboListenShutdown(t *testing.T) {
 	req_wg.Add(2)
 	call_func := func() {
 		_, err := tripleService.Invoke(
-			context.TODO(),
+			newDubboContext("com.dubbogo.pixiu.TripleUserService"),
 			"TestByDubbo",
 			[]string{"java.lang.String"},
 			[]hessian.Object{"0001"},
@@ -97,5 +107,5 @@ func TestDubboListenShutdown(t *testing.T) {
 	}()
 	server.GetServer().GetListenerManager().GetListenerService("0.0.0.0-8889-TCP").ShutDown(wg)
 	req_wg.Wait()
-	assert.Equal(t, count, int32(1))
+	assert.Equal(t, int32(1), count)
 }

@@ -39,7 +39,9 @@ var survivalTimeout = int(3e9)
 //	export CONF_PROVIDER_FILE_PATH="xxx"
 //	export APP_LOG_CONF_FILE="xxx"
 func main() {
-	dubbo.Load()
+	if err := dubbo.Load(); err != nil {
+		panic(err)
+	}
 	logger.Infof("dubbo version is: %s", Version)
 	initSignal()
 }

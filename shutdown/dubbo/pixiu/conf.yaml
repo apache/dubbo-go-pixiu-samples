@@ -34,7 +34,7 @@ static_resources:
                   - match:
                       prefix: "/com.dubbogo.pixiu.TripleUserService"
                       methods:
-                        - "*"
+                        - "$invoke"
                     route:
                       cluster: "http-server"
                       cluster_not_found_response_code: 505
