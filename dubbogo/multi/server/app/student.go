@@ -249,7 +249,7 @@ func (s *StudentProvider) UpdateStudentByName(ctx context.Context, name string, 
 
 // nolint
 func (s *StudentProvider) Reference() string {
-	return "StudentProvider"
+	return "com.dubbogo.pixiu.StudentService"
 }
 
 // nolint

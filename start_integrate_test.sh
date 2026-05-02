@@ -29,6 +29,7 @@ array=(
   "dubbogo/simple/triple"
   "dubbogo/simple/direct"
   "dubbogo/simple/prometheus"
+  "dubbogo/multi"
   # http
   "http/grpc"
   "http/simple"
