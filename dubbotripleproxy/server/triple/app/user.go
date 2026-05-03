@@ -258,7 +258,7 @@ func (u *UserProvider) UpdateUserByName(ctx context.Context, name string, user *
 
 // nolint
 func (u *UserProvider) Reference() string {
-	return "TripleUserProvider"
+	return "com.dubbogo.pixiu.TripleUserService"
 }
 
 // nolint

@@ -60,8 +60,6 @@ func newTripleGenericService(iface, protocol string) *generic.GenericService {
 		iface,
 		client.WithClusterFailOver(),
 		client.WithProtocol(protocol),
-		client.WithGroup("test"),
-		client.WithVersion("1.0.0"),
 		client.WithURL("tri://127.0.0.1:9999/"+iface+"?"+constant.SerializationKey+"=hessian2"),
 	)
 	if err != nil {

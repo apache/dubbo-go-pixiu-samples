@@ -58,8 +58,6 @@ func newDubboGenericService(iface, protocol string) *generic.GenericService {
 		iface,
 		client.WithClusterFailOver(),
 		client.WithProtocol(protocol),
-		client.WithGroup("test"),
-		client.WithVersion("1.0.0"),
 		client.WithURL("dubbo://127.0.0.1:8888/"+iface),
 	)
 	if err != nil {

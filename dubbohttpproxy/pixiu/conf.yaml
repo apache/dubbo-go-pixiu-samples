@@ -34,10 +34,12 @@ static_resources:
                     - match:
                         prefix: "*"
                 http_filters:
+                  - name: dgp.filter.http.apiconfig
+                    config:
+                      path: $PROJECT_DIR/pixiu/api_config.yaml
                   - name: dgp.filter.http.dubboproxy
                     config:
                       dubboProxyConfig:
-                        auto_resolve: true
                         registries:
                           "zookeeper":
                             protocol: "zookeeper"
@@ -61,9 +63,9 @@ static_resources:
               route_config:
                 routes:
                   - match:
-                      prefix: "/com.dubbogo.pixiu.TripleUserService"
-                      methods:
-                        - "*"
+                        prefix: "/com.dubbogo.pixiu.TripleUserService"
+                        methods:
+                          - "$invoke"
                     route:
                       cluster: "http-server"
                       cluster_not_found_response_code: 505
