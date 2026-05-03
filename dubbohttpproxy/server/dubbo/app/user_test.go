@@ -17,7 +17,9 @@
 
 package main
 
-import "testing"
+import (
+	"testing"
+)
 
 func TestUserProviderReferenceMatchesServiceInterface(t *testing.T) {
 	if got, want := new(UserProvider).Reference(), "com.dubbogo.pixiu.UserService"; got != want {
