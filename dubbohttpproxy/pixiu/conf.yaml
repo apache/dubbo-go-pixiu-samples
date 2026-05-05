@@ -63,9 +63,9 @@ static_resources:
               route_config:
                 routes:
                   - match:
-                        prefix: "/com.dubbogo.pixiu.TripleUserService"
-                        methods:
-                          - "$invoke"
+                      prefix: "/com.dubbogo.pixiu.TripleUserService"
+                      methods:
+                        - "$invoke"
                     route:
                       cluster: "http-server"
                       cluster_not_found_response_code: 505
