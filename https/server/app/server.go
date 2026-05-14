@@ -34,13 +34,11 @@ import (
 
 var survivalTimeout = int(3e9)
 
-// they are necessary:
-// export DUBBO_GO_CONFIG_PATH="../profiles/dev/server.yml"
-// export APP_LOG_CONF_FILE="../profiles/dev/log.yml"
 func main() {
 	if err := dubbo.Load(); err != nil {
 		panic(err)
 	}
+	logger.Infof("dubbo version is: %s", Version)
 	initSignal()
 }
 

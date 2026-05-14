@@ -161,7 +161,7 @@ type UserProvider struct{}
 
 // CreateUser new user, PX config POST.
 func (u *UserProvider) CreateUser(ctx context.Context, user *User) (*User, error) {
-	fmt.Printf("Req CreateUser data: %#v \n", user)
+	outLn("Req CreateUser data:%#v", user)
 	if user == nil {
 		return nil, errors.New("not found")
 	}
@@ -180,10 +180,10 @@ func (u *UserProvider) CreateUser(ctx context.Context, user *User) (*User, error
 
 // GetUserByName query by name, single param, PX config GET.
 func (u *UserProvider) GetUserByName(ctx context.Context, name string) (*User, error) {
-	fmt.Printf("Req GetUserByName name: %#v \n", name)
+	outLn("Req GetUserByName name:%#v", name)
 	r, ok := cache.GetByName(name)
 	if ok {
-		fmt.Printf("Req GetUserByName result: %#v \n", r)
+		outLn("Req GetUserByName result:%#v", r)
 		return r, nil
 	}
 	return nil, nil
@@ -191,10 +191,10 @@ func (u *UserProvider) GetUserByName(ctx context.Context, name string) (*User, e
 
 // GetUserByCode query by code, single param, PX config GET.
 func (u *UserProvider) GetUserByCode(ctx context.Context, code int64) (*User, error) {
-	fmt.Printf("Req GetUserByCode name: %#v \n", code)
+	outLn("Req GetUserByCode name:%#v", code)
 	r, ok := cache.GetByCode(code)
 	if ok {
-		fmt.Printf("Req GetUserByCode result: %#v \n", r)
+		outLn("Req GetUserByCode result:%#v", r)
 		return r, nil
 	}
 	return nil, nil
@@ -202,12 +202,12 @@ func (u *UserProvider) GetUserByCode(ctx context.Context, code int64) (*User, er
 
 // GetUserTimeout query by name, will timeout for pixiu.
 func (u *UserProvider) GetUserTimeout(ctx context.Context, name string) (*User, error) {
-	fmt.Printf("Req GetUserByName name: %#v \n", name)
+	outLn("Req GetUserByName name:%#v", name)
 	// sleep 10s, pixiu config less than 10s.
 	time.Sleep(10 * time.Second)
 	r, ok := cache.GetByName(name)
 	if ok {
-		fmt.Printf("Req GetUserByName result: %#v \n", r)
+		outLn("Req GetUserByName result:%#v", r)
 		return r, nil
 	}
 	return nil, nil
@@ -215,10 +215,10 @@ func (u *UserProvider) GetUserTimeout(ctx context.Context, name string) (*User, 
 
 // GetUserByNameAndAge query by name and age, two params, PX config GET.
 func (u *UserProvider) GetUserByNameAndAge(ctx context.Context, name string, age int32) (*User, error) {
-	fmt.Printf("Req GetUserByNameAndAge name: %s, age: %d \n", name, age)
+	outLn("Req GetUserByNameAndAge name:%s, age:%d", name, age)
 	r, ok := cache.GetByName(name)
 	if ok && r.Age == age {
-		fmt.Printf("Req GetUserByNameAndAge result: %#v \n", r)
+		outLn("Req GetUserByNameAndAge result:%#v", r)
 		return r, nil
 	}
 	return r, nil
@@ -226,7 +226,7 @@ func (u *UserProvider) GetUserByNameAndAge(ctx context.Context, name string, age
 
 // UpdateUser update by user struct, my be another struct, PX config POST or PUT.
 func (u *UserProvider) UpdateUser(ctx context.Context, user *User) (bool, error) {
-	fmt.Printf("Req UpdateUser data: %#v \n", user)
+	outLn("Req UpdateUser data:%#v", user)
 	r, ok := cache.GetByName(user.Name)
 	if ok {
 		if user.ID != "" {
@@ -242,7 +242,7 @@ func (u *UserProvider) UpdateUser(ctx context.Context, user *User) (bool, error)
 
 // UpdateUserByName update by user struct, my be another struct, PX config POST or PUT.
 func (u *UserProvider) UpdateUserByName(ctx context.Context, name string, user *User) (bool, error) {
-	fmt.Printf("Req UpdateUserByName data: %#v \n", user)
+	outLn("Req UpdateUserByName data:%#v", user)
 	r, ok := cache.GetByName(name)
 	if ok {
 		if user.ID != "" {
@@ -264,4 +264,9 @@ func (u *UserProvider) Reference() string {
 // nolint
 func (u User) JavaClassName() string {
 	return "com.dubbogo.pixiu.User"
+}
+
+// nolint
+func outLn(format string, args ...interface{}) {
+	fmt.Printf("\033[32;40m"+format+"\033[0m\n", args...)
 }
