@@ -116,7 +116,14 @@ func (db *userDB) GetByName(n string) (*User, bool) {
 	defer db.lock.Unlock()
 
 	r, ok := db.nameIndex[n]
-	return r, ok
+
+	if !ok {
+		return nil, false
+	}
+
+	copyUser := *r
+
+	return &copyUser, ok
 }
 
 // nolint
@@ -125,7 +132,14 @@ func (db *userDB) GetByCode(n int64) (*User, bool) {
 	defer db.lock.Unlock()
 
 	r, ok := db.codeIndex[n]
-	return r, ok
+
+	if !ok {
+		return nil, false
+	}
+
+	copyUser := *r
+
+	return &copyUser, ok
 }
 
 func (db *userDB) existName(name string) bool {
@@ -144,6 +158,29 @@ func (db *userDB) existCode(code int64) bool {
 
 	_, ok := db.codeIndex[code]
 	return ok
+}
+
+func (db *userDB) UpdateByName(name string, user *User) bool {
+	if user == nil {
+		return false
+	}
+
+	db.lock.Lock()
+	defer db.lock.Unlock()
+
+	r, ok := db.nameIndex[name]
+	if !ok {
+		return false
+	}
+
+	if user.ID != "" {
+		r.ID = user.ID
+	}
+	if user.Age >= 0 {
+		r.Age = user.Age
+	}
+
+	return true
 }
 
 // User user obj.
@@ -227,14 +264,7 @@ func (u *UserProvider) GetUserByNameAndAge(ctx context.Context, name string, age
 // UpdateUser update by user struct, my be another struct, PX config POST or PUT.
 func (u *UserProvider) UpdateUser(ctx context.Context, user *User) (bool, error) {
 	outLn("Req UpdateUser data:%#v", user)
-	r, ok := cache.GetByName(user.Name)
-	if ok {
-		if user.ID != "" {
-			r.ID = user.ID
-		}
-		if user.Age >= 0 {
-			r.Age = user.Age
-		}
+	if user != nil && cache.UpdateByName(user.Name, user) {
 		return true, nil
 	}
 	return false, errors.New("not found")
@@ -243,14 +273,7 @@ func (u *UserProvider) UpdateUser(ctx context.Context, user *User) (bool, error)
 // UpdateUserByName update by user struct, my be another struct, PX config POST or PUT.
 func (u *UserProvider) UpdateUserByName(ctx context.Context, name string, user *User) (bool, error) {
 	outLn("Req UpdateUserByName data:%#v", user)
-	r, ok := cache.GetByName(name)
-	if ok {
-		if user.ID != "" {
-			r.ID = user.ID
-		}
-		if user.Age >= 0 {
-			r.Age = user.Age
-		}
+	if user != nil && cache.UpdateByName(name, user) {
 		return true, nil
 	}
 	return false, errors.New("not found")
