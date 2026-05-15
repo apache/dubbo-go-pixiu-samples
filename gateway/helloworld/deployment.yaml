@@ -40,6 +40,21 @@ spec:
   selector:
     app: dubbo-go-server
 ---
+apiVersion: gateway.networking.k8s.io/v1
+kind: ReferenceGrant
+metadata:
+  name: allow-default-httproute-to-dubbo-go-server
+  namespace: helloworld
+spec:
+  from:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      namespace: default
+  to:
+    - group: ""
+      kind: Service
+      name: dubbo-go-server
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -59,7 +74,7 @@ spec:
     spec:
       containers:
         - name: server
-          image: dubbogopixiu/helloworld-go-server:master
+          image: dubbogopixiu/helloworld-go-server@sha256:45de06f3c8df768a215b4228b87836157feb95b40ff93f321218d6131d4a457f
           imagePullPolicy: IfNotPresent
           ports:
             - name: triple
