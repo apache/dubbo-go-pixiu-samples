@@ -63,7 +63,12 @@ func user(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte(`{"message":"user not found"}`))
 		return
 	}
-	b, _ := json.Marshal(u)
+	b, err := json.Marshal(u)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(err.Error()))
+		return
+	}
 	w.Header().Set(constant.HeaderKeyContextType, constant.HeaderValueJsonUtf8)
 	w.Write(b)
 }
