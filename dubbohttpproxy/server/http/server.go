@@ -22,9 +22,7 @@ import (
 	"io"
 	"log"
 	"net/http"
-)
 
-import (
 	"github.com/apache/dubbo-go-pixiu/pkg/common/constant"
 )
 
@@ -45,8 +43,8 @@ func user(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte(err.Error()))
 		return
 	}
-	// Pixiu 的 dgp.filter.dubbo.http 把 generic invocation 的实参数组整体
-	// json.Marshal 后发出，body 形如 ["0001"]，所以反序列化目标是 []string。
+	// Pixiu's dgp.filter.dubbo.http marshals generic invocation arguments as an array,
+	// so the request body is shaped like ["0001"] and should be decoded into []string.
 	var args []string
 	if err := json.Unmarshal(byts, &args); err != nil {
 		w.WriteHeader(http.StatusBadRequest)
