@@ -50,7 +50,7 @@ func (db *UserDB) Add(u *User) bool {
 	db.lock.Lock()
 	defer db.lock.Unlock()
 
-	db.cacheMap[u.Name] = u
+	db.cacheMap[u.ID] = u
 	return true
 }
 
