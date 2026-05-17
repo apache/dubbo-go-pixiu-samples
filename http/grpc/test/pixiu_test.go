@@ -51,6 +51,7 @@ func TestGet(t *testing.T) {
 	assert.NotNil(t, body)
 	var r proto.GetUserResponse
 	err = json.Unmarshal(body, &r)
+	assert.Equal(t, 200, resp.StatusCode)
 	assert.NoError(t, err)
 	assert.Equal(t, "user(s) query successfully", r.Message)
 	assert.Equal(t, 2, len(r.Users))
@@ -71,9 +72,23 @@ func TestPost(t *testing.T) {
 	assert.NotNil(t, body)
 	var r proto.GetUserResponse
 	err = json.Unmarshal(body, &r)
+	assert.Equal(t, 200, resp.StatusCode)
 	assert.NoError(t, err)
 	assert.Equal(t, "user(s) query successfully", r.Message)
 	assert.Equal(t, 1, len(r.Users))
 	assert.Equal(t, int32(1), r.Users[0].UserId)
 	assert.Equal(t, "Kenway", r.Users[0].Name)
+}
+
+func TestPostInvalidJSON(t *testing.T) {
+	c := http.Client{Timeout: 5 * time.Second}
+	invalidData := "{"
+	req, err := http.NewRequest(http.MethodPost, url, strings.NewReader(invalidData))
+	assert.NoError(t, err)
+	resp, err := c.Do(req)
+	assert.NoError(t, err)
+	body, err := io.ReadAll(resp.Body)
+	assert.NoError(t, err)
+	assert.NotNil(t, body)
+	assert.Equal(t, 502, resp.StatusCode)
 }
