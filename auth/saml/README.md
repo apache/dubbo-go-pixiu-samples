@@ -112,7 +112,7 @@ This URL matches the `idp_metadata_url` used in `pixiu/conf.yaml`.
 
 ### Disable `Client signature required` on the SAML client
 
-Keycloak's SAML clients default `Client signature required=ON`, which forces the SP to sign every AuthnRequest. Pixiu's SAML filter does not sign AuthnRequests, so leaving this on causes Keycloak to reject the redirect with `error="invalid_signature"` / `SigAlg was null`. Run the following from your host to toggle it off (Assertion / Response signing on the IdP side is kept on, so the SAML response is still cryptographically protected):
+Keycloak's SAML clients default to `Client signature required=ON`, which forces the SP to sign every AuthnRequest. Pixiu's SAML filter does not sign AuthnRequests, so leaving this on causes Keycloak to reject the redirect with `error="invalid_signature"` / `SigAlg was null`. Run the following from your host to toggle it off (Assertion / Response signing on the IdP side is kept on, so the SAML response is still cryptographically protected):
 
 ```bash
 # Log in to kcadm inside the container
