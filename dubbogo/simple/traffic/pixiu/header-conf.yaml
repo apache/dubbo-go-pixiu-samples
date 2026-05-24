@@ -16,6 +16,8 @@
 # specific language governing permissions and limitations
 # under the License.
 #
+# 此配置文件未集成到 CI 集成测试中。
+# 如需手动测试 header 路由，请将本文件替换为 pixiu/conf.yaml 后运行。
 ---
 static_resources:
   listeners:
