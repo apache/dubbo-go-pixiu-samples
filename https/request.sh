@@ -22,12 +22,12 @@ ADDRESS="https://${DOMAIN}:${PORT}"
 RESOLVE="${DOMAIN}:${PORT}:127.0.0.1"
 
 API1=$(curl -k --resolve "${RESOLVE}" -s -X POST "${ADDRESS}/api/v1/test-dubbo/com.dubbogo.pixiu.UserService?group=test&version=1.0.0&method=GetUserByName" -d '{"types":"string","values":"tc"}' --header 'Content-Type: application/json')
-API2=$(curl -k --resolve "${RESOLVE}" -s -X POST "${ADDRESS}/api/v1/test-dubbo/com.dubbogo.pixiu.UserService?group=test&version=1.0.0&method=UpdateUserByName" -d '{"types":"string, object","values":["tc",{"id":"0001","code":1,"name":"tc","age":15}]}' --header "Content-Type: application/json")
+API2=$(curl -k --resolve "${RESOLVE}" -s -X POST "${ADDRESS}/api/v1/test-dubbo/com.dubbogo.pixiu.UserService?group=test&version=1.0.0&method=UpdateUserByName" -d '{"types":"string,object","values":["tc",{"id":"0001","code":1,"name":"tc","age":15}]}' --header "Content-Type: application/json")
 API3=$(curl -k --resolve "${RESOLVE}" -s -X POST "${ADDRESS}/api/v1/test-dubbo/com.dubbogo.pixiu.UserService?group=test&version=1.0.0&method=GetUserByCode" -d '{"types":"int","values":1}' --header "Content-Type: application/json")
 
-ARRAY_API=(${API1} ${API2} ${API3})
+ARRAY_API=("${API1}" "${API2}" "${API3}")
 
-for element in ${ARRAY_API[@]}
+for element in "${ARRAY_API[@]}"
 do
-echo ${element}
+echo "${element}"
 done
