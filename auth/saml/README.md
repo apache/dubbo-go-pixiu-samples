@@ -110,6 +110,24 @@ http://localhost:18080/realms/pixiu/protocol/saml/descriptor
 
 This URL matches the `idp_metadata_url` used in `pixiu/conf.yaml`.
 
+### Disable `Client signature required` on the SAML client
+
+Keycloak's SAML clients default to `Client signature required=ON`, which forces the SP to sign every AuthnRequest. Pixiu's SAML filter does not sign AuthnRequests, so leaving this on causes Keycloak to reject the redirect with `error="invalid_signature"` / `SigAlg was null`. Run the following from your host to toggle it off (Assertion / Response signing on the IdP side is kept on, so the SAML response is still cryptographically protected):
+
+```bash
+# Log in to kcadm inside the container
+docker exec pixiu-saml-keycloak /opt/keycloak/bin/kcadm.sh config credentials \
+    --server http://localhost:8080 --realm master --user admin --password admin
+
+# Resolve the SAML client's UUID
+CID=$(docker exec pixiu-saml-keycloak /opt/keycloak/bin/kcadm.sh get clients \
+    -r pixiu -q clientId=pixiu-saml-sp --fields id --format csv --noquotes 2>/dev/null | tr -d '\r')
+
+# Patch: keep IdP-side signing on, turn SP-side AuthnRequest signing off
+docker exec pixiu-saml-keycloak bash -c 'echo "{\"attributes\":{\"saml.server.signature\":\"true\",\"saml.assertion.signature\":\"true\",\"saml.client.signature\":\"false\"}}" > /tmp/patch.json'
+docker exec pixiu-saml-keycloak /opt/keycloak/bin/kcadm.sh update clients/$CID -r pixiu -f /tmp/patch.json
+```
+
 ## Step 3: Start the backend server
 
 ```bash
