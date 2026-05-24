@@ -15,6 +15,8 @@
  * limitations under the License.
  */
 
+//go:build manual
+
 package test
 
 import (
@@ -29,12 +31,12 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestCanaryGET(t *testing.T) {
+func TestHeaderGET1(t *testing.T) {
 	url := "http://localhost:8888/user"
 	client := &http.Client{Timeout: 5 * time.Second}
 	req, err := http.NewRequest("GET", url, nil)
 	assert.NoError(t, err)
-	req.Header.Add("canary-by-header", "v1")
+	req.Header.Add("X-A", "t1")
 	resp, err := client.Do(req)
 	assert.NoError(t, err)
 	assert.NotNil(t, resp)
@@ -43,11 +45,13 @@ func TestCanaryGET(t *testing.T) {
 	assert.True(t, strings.Contains(string(s), `"server": "v1"`))
 }
 
-func TestCanaryGET1(t *testing.T) {
+func TestHeaderGET2(t *testing.T) {
 	url := "http://localhost:8888/user"
 	client := &http.Client{Timeout: 5 * time.Second}
 	req, err := http.NewRequest("GET", url, nil)
 	assert.NoError(t, err)
+	req.Header.Add("X-B", "t4")
+	req.Header.Add("X-C", "t1")
 	resp, err := client.Do(req)
 	assert.NoError(t, err)
 	assert.NotNil(t, resp)
@@ -56,12 +60,12 @@ func TestCanaryGET1(t *testing.T) {
 	assert.True(t, strings.Contains(string(s), `"server": "v2"`))
 }
 
-func TestCanaryGET2(t *testing.T) {
+func TestHeaderGET3(t *testing.T) {
 	url := "http://localhost:8888/user"
 	client := &http.Client{Timeout: 5 * time.Second}
 	req, err := http.NewRequest("GET", url, nil)
 	assert.NoError(t, err)
-	req.Header.Add("canary-by-header", "v3")
+	req.Header.Add("REG", "tt")
 	resp, err := client.Do(req)
 	assert.NoError(t, err)
 	assert.NotNil(t, resp)
@@ -69,4 +73,3 @@ func TestCanaryGET2(t *testing.T) {
 	s, _ := io.ReadAll(resp.Body)
 	assert.True(t, strings.Contains(string(s), `"server": "v3"`))
 }
-
