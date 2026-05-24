@@ -74,3 +74,32 @@ jobs:
         with:
           version: v2.4.0
           args: --disable errcheck
+
+  integration-test:
+    needs: golangci
+    name: Samples Integration Test
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      PIXIU_REPO: apache/dubbo-go-pixiu
+      PIXIU_REF: develop
+    steps:
+      - uses: actions/checkout@v5
+      - name: Checkout latest Pixiu branch
+        uses: actions/checkout@v5
+        with:
+          repository: ${{ env.PIXIU_REPO }}
+          ref: ${{ env.PIXIU_REF }}
+          path: pixiu-latest
+      - uses: actions/setup-go@v6
+        with:
+          go-version-file: 'go.mod'
+          cache: true
+      - name: Prepare current samples for Pixiu integration runner
+        run: |
+          rm -rf ${GITHUB_WORKSPACE}/pixiu-latest/integrate_samples
+          mkdir -p ${GITHUB_WORKSPACE}/pixiu-latest/integrate_samples
+          rsync -a --delete --exclude 'pixiu-latest/' ${GITHUB_WORKSPACE}/ ${GITHUB_WORKSPACE}/pixiu-latest/integrate_samples/
+      - name: Run Pixiu integration entrypoint against current samples
+        working-directory: pixiu-latest
+        run: ./start_integrate_test.sh

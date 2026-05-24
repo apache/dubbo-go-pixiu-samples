@@ -109,6 +109,24 @@ http://localhost:18080/realms/pixiu/protocol/saml/descriptor
 
 这个地址与 `pixiu/conf.yaml` 中配置的 `idp_metadata_url` 一致。
 
+### 关闭 SAML Client 的 `Client signature required`
+
+Keycloak 创建 SAML client 时默认 `Client signature required=ON`，要求 SP 端给每个 AuthnRequest 签名。Pixiu 的 SAML filter 没有实现 AuthnRequest 签名，因此保留这一项会导致 Keycloak 拒绝跳转，日志报 `error="invalid_signature"` / `SigAlg was null`。在宿主机执行下面三步把它关掉即可（IdP→SP 方向的 Response / Assertion 签名保持开启，SAML 响应仍受签名保护）：
+
+```bash
+# 在容器内登录 kcadm
+docker exec pixiu-saml-keycloak /opt/keycloak/bin/kcadm.sh config credentials \
+    --server http://localhost:8080 --realm master --user admin --password admin
+
+# 查出 SAML client 的 UUID
+CID=$(docker exec pixiu-saml-keycloak /opt/keycloak/bin/kcadm.sh get clients \
+    -r pixiu -q clientId=pixiu-saml-sp --fields id --format csv --noquotes 2>/dev/null | tr -d '\r')
+
+# 提交 patch：保留 IdP 端签名，关闭 SP 端 AuthnRequest 签名
+docker exec pixiu-saml-keycloak bash -c 'echo "{\"attributes\":{\"saml.server.signature\":\"true\",\"saml.assertion.signature\":\"true\",\"saml.client.signature\":\"false\"}}" > /tmp/patch.json'
+docker exec pixiu-saml-keycloak /opt/keycloak/bin/kcadm.sh update clients/$CID -r pixiu -f /tmp/patch.json
+```
+
 ## 第 3 步：启动后端服务
 
 ```bash
