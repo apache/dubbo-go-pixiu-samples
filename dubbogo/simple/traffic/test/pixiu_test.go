@@ -85,10 +85,11 @@ func TestHeaderGET1(t *testing.T) {
 }
 
 func TestHeaderGET2(t *testing.T) {
-	url := "http://localhost:8888"
+	url := "http://localhost:8888/user"
 	client := &http.Client{Timeout: 5 * time.Second}
 	req, err := http.NewRequest("GET", url, nil)
 	assert.NoError(t, err)
+	req.Header.Add("X-B", "t4")
 	req.Header.Add("X-C", "t1")
 	resp, err := client.Do(req)
 	assert.NoError(t, err)
@@ -99,7 +100,7 @@ func TestHeaderGET2(t *testing.T) {
 }
 
 func TestHeaderGET3(t *testing.T) {
-	url := "http://localhost:8888"
+	url := "http://localhost:8888/user"
 	client := &http.Client{Timeout: 5 * time.Second}
 	req, err := http.NewRequest("GET", url, nil)
 	assert.NoError(t, err)
