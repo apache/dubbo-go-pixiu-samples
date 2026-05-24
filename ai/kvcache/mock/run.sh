@@ -45,6 +45,8 @@ PIXIU_PID=""
 
 REQ_BODY='{"model":"mock-model","messages":[{"role":"user","content":"please explain kv cache routing"}]}'
 
+WARMUP_BODY='{"model":"mock-model","messages":[{"role":"user","content":"warmup health check"}]}'
+
 cleanup() {
   set +e
   if [[ -n "${PIXIU_PID}" ]] && kill -0 "${PIXIU_PID}" >/dev/null 2>&1; then
@@ -95,7 +97,7 @@ wait_for_pixiu() {
     status="$(curl -s -o "${WORK_DIR}/kvcache-pixiu-ready.out" -w '%{http_code}' \
       -H 'Content-Type: application/json' \
       -X POST "${PIXIU_URL}/v1/chat/completions" \
-      -d "${REQ_BODY}" || true)"
+      -d "${WARMUP_BODY}" || true)"
     if [[ "${status}" == "200" || "${status}" == "4"* || "${status}" == "5"* ]]; then
       return 0
     fi
