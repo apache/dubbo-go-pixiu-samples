@@ -28,7 +28,7 @@ Install the required CRDs from the project root:
 
 ```sh
 kubectl apply --server-side -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.5.0/standard-install.yaml
-kubectl apply -k 'https://github.com/apache/dubbo-go-pixiu/controllers/config/crd?ref=develop'
+kubectl apply -k 'https://github.com/apache/dubbo-go-pixiu/controllers/config/crd?ref=v1.1.0'
 ```
 
 ## How to Run
