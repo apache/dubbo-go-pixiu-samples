@@ -69,4 +69,3 @@ func TestCanaryGET2(t *testing.T) {
 	s, _ := io.ReadAll(resp.Body)
 	assert.True(t, strings.Contains(string(s), `"server": "v3"`))
 }
-
