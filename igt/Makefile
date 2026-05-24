@@ -30,7 +30,12 @@ pixiuSources = $(wildcard $(PIXIU_DIR)/pixiu/*.go)
 export GO111MODULE ?= on
 export GOPROXY ?= https://goproxy.io,direct
 export GOSUMDB ?= sum.golang.org
-export GOARCH ?= amd64
+NATIVE_ARCH := $(shell uname -m)
+ifeq ($(NATIVE_ARCH), arm64)
+	export GOARCH ?= arm64
+else
+	export GOARCH ?= amd64
+endif
 
 export DOCKER_HOST_IP = $(shell hostname)
 
