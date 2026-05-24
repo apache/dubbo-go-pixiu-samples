@@ -59,7 +59,7 @@ spec:
     spec:
       containers:
         - name: server
-          image: dubbogopixiu/helloworld-go-server@sha256:45de06f3c8df768a215b4228b87836157feb95b40ff93f321218d6131d4a457f
+          image: dubbogopixiu/helloworld-go-server:master
           imagePullPolicy: IfNotPresent
           ports:
             - name: triple
