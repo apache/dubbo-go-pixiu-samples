@@ -75,16 +75,16 @@ func post(t *testing.T, url string, data string) string {
 		req.Header.Add("Content-Type", "application/json")
 
 		resp, err := client.Do(req)
-		if err == nil && resp != nil {
+		if resp != nil {
 			body, _ := io.ReadAll(resp.Body)
 			_ = resp.Body.Close()
 			lastBody = string(body)
 			lastStatus = resp.StatusCode
-			if resp.StatusCode == http.StatusOK {
-				return lastBody
-			}
-		} else {
+		}
+		if err != nil {
 			lastErr = err
+		} else if resp != nil && resp.StatusCode == http.StatusOK {
+			return lastBody
 		}
 
 		if time.Now().After(deadline) {
