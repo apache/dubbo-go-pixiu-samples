@@ -27,4 +27,3 @@ coverage.txt
 #test
 
 target/
-**/dist/
