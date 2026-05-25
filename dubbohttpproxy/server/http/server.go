@@ -42,7 +42,7 @@ func user(w http.ResponseWriter, r *http.Request) {
 	byts, err := io.ReadAll(r.Body)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte(err.Error()))
+		_, _ = w.Write([]byte(err.Error()))
 		return
 	}
 	// Pixiu's dgp.filter.dubbo.http marshals generic invocation arguments as an array,
@@ -50,27 +50,27 @@ func user(w http.ResponseWriter, r *http.Request) {
 	var args []string
 	if err := json.Unmarshal(byts, &args); err != nil {
 		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte(err.Error()))
+		_, _ = w.Write([]byte(err.Error()))
 		return
 	}
 	if len(args) == 0 {
 		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte("missing id argument"))
+		_, _ = w.Write([]byte("missing id argument"))
 		return
 	}
 	u, ok := cache.Get(args[0])
 	if !ok {
 		w.Header().Set(constant.HeaderKeyContextType, constant.HeaderValueJsonUtf8)
 		w.WriteHeader(http.StatusNotFound)
-		w.Write([]byte(`{"message":"user not found"}`))
+		_, _ = w.Write([]byte(`{"message":"user not found"}`))
 		return
 	}
 	b, err := json.Marshal(u)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte(err.Error()))
+		_, _ = w.Write([]byte(err.Error()))
 		return
 	}
 	w.Header().Set(constant.HeaderKeyContextType, constant.HeaderValueJsonUtf8)
-	w.Write(b)
+	_, _ = w.Write(b)
 }
