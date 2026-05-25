@@ -33,6 +33,8 @@ array=(
   # http
   "http/grpc"
   "http/simple"
+  # https
+  "https"
   # grpc proxy
   "grpc/deprecated"
   "grpc/reflection"
