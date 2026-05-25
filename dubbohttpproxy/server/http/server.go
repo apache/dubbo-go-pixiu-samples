@@ -21,7 +21,6 @@ import (
 	"encoding/json"
 	"io"
 	"log"
-	"math/rand"
 	"net/http"
 )
 
@@ -36,41 +35,42 @@ func main() {
 }
 
 func user(w http.ResponseWriter, r *http.Request) {
-	switch r.Method {
-	case constant.Post:
-		byts, err := io.ReadAll(r.Body)
-		if err != nil {
-			w.Write([]byte(err.Error()))
-		}
-		var name string
-		var user User
-		err = json.Unmarshal(byts, &name)
-		if err != nil {
-			w.Write([]byte(err.Error()))
-		}
-		_, ok := cache.Get(name)
-		if ok {
-			w.Header().Set(constant.HeaderKeyContextType, constant.HeaderValueJsonUtf8)
-			w.Write([]byte("{\"message\":\"data is exist\"}"))
-			return
-		}
-		user.ID = randSeq(5)
-		if cache.Add(&user) {
-			b, _ := json.Marshal(&user)
-			w.Header().Set(constant.HeaderKeyContextType, constant.HeaderValueJsonUtf8)
-			w.Write(b)
-			return
-		}
-		w.Write(nil)
+	if r.Method != constant.Post {
+		w.WriteHeader(http.StatusMethodNotAllowed)
+		return
 	}
-}
-
-var letters = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
-
-func randSeq(n int) string {
-	b := make([]rune, n)
-	for i := range b {
-		b[i] = letters[rand.Intn(len(letters))]
+	byts, err := io.ReadAll(r.Body)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte(err.Error()))
+		return
 	}
-	return string(b)
+	// Pixiu's dgp.filter.dubbo.http marshals generic invocation arguments as an array,
+	// so the request body is shaped like ["0001"] and should be decoded into []string.
+	var args []string
+	if err := json.Unmarshal(byts, &args); err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte(err.Error()))
+		return
+	}
+	if len(args) == 0 {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte("missing id argument"))
+		return
+	}
+	u, ok := cache.Get(args[0])
+	if !ok {
+		w.Header().Set(constant.HeaderKeyContextType, constant.HeaderValueJsonUtf8)
+		w.WriteHeader(http.StatusNotFound)
+		w.Write([]byte(`{"message":"user not found"}`))
+		return
+	}
+	b, err := json.Marshal(u)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(err.Error()))
+		return
+	}
+	w.Header().Set(constant.HeaderKeyContextType, constant.HeaderValueJsonUtf8)
+	w.Write(b)
 }

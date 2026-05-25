@@ -38,9 +38,9 @@ func init() {
 
 var cache *UserDB
 
-// UserDB cache user.
+// UserDB caches users by user ID.
 type UserDB struct {
-	// key is name, value is user obj
+	// key is user ID, value is user obj
 	cacheMap map[string]*User
 	lock     sync.Mutex
 }
@@ -50,16 +50,16 @@ func (db *UserDB) Add(u *User) bool {
 	db.lock.Lock()
 	defer db.lock.Unlock()
 
-	db.cacheMap[u.Name] = u
+	db.cacheMap[u.ID] = u
 	return true
 }
 
-// Get returns the user.
-func (db *UserDB) Get(n string) (*User, bool) {
+// Get returns the user for the given user ID.
+func (db *UserDB) Get(id string) (*User, bool) {
 	db.lock.Lock()
 	defer db.lock.Unlock()
 
-	r, ok := db.cacheMap[n]
+	r, ok := db.cacheMap[id]
 	return r, ok
 }
 
