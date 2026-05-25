@@ -39,6 +39,21 @@ spec:
           port: 20000
           weight: 100
 ---
+apiVersion: gateway.networking.k8s.io/v1
+kind: ReferenceGrant
+metadata:
+  name: allow-default-httproute-to-dubbo-go-server
+  namespace: helloworld
+spec:
+  from:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      namespace: default
+  to:
+    - group: ""
+      kind: Service
+      name: dubbo-go-server
+---
 apiVersion: pixiu.apache.org/v1alpha1
 kind: PixiuClusterPolicy
 metadata:
