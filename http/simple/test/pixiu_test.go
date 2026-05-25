@@ -55,13 +55,58 @@ func TestGET1(t *testing.T) {
 	req, err := http.NewRequest("GET", url, nil)
 	assert.NoError(t, err)
 	req.Header.Add("Origin", "api.dubbo.com")
-	req.Header.Add("Content-Type", "application/json")
 	resp, err := client.Do(req)
 	assert.NoError(t, err)
 	assert.NotNil(t, resp)
 	assert.Equal(t, 200, resp.StatusCode)
 	s, _ := io.ReadAll(resp.Body)
 	assert.True(t, strings.Contains(string(s), "0001"))
+	ao := resp.Header.Get(constant.HeaderKeyAccessControlAllowOrigin)
+	assert.Equal(t, "api.dubbo.com", ao)
+}
+
+func TestPut(t *testing.T) {
+	url := "http://localhost:8888/user/tc"
+	data := "{\"id\":\"0001\",\"name\":\"tc\",\"age\":20}"
+	client := &http.Client{Timeout: 5 * time.Second}
+	req, err := http.NewRequest("PUT", url, strings.NewReader(data))
+	assert.NoError(t, err)
+	req.Header.Add("Origin", "api.dubbo.com")
+	req.Header.Add("Content-Type", "application/json")
+	resp, err := client.Do(req)
+	assert.NoError(t, err)
+	assert.NotNil(t, resp)
+	assert.Equal(t, 405, resp.StatusCode)
+	ao := resp.Header.Get(constant.HeaderKeyAccessControlAllowOrigin)
+	assert.Equal(t, "api.dubbo.com", ao)
+}
+
+func TestDelete(t *testing.T) {
+	url := "http://localhost:8888/user/tc"
+	client := &http.Client{Timeout: 5 * time.Second}
+	req, err := http.NewRequest("DELETE", url, nil)
+	assert.NoError(t, err)
+	req.Header.Add("Origin", "api.dubbo.com")
+	resp, err := client.Do(req)
+	assert.NoError(t, err)
+	assert.NotNil(t, resp)
+	assert.Equal(t, 405, resp.StatusCode)
+	ao := resp.Header.Get(constant.HeaderKeyAccessControlAllowOrigin)
+	assert.Equal(t, "api.dubbo.com", ao)
+}
+
+func TestPostInvalidJSON(t *testing.T) {
+	url := "http://localhost:8888/user/"
+	data := "{"
+	client := &http.Client{Timeout: 5 * time.Second}
+	req, err := http.NewRequest("POST", url, strings.NewReader(data))
+	assert.NoError(t, err)
+	req.Header.Add("Origin", "api.dubbo.com")
+	req.Header.Add("Content-Type", "application/json")
+	resp, err := client.Do(req)
+	assert.NoError(t, err)
+	assert.NotNil(t, resp)
+	assert.Equal(t, 400, resp.StatusCode)
 	ao := resp.Header.Get(constant.HeaderKeyAccessControlAllowOrigin)
 	assert.Equal(t, "api.dubbo.com", ao)
 }
