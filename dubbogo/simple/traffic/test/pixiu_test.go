@@ -30,7 +30,7 @@ import (
 )
 
 func TestCanaryGET(t *testing.T) {
-	url := "http://localhost:8888/user"
+	url := trafficURL("/user")
 	client := &http.Client{Timeout: 5 * time.Second}
 	req, err := http.NewRequest("GET", url, nil)
 	assert.NoError(t, err)
@@ -44,7 +44,7 @@ func TestCanaryGET(t *testing.T) {
 }
 
 func TestCanaryGET1(t *testing.T) {
-	url := "http://localhost:8888/user"
+	url := trafficURL("/user")
 	client := &http.Client{Timeout: 5 * time.Second}
 	req, err := http.NewRequest("GET", url, nil)
 	assert.NoError(t, err)
@@ -57,7 +57,7 @@ func TestCanaryGET1(t *testing.T) {
 }
 
 func TestCanaryGET2(t *testing.T) {
-	url := "http://localhost:8888/user"
+	url := trafficURL("/user")
 	client := &http.Client{Timeout: 5 * time.Second}
 	req, err := http.NewRequest("GET", url, nil)
 	assert.NoError(t, err)

@@ -21,19 +21,64 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"strings"
+	"sync"
 )
 
-func main() {
-	go startServer(":1315", "v1")
-	go startServer(":1316", "v2")
-	go startServer(":1317", "v3")
+const (
+	trafficV1AddrEnv = "TRAFFIC_V1_ADDR"
+	trafficV2AddrEnv = "TRAFFIC_V2_ADDR"
+	trafficV3AddrEnv = "TRAFFIC_V3_ADDR"
 
-	log.Println("All traffic servers started")
-	select {}
+	defaultTrafficV1Addr = ":1315"
+	defaultTrafficV2Addr = ":1316"
+	defaultTrafficV3Addr = ":1317"
+)
+
+type trafficServer struct {
+	addr  string
+	label string
 }
 
-func startServer(addr, label string) {
+func main() {
+	servers := []trafficServer{
+		{addr: envOrDefault(trafficV1AddrEnv, defaultTrafficV1Addr), label: "v1"},
+		{addr: envOrDefault(trafficV2AddrEnv, defaultTrafficV2Addr), label: "v2"},
+		{addr: envOrDefault(trafficV3AddrEnv, defaultTrafficV3Addr), label: "v3"},
+	}
+
+	var wg sync.WaitGroup
+	errCh := make(chan error, len(servers))
+	for _, server := range servers {
+		wg.Add(1)
+		go func(server trafficServer) {
+			defer wg.Done()
+			errCh <- startServer(server.addr, server.label)
+		}(server)
+	}
+
+	log.Println("All traffic servers started")
+	go func() {
+		wg.Wait()
+		close(errCh)
+	}()
+
+	for err := range errCh {
+		if err != nil {
+			log.Fatalf("traffic server stopped: %v", err)
+		}
+	}
+}
+
+func envOrDefault(key, fallback string) string {
+	if value := os.Getenv(key); value != "" {
+		return value
+	}
+	return fallback
+}
+
+func startServer(addr, label string) error {
 	mux := http.NewServeMux()
 	routers := []string{"/user", "/user/pixiu", "/prefix", "/health"}
 	for _, router := range routers {
@@ -43,5 +88,5 @@ func startServer(addr, label string) {
 		})
 	}
 	log.Printf("Starting %s server on %s...", label, addr)
-	log.Fatal(http.ListenAndServe(addr, mux))
+	return http.ListenAndServe(addr, mux)
 }
