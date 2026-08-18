@@ -37,9 +37,13 @@ func TestHeaderGET1(t *testing.T) {
 	req, err := http.NewRequest("GET", url, nil)
 	assert.NoError(t, err)
 	req.Header.Add("X-A", "t1")
+	req.Header.Set("X-B", "t4")
 	resp, err := client.Do(req)
 	assert.NoError(t, err)
-	assert.NotNil(t, resp)
+	if !assert.NotNil(t, resp) {
+		return
+	}
+	defer func() { _ = resp.Body.Close() }()
 	assert.Equal(t, 200, resp.StatusCode)
 	s, _ := io.ReadAll(resp.Body)
 	assert.True(t, strings.Contains(string(s), `"server": "v1"`))
@@ -50,11 +54,14 @@ func TestHeaderGET2(t *testing.T) {
 	client := &http.Client{Timeout: 5 * time.Second}
 	req, err := http.NewRequest("GET", url, nil)
 	assert.NoError(t, err)
-	req.Header.Add("X-B", "t4")
+	req.Header.Set("X-B", "t4")
 	req.Header.Add("X-C", "t1")
 	resp, err := client.Do(req)
 	assert.NoError(t, err)
-	assert.NotNil(t, resp)
+	if !assert.NotNil(t, resp) {
+		return
+	}
+	defer func() { _ = resp.Body.Close() }()
 	assert.Equal(t, 200, resp.StatusCode)
 	s, _ := io.ReadAll(resp.Body)
 	assert.True(t, strings.Contains(string(s), `"server": "v2"`))
@@ -68,8 +75,27 @@ func TestHeaderGET3(t *testing.T) {
 	req.Header.Add("REG", "tt")
 	resp, err := client.Do(req)
 	assert.NoError(t, err)
-	assert.NotNil(t, resp)
+	if !assert.NotNil(t, resp) {
+		return
+	}
+	defer func() { _ = resp.Body.Close() }()
 	assert.Equal(t, 200, resp.StatusCode)
 	s, _ := io.ReadAll(resp.Body)
 	assert.True(t, strings.Contains(string(s), `"server": "v3"`))
+}
+
+func TestHeaderGETMissingB(t *testing.T) {
+	url := trafficURL("/user")
+	client := &http.Client{Timeout: 5 * time.Second}
+	req, err := http.NewRequest("GET", url, nil)
+	assert.NoError(t, err)
+	req.Header.Set("X-A", "t1")
+	resp, err := client.Do(req)
+	assert.NoError(t, err)
+	if !assert.NotNil(t, resp) {
+		return
+	}
+	defer func() { _ = resp.Body.Close() }()
+	s, _ := io.ReadAll(resp.Body)
+	assert.NotContains(t, string(s), `"server": "v1"`)
 }

@@ -16,8 +16,7 @@
 # specific language governing permissions and limitations
 # under the License.
 #
-# This config is not integrated into CI.
-# To manually test header-based routing, replace pixiu/conf.yaml with this file.
+# This config is used by the header-based routing integration tests.
 ---
 static_resources:
   listeners:

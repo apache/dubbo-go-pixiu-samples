@@ -84,7 +84,7 @@ func startServer(addr, label string) error {
 	for _, router := range routers {
 		msg := router[strings.LastIndex(router, "/")+1:]
 		mux.HandleFunc(router, func(w http.ResponseWriter, r *http.Request) {
-			fmt.Fprintf(w, `{"server": "%s","message":"%s","status":200}`, label, msg)
+			_, _ = fmt.Fprintf(w, `{"server": "%s","message":"%s","status":200}`, label, msg)
 		})
 	}
 	log.Printf("Starting %s server on %s...", label, addr)
