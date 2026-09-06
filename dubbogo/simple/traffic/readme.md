@@ -1,54 +1,40 @@
-# Traffic Filter quick start
+# Traffic Filter
 
 ## Canary Distribution
 
-### Start Http Server
+### Start Server
 
 ```shell
-cd server
-go run server.go
-```
-
-```shell
-cd server/v1
-go run server.go
-```
-
-```shell
-cd server/v2
-go run server.go
+cd server/app
+go run main.go
 ```
 
 ### Start Pixiu
 
 ```shell
-go run cmd/pixiu/*.go gateway start -c samples/dubbogo/simple/traffic/pixiu/canary-conf.yaml
+go run cmd/pixiu/*.go gateway start -c samples/dubbogo/simple/traffic/pixiu/conf.yaml
 ```
 
-### Start test
+### Test
 
 ```shell
+# default (v2, canary-weight 100)
 curl http://localhost:8888/user
+
+# canary to v1
 curl -H "canary-by-header: v1" http://localhost:8888/user
+
+# canary to v3
+curl -H "canary-by-header: v3" http://localhost:8888/user
 ```
 
 ## Header Route
 
-### Start Http Server
+### Start Server
 
 ```shell
-cd server/v1
-go run server.go
-```
-
-```shell
-cd server/v2
-go run server.go
-```
-
-```shell
-cd server/v3
-go run server.go
+cd server/app
+go run main.go
 ```
 
 ### Start Pixiu
@@ -57,11 +43,10 @@ go run server.go
 go run cmd/pixiu/*.go gateway start -c samples/dubbogo/simple/traffic/pixiu/header-conf.yaml
 ```
 
-### Start test
+### Test
 
 ```shell
-curl http://localhost:8888/user
-curl -H "X-C: t1" http://localhost:8888
-curl -H "REG: tt" http://localhost:8888
-curl -H "X-A: t1" http://localhost:8888/user
+curl -H "X-A: t1" -H "X-B: t4" http://localhost:8888/user
+curl -H "X-B: t4" -H "X-C: t1" http://localhost:8888/user
+curl -H "REG: tt" http://localhost:8888/user
 ```

@@ -29,6 +29,7 @@ array=(
   "dubbogo/simple/triple"
   "dubbogo/simple/direct"
   "dubbogo/simple/prometheus"
+  "dubbogo/simple/traffic"
   "dubbogo/multi"
   # http
   "http/grpc"
@@ -50,6 +51,10 @@ for t in "${array[@]}"; do
   echo "::group::> start: $t"
   bash ./integrate_test.sh "$t"
   result=$?
+  if [ "$result" -eq 0 ] && [ "$t" = "dubbogo/simple/traffic" ]; then
+    PIXIU_CONFIG=header-conf.yaml TEST_TAGS="integration manual" TEST_RUN="^TestHeader" bash ./integrate_test.sh "$t"
+    result=$?
+  fi
   echo "::endgroup::"
   if [ "$result" -ne 0 ]; then
     echo "[ERROR] failed: $t (exit code: $result)"

@@ -22,6 +22,9 @@ PID = /tmp/.$(PROJECT_NAME).pid
 PROJECT_DIR=$(shell pwd)
 BASE_DIR := $(PROJECT_DIR)/dist
 PIXIU_DIR := $(PIXIU_DIR)
+PIXIU_CONFIG ?= conf.yaml
+TEST_TAGS ?= integration
+TEST_RUN ?=
 PIXIU_PID = /tmp/.pixiu.pid
 
 SOURCES = $(wildcard $(PROJECT_DIR)/server/app/*.go)
@@ -95,7 +98,7 @@ config:
 	@-test -f $(PROJECT_DIR)/server/profiles/dev/log.yml && cat $(PROJECT_DIR)/server/profiles/dev/log.yml | sed "s#\$$HOST_IP#$(DOCKER_HOST_IP)#g" > $(OUT_DIR)/server/log.yml && echo "  > $(OUT_DIR)/conf/log.yml"
 	@-test -f $(PROJECT_DIR)/server/profiles/dev/server.yml && cat $(PROJECT_DIR)/server/profiles/dev/server.yml | sed "s#\$$HOST_IP#$(DOCKER_HOST_IP)#g" > $(OUT_DIR)/server/server.yml && echo "  > $(OUT_DIR)/conf/server.yml"
 	@-test -f $(PROJECT_DIR)/pixiu/api_config.yaml && cat $(PROJECT_DIR)/pixiu/api_config.yaml | sed "s#\$$HOST_IP#$(DOCKER_HOST_IP)#g" > $(OUT_DIR)/pixiuconf/api_config.yaml && echo "  > $(OUT_DIR)/pixiuconf/api_config.yaml"
-	@-test -f $(PROJECT_DIR)/pixiu/conf.yaml && cat $(PROJECT_DIR)/pixiu/conf.yaml | sed "s#\$$HOST_IP#$(DOCKER_HOST_IP)#g" | sed "s#\$$PROJECT_DIR#$(PROJECT_DIR)#g" > $(OUT_DIR)/pixiuconf/conf.yaml && echo "  > $(OUT_DIR)/pixiuconf/conf.yaml"
+	@-test -f $(PROJECT_DIR)/pixiu/$(PIXIU_CONFIG) && cat $(PROJECT_DIR)/pixiu/$(PIXIU_CONFIG) | sed "s#\$$HOST_IP#$(DOCKER_HOST_IP)#g" | sed "s#\$$PROJECT_DIR#$(PROJECT_DIR)#g" > $(OUT_DIR)/pixiuconf/conf.yaml && echo "  > $(OUT_DIR)/pixiuconf/conf.yaml"
 
 ## docker-up: Shutdown dependency services on docker
 .PHONY: docker-up
@@ -171,4 +174,4 @@ stop:
 integration:
 	$(info   >  Running integration test for application $(PROJECT_NAME))
 	@go clean -testcache
-	@go test -tags integration -v $(PROJECT_DIR)/test/...
+	@go test -tags "$(TEST_TAGS)" -run "$(TEST_RUN)" -v $(PROJECT_DIR)/test/...
