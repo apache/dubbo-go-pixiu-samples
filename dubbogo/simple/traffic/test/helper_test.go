@@ -15,25 +15,25 @@
  * limitations under the License.
  */
 
-package main
+package test
 
 import (
-	"fmt"
-	"log"
-	"net/http"
+	"os"
 	"strings"
 )
 
-func main() {
-	routers := []string{"/user", "/user/pixiu", "/prefix", "/health"}
+const (
+	defaultTrafficGatewayURL = "http://localhost:8888"
+	trafficGatewayURLEnv     = "TRAFFIC_GATEWAY_URL"
+)
 
-	for _, router := range routers {
-		msg := router[strings.LastIndex(router, "/")+1:]
-		http.HandleFunc(router, func(w http.ResponseWriter, r *http.Request) {
-			fmt.Fprintf(w, `{"server": "v2","message":"%s","status":200}`, msg)
-		})
+func trafficURL(path string) string {
+	return strings.TrimRight(envOrDefault(trafficGatewayURLEnv, defaultTrafficGatewayURL), "/") + "/" + strings.TrimLeft(path, "/")
+}
+
+func envOrDefault(key, fallback string) string {
+	if value := os.Getenv(key); value != "" {
+		return value
 	}
-
-	log.Println("Starting sample server ...")
-	log.Fatal(http.ListenAndServe(":1316", nil))
+	return fallback
 }

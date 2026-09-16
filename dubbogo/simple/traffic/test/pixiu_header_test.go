@@ -1,3 +1,5 @@
+//go:build manual
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -29,43 +31,71 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestCanaryGET(t *testing.T) {
+func TestHeaderGET1(t *testing.T) {
 	url := trafficURL("/user")
 	client := &http.Client{Timeout: 5 * time.Second}
 	req, err := http.NewRequest("GET", url, nil)
 	assert.NoError(t, err)
-	req.Header.Add("canary-by-header", "v1")
+	req.Header.Add("X-A", "t1")
+	req.Header.Set("X-B", "t4")
 	resp, err := client.Do(req)
 	assert.NoError(t, err)
-	assert.NotNil(t, resp)
+	if !assert.NotNil(t, resp) {
+		return
+	}
+	defer func() { _ = resp.Body.Close() }()
 	assert.Equal(t, 200, resp.StatusCode)
 	s, _ := io.ReadAll(resp.Body)
 	assert.True(t, strings.Contains(string(s), `"server": "v1"`))
 }
 
-func TestCanaryGET1(t *testing.T) {
+func TestHeaderGET2(t *testing.T) {
 	url := trafficURL("/user")
 	client := &http.Client{Timeout: 5 * time.Second}
 	req, err := http.NewRequest("GET", url, nil)
 	assert.NoError(t, err)
+	req.Header.Set("X-B", "t4")
+	req.Header.Add("X-C", "t1")
 	resp, err := client.Do(req)
 	assert.NoError(t, err)
-	assert.NotNil(t, resp)
+	if !assert.NotNil(t, resp) {
+		return
+	}
+	defer func() { _ = resp.Body.Close() }()
 	assert.Equal(t, 200, resp.StatusCode)
 	s, _ := io.ReadAll(resp.Body)
 	assert.True(t, strings.Contains(string(s), `"server": "v2"`))
 }
 
-func TestCanaryGET2(t *testing.T) {
+func TestHeaderGET3(t *testing.T) {
 	url := trafficURL("/user")
 	client := &http.Client{Timeout: 5 * time.Second}
 	req, err := http.NewRequest("GET", url, nil)
 	assert.NoError(t, err)
-	req.Header.Add("canary-by-header", "v3")
+	req.Header.Add("REG", "tt")
 	resp, err := client.Do(req)
 	assert.NoError(t, err)
-	assert.NotNil(t, resp)
+	if !assert.NotNil(t, resp) {
+		return
+	}
+	defer func() { _ = resp.Body.Close() }()
 	assert.Equal(t, 200, resp.StatusCode)
 	s, _ := io.ReadAll(resp.Body)
 	assert.True(t, strings.Contains(string(s), `"server": "v3"`))
+}
+
+func TestHeaderGETMissingB(t *testing.T) {
+	url := trafficURL("/user")
+	client := &http.Client{Timeout: 5 * time.Second}
+	req, err := http.NewRequest("GET", url, nil)
+	assert.NoError(t, err)
+	req.Header.Set("X-A", "t1")
+	resp, err := client.Do(req)
+	assert.NoError(t, err)
+	if !assert.NotNil(t, resp) {
+		return
+	}
+	defer func() { _ = resp.Body.Close() }()
+	s, _ := io.ReadAll(resp.Body)
+	assert.NotContains(t, string(s), `"server": "v1"`)
 }

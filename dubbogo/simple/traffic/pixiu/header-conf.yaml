@@ -16,6 +16,7 @@
 # specific language governing permissions and limitations
 # under the License.
 #
+# This config is used by the header-based routing integration tests.
 ---
 static_resources:
   listeners:
@@ -58,8 +59,8 @@ static_resources:
                           - name: REG
                             values: ["t{2}"]
                             regex: true
-                        route:
-                          cluster: "user-v3"
+                      route:
+                        cluster: "user-v3"
                 http_filters:
                   - name: dgp.filter.http.httpproxy
                     config:
