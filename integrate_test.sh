@@ -264,6 +264,13 @@ trap cleanup_sample EXIT
 trap 'exit 130' INT
 trap 'exit 143' TERM
 
+if [[ "$P_DIR" == "$SAMPLES_ROOT/https" ]]; then
+  make "${make_args[@]}" docker-up
+  sleep 2
+  make "${make_args[@]}" TEST_TAGS="$TEST_TAGS" TEST_RUN="$TEST_RUN" integration
+  exit 0
+fi
+
 make "${make_args[@]}" config
 make "${make_args[@]}" docker-up
 make "${make_args[@]}" docker-health-check

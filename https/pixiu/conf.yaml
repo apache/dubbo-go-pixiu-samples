@@ -27,7 +27,7 @@ static_resources:
             - "sample.domain.com"
             - "sample.domain-1.com"
             - "sample.domain-2.com"
-          certs_dir: $PROJECT_DIR/cert
+          certs_dir: /var/cache/golang-autocert
       filter_chains:
           filters:
             - name: dgp.filter.httpconnectionmanager
@@ -37,12 +37,12 @@ static_resources:
                     - match:
                         prefix: "/api/v1"
                       route:
-                        cluster: "test-dubbo"
+                        cluster: "test_dubbo"
                         cluster_not_found_response_code: 505
                 http_filters:
                   - name: dgp.filter.http.apiconfig
                     config:
-                      path: $PROJECT_DIR/pixiu/api_config.yaml
+                      path: /etc/pixiu/api_config.yaml
                   - name: dgp.filter.http.dubboproxy
                     config:
                       dubboProxyConfig:
@@ -50,7 +50,7 @@ static_resources:
                           "zookeeper":
                             protocol: "zookeeper"
                             timeout: "3s"
-                            address: "127.0.0.1:2181"
+                            address: "zookeeper:2181"
                             username: ""
                             password: ""
                         timeout_config:
@@ -64,13 +64,14 @@ static_resources:
         read_timeout: 5s
         write_timeout: 5s
   clusters:
-    - name: "user"
-      lb_policy: "lb"
-      endpoints:
-        - id: 1
-          socket_address:
-            address: 127.0.0.1
-            port: 1314
+    - name: "test_dubbo"
+      lb_policy: "RoundRobin"
+      registries:
+        "zookeeper":
+          timeout: "3s"
+          address: "zookeeper:2181"
+          username: ""
+          password: ""
   shutdown_config:
     timeout: "60s"
     step_timeout: "10s"

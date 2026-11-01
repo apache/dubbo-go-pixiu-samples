@@ -41,12 +41,14 @@ func user(w http.ResponseWriter, r *http.Request) {
 	case constant.Post:
 		byts, err := io.ReadAll(r.Body)
 		if err != nil {
-			w.Write([]byte(err.Error()))
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
 		}
 		var user User
 		err = json.Unmarshal(byts, &user)
 		if err != nil {
-			w.Write([]byte(err.Error()))
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
 		}
 		_, ok := cache.Get(user.Name)
 		if ok {
@@ -83,6 +85,10 @@ func user(w http.ResponseWriter, r *http.Request) {
 		}
 		w.WriteHeader(http.StatusNotFound)
 		w.Write(nil)
+	default:
+		w.Header().Set("Allow", constant.Post+", "+constant.Get)
+		http.Error(w, http.StatusText(http.StatusMethodNotAllowed), http.StatusMethodNotAllowed)
+		return
 	}
 }
 

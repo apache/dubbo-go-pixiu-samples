@@ -39,7 +39,7 @@ endif
 export GO111MODULE ?= on
 export GOPROXY ?= https://goproxy.io,direct
 export GOSUMDB ?= sum.golang.org
-export GOARCH ?= amd64
+export GOARCH ?= $(shell go env GOARCH)
 
 export DOCKER_HOST_IP = $(shell hostname)
 

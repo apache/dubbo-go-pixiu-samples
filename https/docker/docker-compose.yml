@@ -1,0 +1,87 @@
+#
+# Licensed to Apache Software Foundation (ASF) under one or more contributor
+# license agreements. See the NOTICE file distributed with
+# this work for additional information regarding copyright
+# ownership. Apache Software Foundation (ASF) licenses this file to you under
+# the Apache License, Version 2.0 (the "License"); you may
+# not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+#
+
+services:
+  zookeeper:
+    image: zookeeper
+    ports:
+      - 2181:2181
+    restart: on-failure
+
+  pixiu-cert-init:
+    image: alpine:latest
+    user: "root"
+    command:
+      - sh
+      - -c
+      - |
+        apk add --no-cache openssl &&
+        openssl req -x509 -nodes \
+          -newkey ec -pkeyopt ec_paramgen_curve:P-256 \
+          -keyout /tmp/k.pem -out /tmp/c.pem \
+          -days 365 \
+          -subj '/CN=sample.domain.com' \
+          -addext 'subjectAltName=DNS:sample.domain.com' \
+          -addext 'extendedKeyUsage=serverAuth' &&
+        cat /tmp/k.pem /tmp/c.pem > /cache/sample.domain.com &&
+        chmod 644 /cache/sample.domain.com
+    volumes:
+      - cert-cache:/cache
+
+  provider:
+    image: golang:1.25.4-bookworm
+    working_dir: /workspace
+    command: go run ./https/server/app
+    environment:
+      - DUBBO_GO_CONFIG_PATH=/etc/dubbo/server.yml
+      - APP_LOG_CONF_FILE=/etc/dubbo/log.yml
+    volumes:
+      - ../..:/workspace:ro
+      - go-mod-cache:/go/pkg/mod
+      - go-build-cache:/root/.cache/go-build
+      - ../server/profiles/dev/server.yml:/etc/dubbo/server.yml:ro
+      - ../server/profiles/dev/log.yml:/etc/dubbo/log.yml:ro
+    depends_on:
+      - zookeeper
+
+  pixiu:
+    platform: linux/amd64
+    build:
+      context: https://github.com/apache/dubbo-go-pixiu.git#v1.1.0
+    user: "root"
+    environment:
+      - XDG_CACHE_HOME=/var/cache
+    ports:
+      - 8443:443
+    volumes:
+      - cert-cache:/var/cache/golang-autocert
+      - ../pixiu/conf.yaml:/etc/pixiu/conf.yaml:ro
+      - ../pixiu/api_config.yaml:/etc/pixiu/api_config.yaml:ro
+    depends_on:
+      pixiu-cert-init:
+        condition: service_completed_successfully
+      provider:
+        condition: service_started
+      zookeeper:
+        condition: service_started
+
+volumes:
+  cert-cache:
+  go-mod-cache:
+  go-build-cache:
