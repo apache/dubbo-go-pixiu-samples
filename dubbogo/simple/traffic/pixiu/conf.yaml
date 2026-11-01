@@ -58,13 +58,6 @@ static_resources:
         read_timeout: 5s
         write_timeout: 5s
   clusters:
-    - name: "user"
-      lb_policy: "lb"
-      endpoints:
-        - id: 1
-          socket_address:
-            address: 127.0.0.1
-            port: 1314
     - name: "user-v1"
       lb_policy: "lb"
       endpoints:

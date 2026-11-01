@@ -18,22 +18,25 @@
 package main
 
 import (
+	"flag"
 	"fmt"
-	"log"
-	"net/http"
-	"strings"
+	"os"
+)
+
+import (
+	traffic "github.com/dubbo-go-pixiu/samples/dubbogo/simple/traffic"
 )
 
 func main() {
-	routers := []string{"/user", "/user/pixiu", "/prefix", "/health"}
-
-	for _, router := range routers {
-		msg := router[strings.LastIndex(router, "/")+1:]
-		http.HandleFunc(router, func(w http.ResponseWriter, r *http.Request) {
-			fmt.Fprintf(w, `{"server": "v2","message":"%s","status":200}`, msg)
-		})
+	input := flag.String("input", "", "source Pixiu YAML")
+	output := flag.String("output", "", "build-directory Pixiu YAML")
+	flag.Parse()
+	if *input == "" || *output == "" {
+		fmt.Fprintln(os.Stderr, "both -input and -output are required")
+		os.Exit(2)
 	}
-
-	log.Println("Starting sample server ...")
-	log.Fatal(http.ListenAndServe(":1316", nil))
+	if err := traffic.PrepareConfig(*input, *output); err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
+	}
 }
