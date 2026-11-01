@@ -91,10 +91,18 @@ jobs:
           repository: ${{ env.PIXIU_REPO }}
           ref: ${{ env.PIXIU_REF }}
           path: pixiu-latest
+      - name: Record integration source revisions
+        run: |
+          echo "Samples repository: $(git rev-parse HEAD)"
+          echo "Pixiu repository: ${PIXIU_REPO}"
+          echo "Pixiu ref requested: ${PIXIU_REF}"
+          echo "Pixiu SHA checked out: $(git -C pixiu-latest rev-parse HEAD)"
       - uses: actions/setup-go@v6
         with:
           go-version-file: 'go.mod'
           cache: true
+      - name: Test traffic configuration
+        run: go test -race ./dubbogo/simple/traffic
       - name: Prepare current samples for Pixiu integration runner
         run: |
           rm -rf ${GITHUB_WORKSPACE}/pixiu-latest/integrate_samples

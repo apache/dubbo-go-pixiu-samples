@@ -18,22 +18,38 @@
 package test
 
 import (
-	"os"
+	"context"
+	"net"
+	"net/http"
 	"strings"
+	"testing"
+	"time"
 )
 
-const (
-	defaultTrafficGatewayURL = "http://localhost:8888"
-	trafficGatewayURLEnv     = "TRAFFIC_GATEWAY_URL"
+import (
+	traffic "github.com/dubbo-go-pixiu/samples/dubbogo/simple/traffic"
 )
 
-func trafficURL(path string) string {
-	return strings.TrimRight(envOrDefault(trafficGatewayURLEnv, defaultTrafficGatewayURL), "/") + "/" + strings.TrimLeft(path, "/")
+func trafficURL(t *testing.T, path string) string {
+	t.Helper()
+	config, err := traffic.LoadConfig()
+	if err != nil {
+		t.Fatalf("invalid traffic test configuration: %v", err)
+	}
+	return strings.TrimRight(config.GatewayURL, "/") + "/" + strings.TrimLeft(path, "/")
 }
 
-func envOrDefault(key, fallback string) string {
-	if value := os.Getenv(key); value != "" {
-		return value
+func trafficHTTPClient(t *testing.T) *http.Client {
+	t.Helper()
+	transport := http.DefaultTransport.(*http.Transport).Clone()
+	transport.Proxy = nil
+	transport.DialContext = func(ctx context.Context, network, address string) (net.Conn, error) {
+		host, port, err := net.SplitHostPort(address)
+		if err == nil && host == "localhost" {
+			address = net.JoinHostPort("127.0.0.1", port)
+		}
+		return (&net.Dialer{Timeout: 5 * time.Second}).DialContext(ctx, network, address)
 	}
-	return fallback
+	t.Cleanup(transport.CloseIdleConnections)
+	return &http.Client{Timeout: 5 * time.Second, Transport: transport}
 }

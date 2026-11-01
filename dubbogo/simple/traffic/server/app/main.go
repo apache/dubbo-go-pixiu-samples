@@ -21,19 +21,12 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"os"
 	"strings"
 	"sync"
 )
 
-const (
-	trafficV1AddrEnv = "TRAFFIC_V1_ADDR"
-	trafficV2AddrEnv = "TRAFFIC_V2_ADDR"
-	trafficV3AddrEnv = "TRAFFIC_V3_ADDR"
-
-	defaultTrafficV1Addr = ":1315"
-	defaultTrafficV2Addr = ":1316"
-	defaultTrafficV3Addr = ":1317"
+import (
+	traffic "github.com/dubbo-go-pixiu/samples/dubbogo/simple/traffic"
 )
 
 type trafficServer struct {
@@ -42,10 +35,14 @@ type trafficServer struct {
 }
 
 func main() {
+	config, err := traffic.LoadConfig()
+	if err != nil {
+		log.Fatalf("invalid traffic configuration: %v", err)
+	}
 	servers := []trafficServer{
-		{addr: envOrDefault(trafficV1AddrEnv, defaultTrafficV1Addr), label: "v1"},
-		{addr: envOrDefault(trafficV2AddrEnv, defaultTrafficV2Addr), label: "v2"},
-		{addr: envOrDefault(trafficV3AddrEnv, defaultTrafficV3Addr), label: "v3"},
+		{addr: config.V1.ListenAddr, label: "v1"},
+		{addr: config.V2.ListenAddr, label: "v2"},
+		{addr: config.V3.ListenAddr, label: "v3"},
 	}
 
 	var wg sync.WaitGroup
@@ -71,22 +68,17 @@ func main() {
 	}
 }
 
-func envOrDefault(key, fallback string) string {
-	if value := os.Getenv(key); value != "" {
-		return value
-	}
-	return fallback
-}
-
 func startServer(addr, label string) error {
 	mux := http.NewServeMux()
 	routers := []string{"/user", "/user/pixiu", "/prefix", "/health"}
 	for _, router := range routers {
 		msg := router[strings.LastIndex(router, "/")+1:]
 		mux.HandleFunc(router, func(w http.ResponseWriter, r *http.Request) {
-			_, _ = fmt.Fprintf(w, `{"server": "%s","message":"%s","status":200}`, label, msg)
+			if _, err := fmt.Fprintf(w, `{"server": "%s","message":"%s","status":200}`, label, msg); err != nil {
+				log.Printf("write %s response: %v", label, err)
+			}
 		})
 	}
 	log.Printf("Starting %s server on %s...", label, addr)
-	return http.ListenAndServe(addr, mux)
+	return (&http.Server{Addr: addr, Handler: mux}).ListenAndServe()
 }

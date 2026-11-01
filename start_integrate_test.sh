@@ -17,6 +17,9 @@
 #  limitations under the License.
 #
 
+set -uo pipefail
+unset TRAFFIC_V1_ADDR TRAFFIC_V2_ADDR TRAFFIC_V3_ADDR TRAFFIC_GATEWAY_URL PIXIU_CONFIG TEST_TAGS TEST_RUN
+
 array=(
   "dubbogo/simple/body"
   "dubbogo/simple/jaeger"
@@ -47,11 +50,31 @@ array=(
 
 for t in "${array[@]}"; do
   echo "::group::> start: $t"
-  bash ./integrate_test.sh "$t"
-  result=$?
-  if [ "$result" -eq 0 ] && [ "$t" = "dubbogo/simple/traffic" ]; then
-    PIXIU_CONFIG=header-conf.yaml TEST_TAGS="integration manual" TEST_RUN="^TestHeader" bash ./integrate_test.sh "$t"
+  if bash ./integrate_test.sh "$t"; then
+    result=0
+  else
     result=$?
+  fi
+  if [ "$result" -eq 0 ] && [ "$t" = "dubbogo/simple/traffic" ]; then
+    if PIXIU_CONFIG=header-conf.yaml TEST_TAGS="integration manual" TEST_RUN="^TestHeader" bash ./integrate_test.sh "$t"; then
+      result=0
+    else
+      result=$?
+    fi
+  fi
+  if [ "$result" -eq 0 ] && [ "$t" = "dubbogo/simple/traffic" ]; then
+    if TRAFFIC_V1_ADDR=127.0.0.1:11315 TRAFFIC_V2_ADDR=127.0.0.1:11316 TRAFFIC_V3_ADDR=127.0.0.1:11317 TRAFFIC_GATEWAY_URL=http://127.0.0.1:18888 bash ./integrate_test.sh "$t"; then
+      result=0
+    else
+      result=$?
+    fi
+  fi
+  if [ "$result" -eq 0 ] && [ "$t" = "dubbogo/simple/traffic" ]; then
+    if TRAFFIC_V1_ADDR=127.0.0.1:11315 TRAFFIC_V2_ADDR=127.0.0.1:11316 TRAFFIC_V3_ADDR=127.0.0.1:11317 TRAFFIC_GATEWAY_URL=http://127.0.0.1:18888 PIXIU_CONFIG=header-conf.yaml TEST_TAGS="integration manual" TEST_RUN="^TestHeader" bash ./integrate_test.sh "$t"; then
+      result=0
+    else
+      result=$?
+    fi
   fi
   echo "::endgroup::"
   if [ "$result" -ne 0 ]; then

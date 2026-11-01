@@ -22,50 +22,46 @@ import (
 	"net/http"
 	"strings"
 	"testing"
-	"time"
-)
-
-import (
-	"github.com/stretchr/testify/assert"
 )
 
 func TestCanaryGET(t *testing.T) {
-	url := trafficURL("/user")
-	client := &http.Client{Timeout: 5 * time.Second}
-	req, err := http.NewRequest("GET", url, nil)
-	assert.NoError(t, err)
-	req.Header.Add("canary-by-header", "v1")
-	resp, err := client.Do(req)
-	assert.NoError(t, err)
-	assert.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
-	s, _ := io.ReadAll(resp.Body)
-	assert.True(t, strings.Contains(string(s), `"server": "v1"`))
+	assertTrafficResponse(t, "v1", func(req *http.Request) {
+		req.Header.Set("canary-by-header", "v1")
+	})
 }
 
 func TestCanaryGET1(t *testing.T) {
-	url := trafficURL("/user")
-	client := &http.Client{Timeout: 5 * time.Second}
-	req, err := http.NewRequest("GET", url, nil)
-	assert.NoError(t, err)
-	resp, err := client.Do(req)
-	assert.NoError(t, err)
-	assert.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
-	s, _ := io.ReadAll(resp.Body)
-	assert.True(t, strings.Contains(string(s), `"server": "v2"`))
+	assertTrafficResponse(t, "v2", nil)
 }
 
 func TestCanaryGET2(t *testing.T) {
-	url := trafficURL("/user")
-	client := &http.Client{Timeout: 5 * time.Second}
-	req, err := http.NewRequest("GET", url, nil)
-	assert.NoError(t, err)
-	req.Header.Add("canary-by-header", "v3")
-	resp, err := client.Do(req)
-	assert.NoError(t, err)
-	assert.NotNil(t, resp)
-	assert.Equal(t, 200, resp.StatusCode)
-	s, _ := io.ReadAll(resp.Body)
-	assert.True(t, strings.Contains(string(s), `"server": "v3"`))
+	assertTrafficResponse(t, "v3", func(req *http.Request) {
+		req.Header.Set("canary-by-header", "v3")
+	})
+}
+
+func assertTrafficResponse(t *testing.T, backend string, setHeaders func(*http.Request)) {
+	t.Helper()
+	req, err := http.NewRequest(http.MethodGet, trafficURL(t, "/user"), nil)
+	if err != nil {
+		t.Fatalf("create request: %v", err)
+	}
+	if setHeaders != nil {
+		setHeaders(req)
+	}
+	resp, err := trafficHTTPClient(t).Do(req)
+	if err != nil {
+		t.Fatalf("request gateway: %v", err)
+	}
+	defer func() { _ = resp.Body.Close() }()
+	if resp.StatusCode != http.StatusOK {
+		t.Fatalf("expected HTTP 200, got %d", resp.StatusCode)
+	}
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		t.Fatalf("read response body: %v", err)
+	}
+	if !strings.Contains(string(body), `"server": "`+backend+`"`) {
+		t.Fatalf("expected backend %s response, got %s", backend, body)
+	}
 }
