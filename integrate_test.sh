@@ -28,8 +28,10 @@ PIXIU_CONFIG=${PIXIU_CONFIG:-conf.yaml}
 TEST_TAGS=${TEST_TAGS:-integration}
 TEST_RUN=${TEST_RUN:-}
 PROJECT_NAME=$(basename "$P_DIR")
-MODULE_FILE=$(cd "$P_DIR" && go env GOMOD)
-SAMPLES_ROOT=$(dirname "$MODULE_FILE")
+SAMPLES_ROOT=$P_DIR
+while [[ ! -f "$SAMPLES_ROOT/igt/Makefile" && "$SAMPLES_ROOT" != "/" ]]; do
+  SAMPLES_ROOT=$(dirname "$SAMPLES_ROOT")
+done
 
 if [[ -n "${PIXIU_DIR:-}" ]]; then
   PIXIU_DIR=$(cd "$PIXIU_DIR" && pwd)
@@ -241,7 +243,7 @@ BASE_DIR="$RUN_DIR/dist"
 GOOS=$(go env GOOS)
 GOARCH=$(go env GOARCH)
 OUT_DIR="$BASE_DIR/${GOOS}_${GOARCH}"
-make_args=(--no-print-directory "PROJECT_DIR=$P_DIR" "PIXIU_DIR=$PIXIU_DIR" "PROJECT_NAME=$PROJECT_NAME" "BASE_DIR=$BASE_DIR" "GOOS=$GOOS" "GOARCH=$GOARCH" -f "$SAMPLES_ROOT/igt/Makefile")
+make_args=(--no-print-directory -C "$P_DIR" "PROJECT_DIR=$P_DIR" "PIXIU_DIR=$PIXIU_DIR" "PROJECT_NAME=$PROJECT_NAME" "BASE_DIR=$BASE_DIR" "GOOS=$GOOS" "GOARCH=$GOARCH" -f "$SAMPLES_ROOT/igt/Makefile")
 
 cleanup_sample() {
   local result=$?

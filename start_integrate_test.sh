@@ -31,6 +31,7 @@ array=(
   "dubbogo/simple/nacos"
   "dubbogo/simple/triple"
   "dubbogo/simple/direct"
+  "dubbogo/simple/generic"
   "dubbogo/simple/prometheus"
   "dubbogo/simple/traffic"
   "dubbogo/multi"

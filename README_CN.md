@@ -21,6 +21,7 @@
   - dubbogo/simple/body：http 到 dubbo，使用 api_config.yaml
   - dubbogo/simple/csrf：CSRF 保护
   - dubbogo/simple/direct：http 到 dubbo 的直接泛化调用
+  - dubbogo/simple/generic：http 到 triple 的直连泛化调用，可在 api_config.yaml 中指定泛化方式
   - dubbogo/simple/nacos_farconf：pixiu 使用 nacos 作为远端配置中心
   - dubbogo/simple/jaeger：pixiu 集成 jaeger
   - dubbogo/simple/jwt：JWT 认证

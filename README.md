@@ -22,6 +22,7 @@ This project includes multiple samples covering conversions such as HTTP to Dubb
   * `body`: HTTP to Dubbo using `api_config.yaml`
   * `csrf`: CSRF protection
   * `direct`: Direct generic HTTP-to-Dubbo call
+  * `generic`: Direct generic HTTP-to-Triple call with a configurable Dubbo-Go generic mode
   * `nacos_farconf`: Pixiu using Nacos as a remote configuration center
   * `jaeger`: Pixiu integration with Jaeger
   * `jwt`: JWT authentication
